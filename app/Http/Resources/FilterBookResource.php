@@ -14,21 +14,24 @@ class FilterBookResource extends JsonResource
      */
     public function toArray($request)
     {
+        $sub_price = round($this->book_price - $this->discount_price, 2);
         if (!is_null($this->discount_end_date)) {
             if ( !(date('Y-m-d') >= $this->discount_start_date and date('Y-m-d') <= $this->discount_end_date) ) {
-                $this->discount_price = 0;
+                $this->discount_price = $this->book_price;
+                $sub_price = 0;
             }
         }
         else {
-            if ( !(date('Y-m-d') >= $this->discount_start_date) ) {
-                $this->discount_price = 0;
+            if ( !(date('Y-m-d') >= $this->discount_start_date) or is_null($this->discount_start_date) ) {
+                $this->discount_price = $this->book_price;
+                $sub_price = 0;
             }
         }
         return [
             'book_id' => $this->id,
-            'discount_price' => $this->discount_price,
+            'final_price' => $this->discount_price,
             'book_price' => $this->book_price,
-            'final_price' => round($this->book_price - $this->discount_price, 2),
+            'sub_price' => $sub_price,
             // 'category' => new CategoryResource($this->category),
             // 'author' => new AuthorResource($this->author),
             'date_start' => $this->discount_start_date,
