@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Api\BookApi;
+use App\Http\Api\ReviewBookApi;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('books/filter', [BookApi::class, 'filter']);
+
+Route::get('books/{book}/reviews/filter', [ReviewBookApi::class, 'filter']);
+
+Route::resource('books', BookApi::class);
+
+Route::resource('books.details', ReviewBookApi::class);

@@ -68,7 +68,25 @@ class Book extends Model
         ->leftJoin('reviews', 'reviews.book_id', 'books.id')
         ->leftJoin('discounts', 'discounts.book_id', 'books.id')
         ->groupBy('books.id', 'discounts.id')
-        ->select('books.id', 'discounts.discount_price', 'books.book_price', 'books.category_id', 'books.author_id', 'discount_start_date', 'discount_end_date');
+        ->select('books.id', 'discounts.discount_price', 'books.book_price', 'books.category_id', 'books.book_title', 'books.book_cover_photo', 'books.author_id', 'discount_start_date', 'discount_end_date');
+    }
+
+    public function scopeDetail($query)
+    {
+        return $query
+        ->leftJoin('reviews', 'reviews.book_id', 'books.id')
+        ->leftJoin('discounts', 'discounts.book_id', 'books.id')
+        ->groupBy('books.id', 'discounts.id')
+        ->select('books.id',
+        'discounts.discount_price',
+        'books.book_price',
+        'books.category_id',
+        'books.author_id',
+        'books.book_title',
+        'books.book_summary',
+        'books.book_cover_photo',
+        'discount_start_date',
+        'discount_end_date');
     }
 
     // SORT
@@ -123,39 +141,16 @@ class Book extends Model
     public function filterStar($query, $value)
     {
         if (is_numeric($value)) {
-            return $query
-            ->havingRaw("(
-                count(case when reviews.rating_start like '1' then 1 else null end) +
-                count(case when reviews.rating_start like '2' then 1 else null end) +
-                count(case when reviews.rating_start like '3' then 1 else null end) +
-                count(case when reviews.rating_start like '4' then 1 else null end) +
-                count(case when reviews.rating_start like '5' then 1 else null end)) > ?"
-                , [0])
-            ->havingRaw("
-                (
-                count(case when reviews.rating_start like '1' then 1 else null end)*1 +
-                count(case when reviews.rating_start like '2' then 1 else null end)*2 +
-                count(case when reviews.rating_start like '3' then 1 else null end)*3 +
-                count(case when reviews.rating_start like '4' then 1 else null end)*4 +
-                count(case when reviews.rating_start like '5' then 1 else null end)*5
-                ) / (
-                count(case when reviews.rating_start like '1' then 1 else null end) +
-                count(case when reviews.rating_start like '2' then 1 else null end) +
-                count(case when reviews.rating_start like '3' then 1 else null end) +
-                count(case when reviews.rating_start like '4' then 1 else null end) +
-                count(case when reviews.rating_start like '5' then 1 else null end)
-                )
-                >= ?
-            ", [$value]);
+            return $query->havingRaw("AVG(CAST(rating_start as INT)) >= ?", [$value]);
         }
     }
 
-    public function filterAuthor($query, $value)
+    public function filterCategory($query, $value)
     {
         return $query->where('books.category_id', $value);
     }
 
-    public function filterCategory($query, $value)
+    public function filterAuthor($query, $value)
     {
         return $query->where('books.author_id', $value);
     }
