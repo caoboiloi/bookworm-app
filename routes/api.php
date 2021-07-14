@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Api\BookApi;
 use App\Http\Api\ReviewBookApi;
+use App\Http\Api\FilterApi;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +28,8 @@ Route::get('books/{book}/reviews/filter', [ReviewBookApi::class, 'filter']);
 
 Route::resource('books', BookApi::class);
 
-Route::resource('books.details', ReviewBookApi::class);
+Route::resource('books.reviews', ReviewBookApi::class);
+
+Route::resource('filters', FilterApi::class)->only([
+    'index'
+]);

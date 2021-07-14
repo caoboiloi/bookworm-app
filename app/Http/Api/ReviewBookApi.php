@@ -10,16 +10,25 @@ use App\Models\Book;
 use App\Models\Review;
 
 use App\Http\Resources\ReviewBookCollection;
+use App\Http\Resources\DetailBookResource;
+use App\Http\Resources\ReviewBookResource;
 
 class ReviewBookApi extends Controller
 {
     public function index($book)
     {
-        $bookDetail = Book::findOrFail($book);
-        $rv = Book::findOrFail($book)->reviews()->paginate(10);
+        $bookDetail = Book::detail()->findOrFail($book);
+        $bookDetail = new DetailBookResource($bookDetail);
+
+        $reviews = Book::findOrFail($book)->reviews()->paginate(4);
+        $reviews = new ReviewBookCollection($reviews);
+
+        $group = Review::group($book)->get();
+
         return response()->json([
             'book' => $bookDetail,
-            'reviews'=> $rv,
+            'count' => $group,
+            'reviews' => $reviews
         ], Response::HTTP_ACCEPTED);
     }
 
@@ -35,12 +44,15 @@ class ReviewBookApi extends Controller
 
     public function show($book, $review)
     {
-        $bookDetail = Book::findOrFail($book);
-        $rv = Book::findOrFail($book)->reviews()->findOrFail($review);
+        $bookDetail = Book::detail()->findOrFail($book);
+        $bookDetail = new DetailBookResource($bookDetail);
+
+        $review = Book::findOrFail($book)->reviews()->findOrFail($review);
+        $review = new ReviewBookResource($review);
 
         return response()->json([
             'book' => $bookDetail,
-            'reviews'=> $rv,
+            'review'=> $review,
         ], Response::HTTP_ACCEPTED);
     }
 
