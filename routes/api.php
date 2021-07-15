@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Api\BookApi;
 use App\Http\Api\ReviewBookApi;
 use App\Http\Api\FilterApi;
+use App\Http\Api\OrderApi;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,8 @@ Route::resource('books.reviews', ReviewBookApi::class);
 
 Route::resource('filters', FilterApi::class)->only([
     'index'
+]);
+
+Route::resource('orders', OrderApi::class)->only([
+    'store'
 ]);
