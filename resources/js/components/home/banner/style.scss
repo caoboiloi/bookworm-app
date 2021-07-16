@@ -1,0 +1,33 @@
+/* BANNER */
+/* -------------------------------------------------------------------- */
+
+div.banner {
+    div.col-auto {
+        button.btn-view-all {
+            background-color: #868f96;
+        }
+    }
+
+    div.carousel {
+        border: 0.5px solid #868f96;
+
+        .carousel-control-next, .carousel-control-prev {
+            width: 5%;
+        }
+
+        .carousel-inner {
+            .carousel-item img {
+                height: 27rem;
+            }
+        }
+    }
+
+    /* FONT AWESOME */
+    /* -------------------------------------------------------------------- */
+    .carousel-control-prev .fa-caret-left, .carousel-control-next .fa-caret-right {
+        text-shadow: 0 0 3px #333435;
+        font-size: 120px;
+    }
+}
+
+

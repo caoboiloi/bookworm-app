@@ -4,9 +4,13 @@ import { HashRouter as Router, Route } from "react-router-dom";
 
 import '../scss/app.scss';
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'font-awesome/css/font-awesome.min.css';
 
 import Header from './components/header';
 import Footer from './components/footer';
+
+import Banner from './components/home/banner';
+import WrapperHome from './components/home/wrapper';
 
 class App extends React.Component {
     render() {
@@ -16,7 +20,8 @@ class App extends React.Component {
                 <Header />
 
                 <Route exact path="/">
-                    <h1>Home</h1>
+                    <Banner />
+                    <WrapperHome />
                 </Route>
                 <Route exact path="/product">
                     <h1>product</h1>

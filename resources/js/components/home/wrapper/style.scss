@@ -1,0 +1,30 @@
+/* WRAPPER - HOME */
+/* -------------------------------------------------------------------- */
+
+/* Select Bar */
+div.wrapper {
+    .select-home-bar {
+        .btn-group-toggle {
+            label.btn-primary.active {
+                background-color: #868f96;
+                border-color: wheat;
+                color: white;
+            }
+            label.btn-primary {
+                background-color: white;
+                border-color: white;
+                color: black;
+            }
+        }
+    }
+
+    /* Product Home List */
+    .product-home-list {
+        border: 0.5px solid #868f96;
+    }
+    .card-img-top {
+        width: 100%;
+        height: 28vw;
+        object-fit: cover;
+    }
+}

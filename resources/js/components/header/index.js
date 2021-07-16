@@ -3,15 +3,13 @@ import './style.scss';
 
 import {Navbar, Nav} from 'react-bootstrap';
 
-import mainLogo from '../../../assets/bookworm_icon.svg';
-
 class Header extends React.Component {
     render() {
         return (
             <header className="my-0">
                 <Navbar collapseOnSelect expand="md" bg="light">
                     <Navbar.Brand href="#home">
-                        <img src={mainLogo} width="32" height="32" className="d-inline-block align-top my-auto" />
+                        <img src="/assets/bookworm_icon.svg" width="32" height="32" className="d-inline-block align-top my-auto" />
                         <b className="ml-2">BOOKWORM</b>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
