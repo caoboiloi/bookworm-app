@@ -1,0 +1,32 @@
+/* HEADER */
+/* -------------------------------------------------------------------- */
+
+/* -- Set the navbar to fixed position */
+header {
+    nav.navbar {
+        background-color: #868f96;
+        overflow: hidden;
+        position: fixed;
+        z-index: 10000000000;
+        top: 0;
+        width: 100%;
+
+        .collapse {
+            margin-right: 1.5rem;
+        }
+
+        .collapse {
+            a {
+                padding: 1rem;
+                margin-left: 1rem;
+            }
+        }
+
+        .navbar-brand {
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            align-items: center;
+        }
+    }
+}
