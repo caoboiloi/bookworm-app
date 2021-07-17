@@ -24,7 +24,10 @@ class Banner extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return true;
+        if (this.state.bannerBook !== nextState.bannerBook) {
+            return true;
+        }
+        return false;
     }
 
     fetchBookBanner() {

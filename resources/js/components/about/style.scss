@@ -1,0 +1,22 @@
+/* WRAPPER - ABOUT */
+/* -------------------------------------------------------------------- */
+
+/* -- Main Title */
+div.wrapper-about {
+    .main-title-information {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+    }
+    .main-title-information-1 {
+        font-size: 1.5rem;
+    }
+    /* -- About - Introduction */
+    .about-introduction .title-about-introduction {
+        font-size: 1.5rem;
+    }
+    /* -- About - Story, About - Vision */
+    .about-story, .about-vision {
+        font-size: 1.5rem;
+    }
+}

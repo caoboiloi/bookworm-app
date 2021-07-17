@@ -43,7 +43,7 @@ body {
 }
 @media only screen and (max-width: 767px) {
     .card-img-top {
-        height: 30rem;
+        height: 30rem !important;
     }
 
     div.banner {
@@ -56,7 +56,7 @@ body {
 }
 @media only screen and (max-width: 650px) {
     .card-img-top {
-        height: 18rem;
+        height: 22rem !important;
     }
 
     div.banner {
@@ -69,5 +69,11 @@ body {
                 font-size: 70px;
             }
         }
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    .card-img-top {
+        height: 14rem !important;
     }
 }

@@ -12,6 +12,10 @@ import Footer from './components/footer';
 import Banner from './components/home/banner';
 import WrapperHome from './components/home/wrapper';
 
+import About from './components/about';
+
+import WrapperProduct from './components/product/wrapper';
+
 class App extends React.Component {
     render() {
         return (
@@ -23,12 +27,15 @@ class App extends React.Component {
                     <Banner />
                     <WrapperHome />
                 </Route>
+
                 <Route exact path="/product">
-                    <h1>product</h1>
+                    <WrapperProduct />
                 </Route>
+
                 <Route exact path="/about">
-                    <h1>about</h1>
+                    <About />
                 </Route>
+
                 <Route exact path="/cart">
                     <h1>cart</h1>
                 </Route>
