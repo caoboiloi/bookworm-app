@@ -141,7 +141,9 @@ class Book extends Model
     public function filterStar($query, $value)
     {
         if (is_numeric($value)) {
-            return $query->havingRaw("AVG(CAST(rating_start as INT)) >= ?", [$value]);
+            return $query
+            ->havingRaw("COALESCE(AVG(CAST(rating_start as INT)), 0) >= ?", [$value])
+            ->orderByRaw("COALESCE(AVG(cast(rating_start as INT)), 0) desc");
         }
     }
 

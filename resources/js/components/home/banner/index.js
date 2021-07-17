@@ -1,17 +1,55 @@
 import React from 'react';
 import './style.scss';
-import './responsive.scss';
+
+import BookCardRow from '../../book';
 
 import {Carousel} from 'react-bootstrap';
+import {getSaleLimit} from '../../../utils/httpHelper';
+
+import { chunk } from 'lodash';
 
 class Banner extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            index: 1,  //index which u want to display first
+            index: 0,  //index which u want to display first
             nextIcon: <i className="fa fa-caret-right"></i>,
-            prevIcon: <i className="fa fa-caret-left"></i>
+            prevIcon: <i className="fa fa-caret-left"></i>,
+            bannerBook: []
         }
+    }
+
+    componentDidMount() {
+        this.fetchBookBanner();
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return true;
+    }
+
+    fetchBookBanner() {
+        getSaleLimit()
+        .then((response) => {
+            this.setState({
+                bannerBook: response.data.data
+            });
+        })
+        .catch((error) => console.log(error));
+    }
+
+    dataBindingGrid() {
+        const rows = chunk(this.state.bannerBook, 4);
+        return rows.map((arrayBook, index) =>{
+            return (
+                <Carousel.Item key={index}>
+                <div className="mx-6 mt-4">
+                    <div className="row">
+                        <BookCardRow books = {arrayBook} />
+                    </div>
+                </div>
+                </Carousel.Item>
+            );
+        })
     }
 
     render() {
@@ -29,135 +67,11 @@ class Banner extends React.Component {
                         </div>
                     </div>
                 </div>
-
                 <Carousel className="mx-5"
                 nextIcon={this.state.nextIcon}
                 prevIcon={this.state.prevIcon}
                 index={this.state.index}>
-                    <Carousel.Item>
-                        <div className="mx-6 mt-4">
-                            <div className="row">
-                                <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                                    <div className="card">
-                                        <img className="card-img-top" src="/assets/bookcover/book1.jpg" alt="Card image cap" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">Book title</h5>
-                                            <p className="card-text">
-                                                Author name
-                                            </p>
-                                        </div>
-                                        <div className="card-footer">
-                                            <small className="text-muted">Price</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                                    <div className="card">
-                                        <img className="card-img-top" src="/assets/bookcover/book2.jpg" alt="Card image cap" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">Book title</h5>
-                                            <p className="card-text">
-                                                Author name
-                                            </p>
-                                        </div>
-                                        <div className="card-footer">
-                                            <small className="text-muted">Price</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                                    <div className="card">
-                                        <img className="card-img-top" src="/assets/bookcover/book3.jpg" alt="Card image cap" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">Book title</h5>
-                                            <p className="card-text">
-                                                Author name
-                                            </p>
-                                        </div>
-                                        <div className="card-footer">
-                                            <small className="text-muted">Price</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                                    <div className="card">
-                                        <img className="card-img-top" src="/assets/bookcover/book4.jpg" alt="Card image cap" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">Book title</h5>
-                                            <p className="card-text">
-                                                Author name
-                                            </p>
-                                        </div>
-                                        <div className="card-footer">
-                                            <small className="text-muted">Price</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <div className="mx-6 mt-4">
-                            <div className="row">
-                                <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                                    <div className="card">
-                                        <img className="card-img-top" src="/assets/bookcover/book5.jpg" alt="Card image cap" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">Book title</h5>
-                                            <p className="card-text">
-                                                Author name
-                                            </p>
-                                        </div>
-                                        <div className="card-footer">
-                                            <small className="text-muted">Price</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                                    <div className="card">
-                                        <img className="card-img-top" src="/assets/bookcover/book6.jpg" alt="Card image cap" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">Book title</h5>
-                                            <p className="card-text">
-                                                Author name
-                                            </p>
-                                        </div>
-                                        <div className="card-footer">
-                                            <small className="text-muted">Price</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                                    <div className="card">
-                                        <img className="card-img-top" src="/assets/bookcover/book7.jpg" alt="Card image cap" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">Book title</h5>
-                                            <p className="card-text">
-                                                Author name
-                                            </p>
-                                        </div>
-                                        <div className="card-footer">
-                                            <small className="text-muted">Price</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                                    <div className="card">
-                                        <img className="card-img-top" src="/assets/bookcover/book8.jpg" alt="Card image cap" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">Book title</h5>
-                                            <p className="card-text">
-                                                Author name
-                                            </p>
-                                        </div>
-                                        <div className="card-footer">
-                                            <small className="text-muted">Price</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Carousel.Item>
+                    {this.dataBindingGrid()}
                 </Carousel>
             </div>
         );

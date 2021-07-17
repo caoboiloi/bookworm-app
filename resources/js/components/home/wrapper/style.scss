@@ -6,14 +6,18 @@ div.wrapper {
     .select-home-bar {
         .btn-group-toggle {
             label.btn-primary.active {
-                background-color: #868f96;
+                background-color: #cccccc;
                 border-color: wheat;
                 color: white;
             }
             label.btn-primary {
+                margin-left: 0.5rem;
                 background-color: white;
                 border-color: white;
                 color: black;
+            }
+            label.btn-primary.focus {
+                box-shadow: 0 0 0 0 #b7bfc5;
             }
         }
     }
