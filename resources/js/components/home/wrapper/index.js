@@ -16,9 +16,7 @@ class Wrapper extends React.Component {
       };
 
     componentDidMount() {
-        if ( !(this.state.books && this.state.books.length > 0) ) {
-            this.fetchBookRecommend();
-        }
+        this.fetchBookRecommend();
     }
 
     shouldComponentUpdate(nextProps, nextState) {

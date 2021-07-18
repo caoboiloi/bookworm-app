@@ -8,6 +8,26 @@ import {getSaleLimit} from '../../../utils/httpHelper';
 
 import { chunk } from 'lodash';
 
+//Import to connect react-redux
+import { connect } from 'react-redux';
+//Import action to use dispatch
+import { actNewBanner } from '../../../actions/index';
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addBanner: content => dispatch(actNewBanner(content))
+    };
+};
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        banner: state.banner
+    }
+}
+
+//Gán giá trị của state thành props
+
+
 class Banner extends React.Component {
     constructor(props) {
         super(props);
@@ -24,15 +44,14 @@ class Banner extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.bannerBook !== nextState.bannerBook) {
-            return true;
-        }
-        return false;
+        return nextState.bannerBook.length != this.state.bannerBook.length;
     }
 
     fetchBookBanner() {
         getSaleLimit()
         .then((response) => {
+            var data = response.data.data;
+            // this.props.addBanner(data);
             this.setState({
                 bannerBook: response.data.data
             });
@@ -81,4 +100,4 @@ class Banner extends React.Component {
     }
 }
 
-export default Banner;
+export default connect(mapStateToProps, mapDispatchToProps)(Banner)
