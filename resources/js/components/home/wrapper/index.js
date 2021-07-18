@@ -20,15 +20,7 @@ class Wrapper extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.isClicked == 'recommend' && nextState.books != this.state.books) {
-            this.fetchBookRecommend();
-            return true;
-        }
-        if (this.state.isClicked == 'popular' && nextState.books != this.state.books) {
-            this.fetchBookPopular();
-            return true;
-        }
-        return false;
+        return true;
     }
 
     fetchBookRecommend() {
@@ -62,13 +54,14 @@ class Wrapper extends React.Component {
         })
     }
 
-    handleRecommendChange(event) {
-        var val = event.currentTarget.querySelector("input").value;
-        this.setState({ isClicked: val });
-    }
-    handlePopularChange(event) {
-        var val = event.currentTarget.querySelector("input").value;
-        this.setState({ isClicked: val });
+    handleSelectChange(event) {
+        var val = event;
+        if (val == 'popular') {
+            this.fetchBookPopular();
+        }
+        else {
+            this.fetchBookRecommend();
+        }
     }
 
     render() {
@@ -81,11 +74,11 @@ class Wrapper extends React.Component {
                         </div>
                         <div className="col-lg-12">
                             <div className="text-center">
-                            <ToggleButtonGroup type="radio" name="options" defaultValue={this.state.isClicked}>
-                                <ToggleButton id="tbg-radio-1" value='recommend' onClick={this.handleRecommendChange.bind(this)}>
+                            <ToggleButtonGroup type="radio" name="options" defaultValue={this.state.isClicked} onChange={this.handleSelectChange.bind(this)}>
+                                <ToggleButton id="tbg-radio-1" value='recommend' >
                                     Recommended
                                 </ToggleButton>
-                                <ToggleButton id="tbg-radio-2" value='popular' onClick={this.handlePopularChange.bind(this)}>
+                                <ToggleButton id="tbg-radio-2" value='popular' >
                                     Popular
                                 </ToggleButton>
                             </ToggleButtonGroup>

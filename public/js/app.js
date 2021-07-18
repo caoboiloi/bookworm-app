@@ -6298,17 +6298,7 @@ var Wrapper = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "shouldComponentUpdate",
     value: function shouldComponentUpdate(nextProps, nextState) {
-      if (this.state.isClicked == 'recommend' && nextState.books != this.state.books) {
-        this.fetchBookRecommend();
-        return true;
-      }
-
-      if (this.state.isClicked == 'popular' && nextState.books != this.state.books) {
-        this.fetchBookPopular();
-        return true;
-      }
-
-      return false;
+      return true;
     }
   }, {
     key: "fetchBookRecommend",
@@ -6350,20 +6340,15 @@ var Wrapper = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
-    key: "handleRecommendChange",
-    value: function handleRecommendChange(event) {
-      var val = event.currentTarget.querySelector("input").value;
-      this.setState({
-        isClicked: val
-      });
-    }
-  }, {
-    key: "handlePopularChange",
-    value: function handlePopularChange(event) {
-      var val = event.currentTarget.querySelector("input").value;
-      this.setState({
-        isClicked: val
-      });
+    key: "handleSelectChange",
+    value: function handleSelectChange(event) {
+      var val = event;
+
+      if (val == 'popular') {
+        this.fetchBookPopular();
+      } else {
+        this.fetchBookRecommend();
+      }
     }
   }, {
     key: "render",
@@ -6388,15 +6373,14 @@ var Wrapper = /*#__PURE__*/function (_React$Component) {
                   type: "radio",
                   name: "options",
                   defaultValue: this.state.isClicked,
+                  onChange: this.handleSelectChange.bind(this),
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
                     id: "tbg-radio-1",
                     value: "recommend",
-                    onClick: this.handleRecommendChange.bind(this),
                     children: "Recommended"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
                     id: "tbg-radio-2",
                     value: "popular",
-                    onClick: this.handlePopularChange.bind(this),
                     children: "Popular"
                   })]
                 })
