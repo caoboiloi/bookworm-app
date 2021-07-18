@@ -1,11 +1,25 @@
 import React from 'react';
 import './style.scss';
 
+import { withRouter } from 'react-router';
+
 import MainTitle from '../title';
 import LeftSidebar from '../sidebar';
 import FilterProduct from '../filter';
 
+import qs from 'query-string';
+
 class WrapperProduct extends React.Component {
+
+    componentDidMount() {
+        this.tttt();
+    }
+
+    tttt() {
+        let params = qs.parse(this.props.location.search);
+        console.log(params);
+    }
+
     render() {
         return (
             // WRAPPER - SHOP
@@ -23,4 +37,4 @@ class WrapperProduct extends React.Component {
     }
 }
 
-export default WrapperProduct;
+export default withRouter(WrapperProduct);

@@ -13,6 +13,10 @@ import { connect } from 'react-redux';
 //Import action to use dispatch
 import { actNewBanner } from '../../../actions/index';
 
+import { Link } from 'react-router-dom';
+
+import qs from 'query-string';
+
 const mapDispatchToProps = dispatch => {
     return {
         addBanner: content => dispatch(actNewBanner(content))
@@ -24,9 +28,6 @@ const mapStateToProps = (state, ownProps) => {
         banner: state.banner
     }
 }
-
-//Gán giá trị của state thành props
-
 
 class Banner extends React.Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class Banner extends React.Component {
         getSaleLimit()
         .then((response) => {
             var data = response.data.data;
-            // this.props.addBanner(data);
+            this.props.addBanner(data);
             this.setState({
                 bannerBook: response.data.data
             });
@@ -74,6 +75,16 @@ class Banner extends React.Component {
         })
     }
 
+    handleQuerySearch(query) {
+        const queryParam = qs.parse(location.search);
+        const newQueryParam = {
+           ...queryParam,
+           ...query
+        }
+        console.log(newQueryParam);
+        return newQueryParam;
+    }
+
     render() {
         return(
             <div className="banner mt-4">
@@ -83,9 +94,17 @@ class Banner extends React.Component {
                             <p className="h4"><b>On Sale</b></p>
                         </div>
                         <div className="col-auto my-auto">
-                            <button type="button" className="btn btn-secondary btn-view-all">
-                                View All <i className="fa fa-caret-right"></i>
-                            </button>
+                                <Link to={{
+                                    pathname: '/product',
+                                    search: qs.stringify(this.handleQuerySearch({
+                                            show: 20,
+                                            sort: 'sale'
+                                        }))
+                                    }}>
+                                        <button type="button" className="btn btn-secondary btn-view-all">
+                                        View All <i className="fa fa-caret-right"></i>
+                                        </button>
+                                </Link>
                         </div>
                     </div>
                 </div>

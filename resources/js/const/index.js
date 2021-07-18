@@ -1,1 +1,3 @@
 export const ADD_NEW_BANNER = "ADD_NEW_BANNER";
+
+export const ADD_NEW_QUERY_SEARCH = 'ADD_NEW_QUERY_SEARCH';

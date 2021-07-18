@@ -8,7 +8,7 @@ class Header extends React.Component {
         return (
             <header className="my-0">
                 <Navbar collapseOnSelect expand="md" bg="light">
-                    <Navbar.Brand href="#home">
+                    <Navbar.Brand href="#/">
                         <img src="/assets/bookworm_icon.svg" width="32" height="32" className="d-inline-block align-top my-auto" />
                         <b className="ml-2">BOOKWORM</b>
                     </Navbar.Brand>

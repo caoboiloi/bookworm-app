@@ -18,3 +18,8 @@ export function getRecommendLimit() {
 export function getPopularLimit() {
     return axios.get(endpoint + '/api/books/filter?show=8&sort=popular');
 }
+
+
+export function getFilter(query) {
+    return axios.get(endpoint + query);
+}

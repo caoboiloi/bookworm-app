@@ -37,7 +37,7 @@ class App extends React.Component {
                             <WrapperHome />
                         </Route>
 
-                        <Route exact path="/product">
+                        <Route exact path="/:redirectParams">
                             <WrapperProduct />
                         </Route>
 
