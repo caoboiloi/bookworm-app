@@ -10,7 +10,7 @@ const queryReducer = (state = [], action) => {
             ]
             return state;
         default:
-            state = [{ show:20 }];
+            state = '/filter?show=20';
             return state;
     }
 };

@@ -5,6 +5,8 @@ import "./style.scss";
 
 import { Link } from 'react-router-dom';
 
+import { withRouter } from 'react-router';
+
 import qs from 'query-string';
 
 import { connect } from 'react-redux';
@@ -40,6 +42,12 @@ class FilterProduct extends React.Component {
     }
 
     componentDidMount() {
+        this.getQueryVariable();
+    }
+
+    getQueryVariable() {
+        let params = qs.parse(this.props.location.search);
+        return params;
     }
 
     handleSelectSort(event) {
@@ -114,6 +122,15 @@ class FilterProduct extends React.Component {
         this.props.pushQuery({show: this.state.show.code});
     }
 
+    handleQuerySearch(query) {
+        const queryParam = this.getQueryVariable();
+        const newQueryParam = {
+           ...queryParam,
+           ...query
+        }
+        return newQueryParam;
+    }
+
     render() {
         return (
         <div className="col-lg-10 col-md-9 col-sm-12 pr-0 product-show-list">
@@ -131,7 +148,16 @@ class FilterProduct extends React.Component {
                         className="ml-4"
                         onSelect={this.handleSelectSort.bind(this)}>
                         <Dropdown.Item eventKey="sale">
-                            Sort by on sale
+                            <Link to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        sort: 'sale'
+                                    }))
+                                }}>
+                                    <button type="button" className="btn btn-secondary btn-view-all">
+                                    View All <i className="fa fa-caret-right"></i>
+                                    </button>
+                            </Link>
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="popular">
                             Sort by popularity
@@ -386,4 +412,4 @@ class FilterProduct extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FilterProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(FilterProduct));

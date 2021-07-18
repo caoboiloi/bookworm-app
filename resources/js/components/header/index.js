@@ -18,7 +18,7 @@ class Header extends React.Component {
                             <Nav.Link eventKey={1} href="#/">
                                 Home
                             </Nav.Link>
-                            <Nav.Link eventKey={2} href="#/product">
+                            <Nav.Link eventKey={2} href="#/product/filter?sort=sale&show=20">
                                 Shop
                             </Nav.Link>
                             <Nav.Link eventKey={3} href="#/about">

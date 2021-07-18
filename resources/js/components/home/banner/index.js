@@ -25,7 +25,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        banner: state.banner
+        filter: state.filter
     }
 }
 
@@ -45,19 +45,29 @@ class Banner extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextState.bannerBook.length != this.state.bannerBook.length;
+        return true;
     }
 
-    fetchBookBanner() {
-        getSaleLimit()
-        .then((response) => {
-            var data = response.data.data;
-            this.props.addBanner(data);
+    async fetchBookBanner() {
+        if (this.props.filter.banner != undefined) {
+            console.log('check true banner\n-------------')
             this.setState({
-                bannerBook: response.data.data
-            });
-        })
-        .catch((error) => console.log(error));
+                bannerBook: this.props.filter.banner
+            })
+        }
+        else {
+            console.log('check false banner\n-------------')
+
+            await getSaleLimit()
+            .then((response) => {
+                var data = response.data.data;
+                this.props.addBanner(data);
+                this.setState({
+                    bannerBook: response.data.data
+                });
+            })
+            .catch((error) => console.log(error));
+        }
     }
 
     dataBindingGrid() {
@@ -81,7 +91,6 @@ class Banner extends React.Component {
            ...queryParam,
            ...query
         }
-        console.log(newQueryParam);
         return newQueryParam;
     }
 
@@ -95,7 +104,7 @@ class Banner extends React.Component {
                         </div>
                         <div className="col-auto my-auto">
                                 <Link to={{
-                                    pathname: '/product',
+                                    pathname: '/product/filter',
                                     search: qs.stringify(this.handleQuerySearch({
                                             show: 20,
                                             sort: 'sale'

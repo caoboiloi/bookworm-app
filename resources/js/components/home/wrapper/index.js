@@ -8,6 +8,24 @@ import { chunk } from 'lodash';
 
 import BookCardRow from '../../book';
 
+//Import to connect react-redux
+import { connect } from 'react-redux';
+//Import action to use dispatch
+import { actNewRecommend, actNewPopular } from '../../../actions/index';
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addRecommend: content => dispatch(actNewRecommend(content)),
+        addPopular: content => dispatch(actNewPopular(content))
+    };
+};
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        filter: state.filter,
+    }
+}
+
 class Wrapper extends React.Component {
 
     state = {
@@ -24,23 +42,45 @@ class Wrapper extends React.Component {
     }
 
     fetchBookRecommend() {
-        getRecommendLimit()
-        .then((response) => {
+        if (this.props.filter.recommend != undefined) {
+            console.log('check true recommend\n-------------')
             this.setState({
-                books: response.data.data
-            });
-        })
-        .catch((error) => console.log(error));
+                books: this.props.filter.recommend
+            })
+        }
+        else {
+            console.log('check false recommend\n-------------')
+            getRecommendLimit()
+            .then((response) => {
+                var data = response.data.data;
+                this.props.addRecommend(data);
+                this.setState({
+                    books: response.data.data
+                });
+            })
+            .catch((error) => console.log(error));
+        }
     }
 
     fetchBookPopular() {
-        getPopularLimit()
-        .then((response) => {
+        if (this.props.filter.popular != undefined) {
+            console.log('check true popular\n-------------')
             this.setState({
-                books: response.data.data
-            });
-        })
-        .catch((error) => console.log(error));
+                books: this.props.filter.popular
+            })
+        }
+        else {
+            console.log('check false popular\n-------------')
+            getPopularLimit()
+            .then((response) => {
+                var data = response.data.data;
+                this.props.addPopular(data);
+                this.setState({
+                    books: response.data.data
+                });
+            })
+            .catch((error) => console.log(error));
+        }
     }
 
     dataBindingGrid() {
@@ -96,4 +136,4 @@ class Wrapper extends React.Component {
     }
 }
 
-export default Wrapper;
+export default connect(mapStateToProps, mapDispatchToProps)(Wrapper)

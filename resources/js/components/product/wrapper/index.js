@@ -12,10 +12,10 @@ import qs from 'query-string';
 class WrapperProduct extends React.Component {
 
     componentDidMount() {
-        this.tttt();
+        this.getQueryVariable();
     }
 
-    tttt() {
+    getQueryVariable() {
         let params = qs.parse(this.props.location.search);
         console.log(params);
     }
