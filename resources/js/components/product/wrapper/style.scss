@@ -13,7 +13,7 @@ div.wrapper-shop {
     }
     /* -- Product Show List */
     /* ---- .1 Filter Left Sidebar */
-    .filter-category-sidebar {
+    .filter-data-sidebar {
         /* border: 0.5px solid #868f96; */
         /* box-shadow: 0 0 3px #868f96; */
         display: flex;
@@ -30,21 +30,16 @@ div.wrapper-shop {
         align-content: center;
         align-items: flex-start;
         justify-content: space-between;
-    }
-    .filter-dropdown-button {
-        display: flex;
-        flex-direction: row;
-    }
-    .filter-dropdown-button button.btn-outline-secondary {
-        background-color: #6A777D;
-        color: white;
+        .filter-dropdown-button {
+            display: flex;
+            flex-direction: row;
+        }
+        .filter-dropdown-button button.btn-outline-secondary {
+            background-color: #6A777D;
+            color: white;
+        }
     }
     /* ------ .2.2 Product-list */
-    .card-img-top {
-        width: 100%;
-        height: 28vw;
-        object-fit: cover;
-    }
     .pagination {
         display: flex;
         justify-content: center;

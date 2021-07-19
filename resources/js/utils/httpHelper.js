@@ -11,7 +11,7 @@ export function getSaleLimit() {
 
 // show & star & sort: limit 8, sort by avg_star desc, final_price asc
 export function getRecommendLimit() {
-    return axios.get(endpoint + '/api/books/filter?show=8&star=0&sort=asc');
+    return axios.get(endpoint + '/api/books/filter?show=8&sort=recommend');
 }
 
 // show & sort: limit 8, sort by popular desc, final_price asc
@@ -20,6 +20,10 @@ export function getPopularLimit() {
 }
 
 
-export function getFilter(query) {
+export function getBookFilter(query) {
     return axios.get(endpoint + query);
+}
+
+export function getSidebarFilter() {
+    return axios.get(endpoint + '/api/filters');
 }

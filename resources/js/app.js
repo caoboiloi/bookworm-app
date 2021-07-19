@@ -22,7 +22,9 @@ import WrapperProduct from './components/product/wrapper';
 // Call reducers
 import reducers from "./reducers/index";
 // Create store
-const store = createStore(reducers);
+const store = createStore(
+    reducers,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 class App extends React.Component {
     render() {
@@ -50,7 +52,7 @@ class App extends React.Component {
                         </Route>
 
                         <Footer />
-                        {/* <Route path="**" render={() => <h1>Route not found!</h1>}></Route> */}
+                        <Route path="**" render={() => <h1>Route not found!</h1>}></Route>
                     </div>
                 </Router>
             </Provider>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Dropdown, DropdownButton, ButtonGroup} from 'react-bootstrap';
+import { Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap';
 import "./style.scss";
 
 import { Link } from 'react-router-dom';
@@ -11,17 +11,18 @@ import qs from 'query-string';
 
 import { connect } from 'react-redux';
 
-import { actAddNewQuerySearch } from '../../../actions/index';
+import { actAddNewSortQueryParam } from '../../../actions/index';
+import { getQueryVariable } from '../../../utils/queryVariable';
 
 const mapDispatchToProps = dispatch => {
     return {
-        pushQuery: content => dispatch(actAddNewQuerySearch(content))
+        pushQueryOrderby: content => dispatch(actAddNewSortQueryParam(content))
     };
 };
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        query: state.query
+        search: state.search
     }
 }
 
@@ -36,18 +37,16 @@ class FilterProduct extends React.Component {
             show : {
                 title: 'Show 20',
                 code: 20
-            },
-            query: ''
+            }
         }
     }
 
     componentDidMount() {
-        this.getQueryVariable();
+        // console.log(this.props.search);
     }
-
-    getQueryVariable() {
-        let params = qs.parse(this.props.location.search);
-        return params;
+    static getDerivedStateFromProps(nextProps, prevState) {
+        // console.log(prevState);
+        return null;
     }
 
     handleSelectSort(event) {
@@ -78,10 +77,8 @@ class FilterProduct extends React.Component {
                 }
         }
         this.setState({
-            sort: sort,
-            query: this.props.query
+            sort: sort
         })
-        this.props.pushQuery({sort: this.state.sort.code});
     }
     handleSelectShow(event) {
         var show = 20;
@@ -119,11 +116,10 @@ class FilterProduct extends React.Component {
         this.setState({
             show: show
         })
-        this.props.pushQuery({show: this.state.show.code});
     }
 
     handleQuerySearch(query) {
-        const queryParam = this.getQueryVariable();
+        const queryParam = getQueryVariable(this.props);
         const newQueryParam = {
            ...queryParam,
            ...query
@@ -147,26 +143,37 @@ class FilterProduct extends React.Component {
                         title={this.state.sort.title}
                         className="ml-4"
                         onSelect={this.handleSelectSort.bind(this)}>
-                        <Dropdown.Item eventKey="sale">
-                            <Link to={{
+                        <Dropdown.Item eventKey="sale" as={Link} to={{
                                 pathname: '/product/filter',
                                 search: qs.stringify(this.handleQuerySearch({
                                         sort: 'sale'
                                     }))
-                                }}>
-                                    <button type="button" className="btn btn-secondary btn-view-all">
-                                    View All <i className="fa fa-caret-right"></i>
-                                    </button>
-                            </Link>
+                                }} replace>
+                                    Sort by on sale
                         </Dropdown.Item>
-                        <Dropdown.Item eventKey="popular">
-                            Sort by popularity
+                        <Dropdown.Item eventKey="popular" as={Link} to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        sort: 'popular'
+                                    }))
+                                }} replace>
+                                    Sort by popularity
                         </Dropdown.Item>
-                        <Dropdown.Item eventKey="asc">
-                            Sort by price: low to high
+                        <Dropdown.Item eventKey="asc" as={Link} to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        sort: 'asc'
+                                    }))
+                                }} replace>
+                                    Sort by price: low to high
                         </Dropdown.Item>
-                        <Dropdown.Item eventKey="desc">
-                            Sort by price: high to low
+                        <Dropdown.Item eventKey="desc" as={Link} to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        sort: 'desc'
+                                    }))
+                                }} replace>
+                                    Sort by price: high to low
                         </Dropdown.Item>
                     </DropdownButton>
                     <DropdownButton
@@ -177,11 +184,46 @@ class FilterProduct extends React.Component {
                         title= {this.state.show.title}
                         className="ml-4"
                         onSelect={this.handleSelectShow.bind(this)}>
-                        <Dropdown.Item eventKey="20">Show 20</Dropdown.Item>
-                        <Dropdown.Item eventKey="40">Show 40</Dropdown.Item>
-                        <Dropdown.Item eventKey="60">Show 60</Dropdown.Item>
-                        <Dropdown.Item eventKey="80">Show 80</Dropdown.Item>
-                        <Dropdown.Item eventKey="100">Show 100</Dropdown.Item>
+                        <Dropdown.Item eventKey="20" as={Link} to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        show: 20
+                                    }))
+                                }} replace>
+                                    Show 20
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey="40" as={Link} to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        show: 40
+                                    }))
+                                }} replace>
+                                    Show 40
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey="60" as={Link} to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        show: 60
+                                    }))
+                                }} replace>
+                                    Show 60
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey="80" as={Link} to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        show: 80
+                                    }))
+                                }} replace>
+                                    Show 80
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey="100" as={Link} to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        show: 100
+                                    }))
+                                }} replace>
+                                    Show 100
+                        </Dropdown.Item>
                     </DropdownButton>
                 </div>
             </div>

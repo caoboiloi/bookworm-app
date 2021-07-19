@@ -3,6 +3,8 @@ import './style.scss';
 
 import BookCardRow from '../../book';
 
+import { withRouter } from 'react-router';
+
 import {Carousel} from 'react-bootstrap';
 import {getSaleLimit} from '../../../utils/httpHelper';
 
@@ -12,6 +14,8 @@ import { chunk } from 'lodash';
 import { connect } from 'react-redux';
 //Import action to use dispatch
 import { actNewBanner } from '../../../actions/index';
+
+import { getQueryVariable } from '../../../utils/queryVariable';
 
 import { Link } from 'react-router-dom';
 
@@ -86,7 +90,7 @@ class Banner extends React.Component {
     }
 
     handleQuerySearch(query) {
-        const queryParam = qs.parse(location.search);
+        const queryParam = getQueryVariable(this.props);
         const newQueryParam = {
            ...queryParam,
            ...query
@@ -106,8 +110,8 @@ class Banner extends React.Component {
                                 <Link to={{
                                     pathname: '/product/filter',
                                     search: qs.stringify(this.handleQuerySearch({
-                                            show: 20,
-                                            sort: 'sale'
+                                            sort: 'sale',
+                                            show: 20
                                         }))
                                     }}>
                                         <button type="button" className="btn btn-secondary btn-view-all">
@@ -128,4 +132,4 @@ class Banner extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Banner)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Banner))

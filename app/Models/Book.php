@@ -137,13 +137,19 @@ class Book extends Model
                     END ASC');
     }
 
+    public function sortRecommend($query)
+    {
+        return $query
+        ->havingRaw("COALESCE(AVG(CAST(rating_start as INT)), 0) >= 0")
+        ->orderByRaw("COALESCE(AVG(cast(rating_start as INT)), 0) desc");
+    }
+
     // FILTER
     public function filterStar($query, $value)
     {
         if (is_numeric($value)) {
             return $query
-            ->havingRaw("COALESCE(AVG(CAST(rating_start as INT)), 0) >= ?", [$value])
-            ->orderByRaw("COALESCE(AVG(cast(rating_start as INT)), 0) desc");
+            ->havingRaw("COALESCE(AVG(CAST(rating_start as INT)), 0) >= ?", [$value]);
         }
     }
 

@@ -1,0 +1,9 @@
+div.wrapper-shop {
+    .filter-data-sidebar {
+        .dropdown-item:focus, .dropdown-item:hover, .dropdown-item.active, .dropdown-item:active  {
+            color: #16181b;
+            text-decoration: none;
+            background-color: #d8e0e7;
+        }
+    }
+}

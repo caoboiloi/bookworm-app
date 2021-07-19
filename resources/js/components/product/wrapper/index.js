@@ -7,17 +7,16 @@ import MainTitle from '../title';
 import LeftSidebar from '../sidebar';
 import FilterProduct from '../filter';
 
+import {getQueryVariable} from '../../../utils/queryVariable';
+
 import qs from 'query-string';
 
 class WrapperProduct extends React.Component {
 
-    componentDidMount() {
-        this.getQueryVariable();
+    constructor(props) {
+        super(props);
     }
-
-    getQueryVariable() {
-        let params = qs.parse(this.props.location.search);
-        console.log(params);
+    componentDidMount() {
     }
 
     render() {

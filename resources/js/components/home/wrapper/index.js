@@ -31,7 +31,7 @@ class Wrapper extends React.Component {
     state = {
         books: [],
         isClicked: 'recommend'
-      };
+    };
 
     componentDidMount() {
         this.fetchBookRecommend();

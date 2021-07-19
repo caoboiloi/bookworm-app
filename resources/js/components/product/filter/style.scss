@@ -1,5 +1,12 @@
-.dropdown-item:focus, .dropdown-item:hover {
-    color: #16181b;
-    text-decoration: none;
-    background-color: #99a4af;
+div.wrapper-shop .product-show-list .filter-dropdown {
+    .dropdown-item:focus, .dropdown-item:hover {
+        color: #16181b;
+        text-decoration: none;
+        background-color: #ccd3da;
+    }
+    .dropdown a {
+        text-decoration: none;
+        color: rgb(32, 31, 31);
+    }
 }
+
