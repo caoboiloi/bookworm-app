@@ -73,7 +73,10 @@ class LeftSidebar extends React.Component {
     }
 
     handleQuerySearch(query) {
-        const queryParam = getQueryVariable(this.props);
+        let queryParam = getQueryVariable(this.props);
+        if (queryParam.page) {
+            delete queryParam.page;
+        }
         const newQueryParam = {
            ...queryParam,
            ...query

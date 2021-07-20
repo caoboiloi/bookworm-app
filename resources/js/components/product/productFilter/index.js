@@ -34,7 +34,15 @@ class ProductFilterList extends React.Component {
         sort : this.props.search.sortTitle,
         show : this.props.search.showTitle,
         filter : this.props.search.mainTitle,
-        queryDefault : this.props.search.queryDefault
+        queryDefault : this.props.search.queryDefault,
+        prevUrlPaginate: '#',
+        nextUrlPaginate: '#',
+        lastUrlPaginate: '#',
+        firstUrlPaginate: '#',
+        totalProduct: 0,
+        currentPage: 0,
+        lastPage: 0,
+        perPage: 0
     }
 
     componentDidMount() {
@@ -42,19 +50,27 @@ class ProductFilterList extends React.Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.location.search !== prevProps.location.search) {
+            console.log('ROUTER CHANGE - productFilter')
             if (prevProps.search.mainTitle != this.state.filter ||
                 prevProps.search.sortTitle != this.state.sort ||
                 prevProps.search.showTitle != this.state.show) {
-                let query = this.onRouteChanged()
-                this.fetchBookFilter(query);
+                    let query = this.parseQueryString()
+                    this.fetchBookFilter(query);
             }
+            if (prevProps.search.mainTitle == this.state.filter &&
+                prevProps.search.sortTitle == this.state.sort &&
+                prevProps.search.showTitle == this.state.show) {
+                    console.log('pagination')
+                    let query = this.parseQueryString()
+                    this.fetchBookFilter(query);
+                }
             if (this.props.location.search == '?' + this.state.queryDefault) {
                 this.props.resetFilterPage();
                 this.fetchBookFilter(this.state.queryDefault);
             }
         }
     }
-    onRouteChanged() {
+    parseQueryString() {
         let query_params = this.handleQuerySearch()
         query_params[query_params.filter] = query_params.id;
         delete query_params.filter;
@@ -66,6 +82,29 @@ class ProductFilterList extends React.Component {
             filter : this.props.search.mainTitle,
         });
         return query_string;
+    }
+    parseQueryPaginate(url) {
+        if (url != null) {
+            let query = qs.parseUrl(url).query
+            if (query.category) {
+                query.filter = 'category';
+                query.id = query.category;
+                delete query.category;
+            }
+            if (query.star) {
+                query.filter = 'star';
+                query.id = query.star;
+                delete query.star;
+            }
+            if (query.author) {
+                query.filter = 'author';
+                query.id = query.author;
+                delete query.author;
+            }
+            let query_string = qs.stringify(query)
+            return query_string
+        }
+        return "#";
     }
     handleQuerySearch() {
         const queryParam = getQueryVariable(this.props);
@@ -80,7 +119,15 @@ class ProductFilterList extends React.Component {
         .then((response) => {
             var data = response.data.data;
             this.setState({
-                books: data
+                books: data,
+                prevUrlPaginate: this.parseQueryPaginate(response.data.link.prev_url),
+                nextUrlPaginate: this.parseQueryPaginate(response.data.link.next_url),
+                lastUrlPaginate: this.parseQueryPaginate(response.data.link.last_url),
+                firstUrlPaginate: this.parseQueryPaginate(response.data.link.first_url),
+                totalProduct: response.data.meta.total,
+                currentPage: response.data.meta.current_page,
+                lastPage: response.data.meta.last_page,
+                perPage: response.data.meta.per_page
             });
         })
         .catch((error) => console.log(error));
@@ -106,45 +153,35 @@ class ProductFilterList extends React.Component {
                 <div className="mt-4 mb-3 pagination">
                     <nav aria-label=" Page navigation product">
                     <ul className="pagination justify-content-end">
-                        <li className="page-item disabled">
-                            <Link to={{
-                                pathname: "/courses",
-                                search: "?sort=name",
-                                hash: "#the-hash",
-                                state: { fromDashboard: true }
-                            }} className="page-link">Previous</Link>
-                        </li>
                         <li className="page-item">
                             <Link to={{
-                                pathname: "/courses",
+                                pathname: "/product/filter",
+                                search: this.state.prevUrlPaginate,
+                            }} className="page-link" replace>Previous</Link>
+                        </li>
+                        <li className="page-item disabled">
+                            <Link to={{
+                                pathname: "/product/filter",
                                 search: "?sort=name",
-                                hash: "#the-hash",
-                                state: { fromDashboard: true }
                             }} className="page-link">1</Link>
                         </li>
                         <li className="page-item">
                             <Link to={{
-                                pathname: "/courses",
+                                pathname: "/product/filter",
                                 search: "?sort=name",
-                                hash: "#the-hash",
-                                state: { fromDashboard: true }
                             }} className="page-link">2</Link>
                         </li>
                         <li className="page-item">
                             <Link to={{
-                                pathname: "/courses",
+                                pathname: "/product/filter",
                                 search: "?sort=name",
-                                hash: "#the-hash",
-                                state: { fromDashboard: true }
                             }} className="page-link">3</Link>
                         </li>
                         <li className="page-item">
                             <Link to={{
-                                pathname: "/courses",
-                                search: "?sort=name",
-                                hash: "#the-hash",
-                                state: { fromDashboard: true }
-                            }} className="page-link">Next</Link>
+                                pathname: "/product/filter",
+                                search: this.state.nextUrlPaginate,
+                            }} className="page-link" replace>Next</Link>
                         </li>
                     </ul>
                     </nav>
