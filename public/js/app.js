@@ -6004,12 +6004,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -6071,15 +6065,6 @@ var Header = /*#__PURE__*/function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {}
   }, {
-    key: "handleQuerySearch",
-    value: function handleQuerySearch(query) {
-      var queryParam = (0,_utils_queryVariable__WEBPACK_IMPORTED_MODULE_5__.getQueryVariable)(this.props);
-
-      var newQueryParam = _objectSpread(_objectSpread({}, queryParam), query);
-
-      return newQueryParam;
-    }
-  }, {
     key: "render",
     value: function render() {
       var _this = this;
@@ -6114,13 +6099,7 @@ var Header = /*#__PURE__*/function (_React$Component) {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default.Link, {
                 eventKey: 2,
                 as: react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link,
-                to: {
-                  pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
-                    sort: 'sale',
-                    show: 20
-                  }))
-                },
+                to: "/product/filter?show=20&sort=sale",
                 onClick: function onClick() {
                   return _this.props.resetFilterPage();
                 },
@@ -6662,17 +6641,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/DropdownButton.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/ButtonGroup.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Dropdown.js");
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./resources/js/components/product/filter/style.scss");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
-/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! query-string */ "./node_modules/query-string/index.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _actions_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../actions/index */ "./resources/js/actions/index.js");
-/* harmony import */ var _utils_queryVariable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../utils/queryVariable */ "./resources/js/utils/queryVariable.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _productFilter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../productFilter */ "./resources/js/components/product/productFilter/index.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/DropdownButton.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/ButtonGroup.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Dropdown.js");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.scss */ "./resources/js/components/product/filter/style.scss");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! query-string */ "./node_modules/query-string/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../actions/index */ "./resources/js/actions/index.js");
+/* harmony import */ var _utils_queryVariable__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utils/queryVariable */ "./resources/js/utils/queryVariable.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -6713,10 +6693,11 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     pushSortFilter: function pushSortFilter(content) {
-      return dispatch((0,_actions_index__WEBPACK_IMPORTED_MODULE_4__.actAddNewSortQueryParam)(content));
+      return dispatch((0,_actions_index__WEBPACK_IMPORTED_MODULE_5__.actAddNewSortQueryParam)(content));
     }
   };
 };
@@ -6742,18 +6723,26 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
       sort: _this.props.search.sortQueryParam.sort,
       show: _this.props.search.sortQueryParam.show,
       sortTitle: _this.props.search.sortTitle,
-      showTitle: _this.props.search.showTitle
+      showTitle: _this.props.search.showTitle,
+      queryDefault: _this.props.search.queryDefault
     };
     return _this;
   }
 
   _createClass(FilterProduct, [{
     key: "componentDidMount",
-    value: function componentDidMount() {// console.log(this.props.search);
-    }
+    value: function componentDidMount() {}
   }, {
     key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps, prevState, snapshot) {// console.log(this.props.search)
+    value: function componentDidUpdate(prevProps, prevState, snapshot) {
+      if (this.props.location.search !== prevProps.location.search) {
+        if (this.props.location.search == '?' + this.state.queryDefault) {
+          this.setState({
+            sortTitle: this.props.search.sortTitle,
+            showTitle: this.props.search.showTitle
+          });
+        }
+      }
     }
   }, {
     key: "shouldComponentUpdate",
@@ -6772,7 +6761,7 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "handleQuerySearch",
     value: function handleQuerySearch(query) {
-      var queryParam = (0,_utils_queryVariable__WEBPACK_IMPORTED_MODULE_5__.getQueryVariable)(this.props);
+      var queryParam = (0,_utils_queryVariable__WEBPACK_IMPORTED_MODULE_6__.getQueryVariable)(this.props);
 
       var newQueryParam = _objectSpread(_objectSpread({}, queryParam), query);
 
@@ -6783,26 +6772,26 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         className: "col-lg-10 col-md-9 col-sm-12 pr-0 product-show-list",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           className: "mt-4 mb-3 filter-dropdown",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-            children: "Showing 1-12 of 126 of books"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            children: "Showing 1-20 of 126 of books"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
             className: "filter-dropdown-button",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
-              as: react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default, {
+              as: react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default,
               id: "dropdown-variants-sort",
               variant: "secondary",
               title: this.state.sortTitle,
               className: "ml-4",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default.Item, {
                 eventKey: "sale",
-                as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_11__.Link,
                 to: {
                   pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
                     sort: 'sale'
                   }))
                 },
@@ -6814,12 +6803,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                 },
                 replace: true,
                 children: "Sort by on sale"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default.Item, {
                 eventKey: "popular",
-                as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_11__.Link,
                 to: {
                   pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
                     sort: 'popular'
                   }))
                 },
@@ -6831,12 +6820,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                 },
                 replace: true,
                 children: "Sort by popularity"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default.Item, {
                 eventKey: "asc",
-                as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_11__.Link,
                 to: {
                   pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
                     sort: 'asc'
                   }))
                 },
@@ -6848,12 +6837,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                 },
                 replace: true,
                 children: "Sort by price: low to high"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default.Item, {
                 eventKey: "desc",
-                as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_11__.Link,
                 to: {
                   pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
                     sort: 'desc'
                   }))
                 },
@@ -6866,18 +6855,18 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                 replace: true,
                 children: "Sort by price: high to low"
               })]
-            }, 'sortFilter'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
-              as: react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default,
+            }, 'sortFilter'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default, {
+              as: react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default,
               id: "dropdown-variants-show",
               variant: "secondary",
               title: this.state.showTitle,
               className: "ml-4",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default.Item, {
                 eventKey: "20",
-                as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_11__.Link,
                 to: {
                   pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
                     show: 20
                   }))
                 },
@@ -6889,12 +6878,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                 },
                 replace: true,
                 children: "Show 20"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default.Item, {
                 eventKey: "40",
-                as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_11__.Link,
                 to: {
                   pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
                     show: 40
                   }))
                 },
@@ -6906,12 +6895,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                 },
                 replace: true,
                 children: "Show 40"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default.Item, {
                 eventKey: "60",
-                as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_11__.Link,
                 to: {
                   pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
                     show: 60
                   }))
                 },
@@ -6923,12 +6912,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                 },
                 replace: true,
                 children: "Show 60"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default.Item, {
                 eventKey: "80",
-                as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_11__.Link,
                 to: {
                   pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
                     show: 80
                   }))
                 },
@@ -6940,12 +6929,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                 },
                 replace: true,
                 children: "Show 80"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default.Item, {
                 eventKey: "100",
-                as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_11__.Link,
                 to: {
                   pathname: '/product/filter',
-                  search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
                     show: 100
                   }))
                 },
@@ -6960,327 +6949,212 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
               })]
             }, 'showFilter ')]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_productFilter__WEBPACK_IMPORTED_MODULE_1__.default, {})]
+      });
+    }
+  }]);
+
+  return FilterProduct;
+}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_4__.connect)(mapStateToProps, mapDispatchToProps)((0,react_router__WEBPACK_IMPORTED_MODULE_12__.withRouter)(FilterProduct)));
+
+/***/ }),
+
+/***/ "./resources/js/components/product/productFilter/index.js":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/product/productFilter/index.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _utils_httpHelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../../utils/httpHelper */ "./resources/js/utils/httpHelper.js");
+/* harmony import */ var _book__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../book */ "./resources/js/components/book/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! query-string */ "./node_modules/query-string/index.js");
+/* harmony import */ var _actions_index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../actions/index */ "./resources/js/actions/index.js");
+/* harmony import */ var _utils_queryVariable__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../utils/queryVariable */ "./resources/js/utils/queryVariable.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    resetFilterPage: function resetFilterPage(content) {
+      return dispatch((0,_actions_index__WEBPACK_IMPORTED_MODULE_6__.actResetDataFilterPage)(content));
+    }
+  };
+};
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    search: state.search
+  };
+};
+
+var ProductFilterList = /*#__PURE__*/function (_React$Component) {
+  _inherits(ProductFilterList, _React$Component);
+
+  var _super = _createSuper(ProductFilterList);
+
+  function ProductFilterList() {
+    var _this;
+
+    _classCallCheck(this, ProductFilterList);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      books: [],
+      sort: _this.props.search.sortTitle,
+      show: _this.props.search.showTitle,
+      filter: _this.props.search.mainTitle,
+      queryDefault: _this.props.search.queryDefault
+    });
+
+    return _this;
+  }
+
+  _createClass(ProductFilterList, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.fetchBookFilter(this.state.queryDefault);
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState, snapshot) {
+      if (this.props.location.search !== prevProps.location.search) {
+        if (prevProps.search.mainTitle != this.state.filter || prevProps.search.sortTitle != this.state.sort || prevProps.search.showTitle != this.state.show) {
+          var query = this.onRouteChanged();
+          this.fetchBookFilter(query);
+        }
+
+        if (this.props.location.search == '?' + this.state.queryDefault) {
+          this.props.resetFilterPage();
+          this.fetchBookFilter(this.state.queryDefault);
+        }
+      }
+    }
+  }, {
+    key: "onRouteChanged",
+    value: function onRouteChanged() {
+      var query_params = this.handleQuerySearch();
+      query_params[query_params.filter] = query_params.id;
+      delete query_params.filter;
+      delete query_params.id;
+      var query_string = query_string__WEBPACK_IMPORTED_MODULE_5__.stringify(query_params);
+      this.setState({
+        sort: this.props.search.sortTitle,
+        show: this.props.search.showTitle,
+        filter: this.props.search.mainTitle
+      });
+      return query_string;
+    }
+  }, {
+    key: "handleQuerySearch",
+    value: function handleQuerySearch() {
+      var queryParam = (0,_utils_queryVariable__WEBPACK_IMPORTED_MODULE_7__.getQueryVariable)(this.props);
+
+      var newQueryParam = _objectSpread({}, queryParam);
+
+      return newQueryParam;
+    }
+  }, {
+    key: "fetchBookFilter",
+    value: function fetchBookFilter(query) {
+      var _this2 = this;
+
+      (0,_utils_httpHelper__WEBPACK_IMPORTED_MODULE_1__.getBookFilter)(query).then(function (response) {
+        var data = response.data.data;
+
+        _this2.setState({
+          books: data
+        });
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    }
+  }, {
+    key: "dataBindingGrid",
+    value: function dataBindingGrid() {
+      var rows = (0,lodash__WEBPACK_IMPORTED_MODULE_4__.chunk)(this.state.books, 4);
+      return rows.map(function (arrayBook, index) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "mt-4 mb-3 product-show-list",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
             className: "row",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book1.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book2.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book3.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book4.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-            className: "row",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book5.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book6.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book7.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book8.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-            className: "row",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book5.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book6.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book7.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                className: "card",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                  className: "card-img-top",
-                  src: "/assets/bookcover/book8.jpg",
-                  alt: "Card image cap"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                  className: "card-body",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h5", {
-                    className: "card-title",
-                    children: "Book title"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-                    className: "card-text",
-                    children: "Author name"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-                  className: "card-footer",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
-                    className: "text-muted",
-                    children: "Price"
-                  })
-                })]
-              })
-            })]
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_book__WEBPACK_IMPORTED_MODULE_2__.default, {
+              books: arrayBook
+            })
+          })
+        }, index);
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+        children: [this.dataBindingGrid(), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "mt-4 mb-3 pagination",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("nav", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("nav", {
             "aria-label": " Page navigation product",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("ul", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
               className: "pagination justify-content-end",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
                 className: "page-item disabled",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
                   to: {
                     pathname: "/courses",
                     search: "?sort=name",
@@ -7292,9 +7166,9 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                   className: "page-link",
                   children: "Previous"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
                 className: "page-item",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
                   to: {
                     pathname: "/courses",
                     search: "?sort=name",
@@ -7306,9 +7180,9 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                   className: "page-link",
                   children: "1"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
                 className: "page-item",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
                   to: {
                     pathname: "/courses",
                     search: "?sort=name",
@@ -7320,9 +7194,9 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                   className: "page-link",
                   children: "2"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
                 className: "page-item",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
                   to: {
                     pathname: "/courses",
                     search: "?sort=name",
@@ -7334,9 +7208,9 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                   className: "page-link",
                   children: "3"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
                 className: "page-item",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
                   to: {
                     pathname: "/courses",
                     search: "?sort=name",
@@ -7356,10 +7230,10 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
     }
   }]);
 
-  return FilterProduct;
+  return ProductFilterList;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_3__.connect)(mapStateToProps, mapDispatchToProps)((0,react_router__WEBPACK_IMPORTED_MODULE_11__.withRouter)(FilterProduct)));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_3__.connect)(mapStateToProps, mapDispatchToProps)((0,react_router__WEBPACK_IMPORTED_MODULE_10__.withRouter)(ProductFilterList)));
 
 /***/ }),
 
@@ -7744,7 +7618,8 @@ var MainTitle = /*#__PURE__*/function (_React$Component) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      mainTitle: _this.props.search.mainTitle
+      mainTitle: _this.props.search.mainTitle,
+      queryDefault: _this.props.search.queryDefault
     });
 
     return _this;
@@ -7753,10 +7628,18 @@ var MainTitle = /*#__PURE__*/function (_React$Component) {
   _createClass(MainTitle, [{
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps, prevState, snapshot) {
-      if (this.state.mainTitle != this.props.search.mainTitle) {
-        this.setState({
-          mainTitle: this.props.search.mainTitle
-        });
+      if (this.props.location.search !== prevProps.location.search) {
+        if (this.state.mainTitle != this.props.search.mainTitle) {
+          this.setState({
+            mainTitle: this.props.search.mainTitle
+          });
+        }
+
+        if (this.props.location.search == '?' + this.state.queryDefault) {
+          this.setState({
+            mainTitle: ""
+          });
+        }
       }
     }
   }, {
@@ -8019,6 +7902,7 @@ var searchReducer = function searchReducer() {
       state.sortTitle = "Sort by on sale";
       state.showTitle = "Show 20";
       state.mainTitle = "";
+      state.queryDefault = query_string__WEBPACK_IMPORTED_MODULE_1__.stringify(state.sortQueryParam);
       return state;
 
     default:
@@ -8035,6 +7919,7 @@ var searchReducer = function searchReducer() {
         authors: [],
         stars: []
       };
+      state.queryDefault = query_string__WEBPACK_IMPORTED_MODULE_1__.stringify(state.sortQueryParam);
       return state;
   }
 };
@@ -8076,7 +7961,7 @@ function getPopularLimit() {
   return axios__WEBPACK_IMPORTED_MODULE_0___default().get(endpoint + '/api/books/filter?show=8&sort=popular');
 }
 function getBookFilter(query) {
-  return axios__WEBPACK_IMPORTED_MODULE_0___default().get(endpoint + query);
+  return axios__WEBPACK_IMPORTED_MODULE_0___default().get(endpoint + '/api/books/filter?' + query);
 }
 function getSidebarFilter() {
   return axios__WEBPACK_IMPORTED_MODULE_0___default().get(endpoint + '/api/filters');

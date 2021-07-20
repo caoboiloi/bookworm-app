@@ -32,6 +32,7 @@ const searchReducer = (state = [], action) => {
             state.sortTitle = "Sort by on sale";
             state.showTitle = "Show 20";
             state.mainTitle = "";
+            state.queryDefault = qs.stringify(state.sortQueryParam);
             return state;
         default:
             state.sortQueryParam = {
@@ -48,6 +49,7 @@ const searchReducer = (state = [], action) => {
                 authors: [],
                 stars: []
             };
+            state.queryDefault = qs.stringify(state.sortQueryParam);
             return state;
     }
 };

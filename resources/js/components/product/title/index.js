@@ -12,13 +12,22 @@ class MainTitle extends React.Component {
 // ERROR
     state = {
         mainTitle: this.props.search.mainTitle,
+        queryDefault: this.props.search.queryDefault
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.state.mainTitle != this.props.search.mainTitle) {
-            this.setState({
-                mainTitle: this.props.search.mainTitle
-            })
+        if (this.props.location.search !== prevProps.location.search) {
+            if (this.state.mainTitle != this.props.search.mainTitle) {
+                this.setState({
+                    mainTitle: this.props.search.mainTitle
+                })
+            }
+            if (this.props.location.search == '?' + this.state.queryDefault) {
+                this.setState({
+                    mainTitle: ""
+                })
+            }
         }
+
     }
 
     render() {

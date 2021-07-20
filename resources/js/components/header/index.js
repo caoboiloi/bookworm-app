@@ -32,15 +32,6 @@ class Header extends React.Component {
 
     }
 
-    handleQuerySearch(query) {
-        const queryParam = getQueryVariable(this.props);
-        const newQueryParam = {
-           ...queryParam,
-           ...query
-        }
-        return newQueryParam;
-    }
-
     render() {
         return (
             <header className="my-0">
@@ -55,13 +46,7 @@ class Header extends React.Component {
                             <Nav.Link eventKey={1} href="#/">
                                 Home
                             </Nav.Link>
-                            <Nav.Link eventKey={2} as={Link} to={{
-                                pathname: '/product/filter',
-                                search: qs.stringify(this.handleQuerySearch({
-                                        sort: 'sale',
-                                        show: 20
-                                    }))
-                                }} onClick={() => this.props.resetFilterPage()} replace>
+                            <Nav.Link eventKey={2} as={Link} to="/product/filter?show=20&sort=sale" onClick={() => this.props.resetFilterPage()} replace>
                                 Shop
                             </Nav.Link>
                             <Nav.Link eventKey={3} href="#/about">

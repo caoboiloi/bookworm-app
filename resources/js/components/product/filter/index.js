@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ProductFilterList from '../productFilter';
+
 import { Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap';
 import "./style.scss";
 
@@ -33,15 +35,22 @@ class FilterProduct extends React.Component {
             sort : this.props.search.sortQueryParam.sort,
             show: this.props.search.sortQueryParam.show,
             sortTitle: this.props.search.sortTitle,
-            showTitle: this.props.search.showTitle
+            showTitle: this.props.search.showTitle,
+            queryDefault: this.props.search.queryDefault
         }
     }
 
     componentDidMount() {
-        // console.log(this.props.search);
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        // console.log(this.props.search)
+        if (this.props.location.search !== prevProps.location.search) {
+            if (this.props.location.search == '?' + this.state.queryDefault) {
+                this.setState({
+                    sortTitle: this.props.search.sortTitle,
+                    showTitle: this.props.search.showTitle
+                })
+            }
+        }
     }
     shouldComponentUpdate(nextProps, nextState) {
         // Error, re-render the sidebar when start app to this routes and switch the other routes, this routes is re-rendered
@@ -70,7 +79,7 @@ class FilterProduct extends React.Component {
         <div className="col-lg-10 col-md-9 col-sm-12 pr-0 product-show-list">
             <div className="mt-4 mb-3 filter-dropdown">
                 <div>
-                    Showing 1-12 of 126 of books
+                    Showing 1-20 of 126 of books
                 </div>
                 <div className="filter-dropdown-button">
                     <DropdownButton
@@ -190,228 +199,8 @@ class FilterProduct extends React.Component {
                     </DropdownButton>
                 </div>
             </div>
-            <div className="mt-4 mb-3 product-show-list">
-                <div className="row">
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book1.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book2.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book3.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book4.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book5.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book6.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book7.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book8.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book5.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book6.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book7.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4">
-                        <div className="card">
-                            <img className="card-img-top" src="/assets/bookcover/book8.jpg" alt="Card image cap" />
-                            <div className="card-body">
-                                <h5 className="card-title">Book title</h5>
-                                <p className="card-text">
-                                    Author name
-                                </p>
-                            </div>
-                            <div className="card-footer">
-                                <small className="text-muted">Price</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="mt-4 mb-3 pagination">
-                <nav aria-label=" Page navigation product">
-                <ul className="pagination justify-content-end">
-                    <li className="page-item disabled">
-                        <Link to={{
-                            pathname: "/courses",
-                            search: "?sort=name",
-                            hash: "#the-hash",
-                            state: { fromDashboard: true }
-                        }} className="page-link">Previous</Link>
-                    </li>
-                    <li className="page-item">
-                        <Link to={{
-                            pathname: "/courses",
-                            search: "?sort=name",
-                            hash: "#the-hash",
-                            state: { fromDashboard: true }
-                        }} className="page-link">1</Link>
-                    </li>
-                    <li className="page-item">
-                        <Link to={{
-                            pathname: "/courses",
-                            search: "?sort=name",
-                            hash: "#the-hash",
-                            state: { fromDashboard: true }
-                        }} className="page-link">2</Link>
-                    </li>
-                    <li className="page-item">
-                        <Link to={{
-                            pathname: "/courses",
-                            search: "?sort=name",
-                            hash: "#the-hash",
-                            state: { fromDashboard: true }
-                        }} className="page-link">3</Link>
-                    </li>
-                    <li className="page-item">
-                        <Link to={{
-                            pathname: "/courses",
-                            search: "?sort=name",
-                            hash: "#the-hash",
-                            state: { fromDashboard: true }
-                        }} className="page-link">Next</Link>
-                    </li>
-                </ul>
-                </nav>
-            </div>
+
+            <ProductFilterList />
         </div>
         )
     }

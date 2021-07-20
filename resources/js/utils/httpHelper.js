@@ -21,7 +21,7 @@ export function getPopularLimit() {
 
 
 export function getBookFilter(query) {
-    return axios.get(endpoint + query);
+    return axios.get(endpoint + '/api/books/filter?' + query);
 }
 
 export function getSidebarFilter() {
