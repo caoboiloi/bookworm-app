@@ -5455,7 +5455,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "actNewPopular": () => (/* binding */ actNewPopular),
 /* harmony export */   "actAddNewDataSidebar": () => (/* binding */ actAddNewDataSidebar),
 /* harmony export */   "actAddNewFilterQueryParam": () => (/* binding */ actAddNewFilterQueryParam),
-/* harmony export */   "actAddNewSortQueryParam": () => (/* binding */ actAddNewSortQueryParam)
+/* harmony export */   "actAddNewSortQueryParam": () => (/* binding */ actAddNewSortQueryParam),
+/* harmony export */   "actResetDataFilterPage": () => (/* binding */ actResetDataFilterPage)
 /* harmony export */ });
 /* harmony import */ var _const_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const/index */ "./resources/js/const/index.js");
  // Home Page
@@ -5494,6 +5495,12 @@ var actAddNewFilterQueryParam = function actAddNewFilterQueryParam(content) {
 var actAddNewSortQueryParam = function actAddNewSortQueryParam(content) {
   return {
     type: _const_index__WEBPACK_IMPORTED_MODULE_0__.ADD_NEW_SORT_QUERY_PARAM,
+    content: content
+  };
+};
+var actResetDataFilterPage = function actResetDataFilterPage(content) {
+  return {
+    type: _const_index__WEBPACK_IMPORTED_MODULE_0__.RESET_DATA_FILTER_PAGE,
     content: content
   };
 };
@@ -5986,10 +5993,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./resources/js/components/header/style.scss");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Navbar.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Nav.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Navbar.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Nav.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! query-string */ "./node_modules/query-string/index.js");
+/* harmony import */ var _actions_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../actions/index */ "./resources/js/actions/index.js");
+/* harmony import */ var _utils_queryVariable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/queryVariable */ "./resources/js/utils/queryVariable.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6017,6 +6036,26 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
+
+
+
+
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    resetFilterPage: function resetFilterPage(content) {
+      return dispatch((0,_actions_index__WEBPACK_IMPORTED_MODULE_4__.actResetDataFilterPage)(content));
+    }
+  };
+};
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+  return {
+    search: state.search
+  };
+};
+
 var Header = /*#__PURE__*/function (_React$Component) {
   _inherits(Header, _React$Component);
 
@@ -6029,47 +6068,72 @@ var Header = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(Header, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {}
+  }, {
+    key: "handleQuerySearch",
+    value: function handleQuerySearch(query) {
+      var queryParam = (0,_utils_queryVariable__WEBPACK_IMPORTED_MODULE_5__.getQueryVariable)(this.props);
+
+      var newQueryParam = _objectSpread(_objectSpread({}, queryParam), query);
+
+      return newQueryParam;
+    }
+  }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("header", {
+      var _this = this;
+
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("header", {
         className: "my-0",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__.default, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default, {
           collapseOnSelect: true,
           expand: "md",
           bg: "light",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__.default.Brand, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.Brand, {
             href: "#/",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
               src: "/assets/bookworm_icon.svg",
               width: "32",
               height: "32",
               className: "d-inline-block align-top my-auto"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("b", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("b", {
               className: "ml-2",
               children: "BOOKWORM"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__.default.Toggle, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.Toggle, {
             "aria-controls": "responsive-navbar-nav"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__.default.Collapse, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.default.Collapse, {
             id: "responsive-navbar-nav",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default, {
               className: "ml-auto",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default.Link, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default.Link, {
                 eventKey: 1,
                 href: "#/",
                 children: "Home"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default.Link, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default.Link, {
                 eventKey: 2,
-                href: "#/product/filter?sort=sale&show=20",
+                as: react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link,
+                to: {
+                  pathname: '/product/filter',
+                  search: query_string__WEBPACK_IMPORTED_MODULE_3__.stringify(this.handleQuerySearch({
+                    sort: 'sale',
+                    show: 20
+                  }))
+                },
+                onClick: function onClick() {
+                  return _this.props.resetFilterPage();
+                },
+                replace: true,
                 children: "Shop"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default.Link, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default.Link, {
                 eventKey: 3,
                 href: "#/about",
                 children: "About"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default.Link, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default.Link, {
                 eventKey: 4,
                 href: "#/cart",
-                children: ["Cart (", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                children: ["Cart (", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
                   children: "0"
                 }), ")"]
               })]
@@ -6083,7 +6147,7 @@ var Header = /*#__PURE__*/function (_React$Component) {
   return Header;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Header);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_2__.connect)(mapStateToProps, mapDispatchToProps)((0,react_router__WEBPACK_IMPORTED_MODULE_10__.withRouter)(Header)));
 
 /***/ }),
 
@@ -7826,7 +7890,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ADD_NEW_POPULAR": () => (/* binding */ ADD_NEW_POPULAR),
 /* harmony export */   "ADD_NEW_DATA_SIDEBAR": () => (/* binding */ ADD_NEW_DATA_SIDEBAR),
 /* harmony export */   "ADD_NEW_FILTER_QUERY_PARAM": () => (/* binding */ ADD_NEW_FILTER_QUERY_PARAM),
-/* harmony export */   "ADD_NEW_SORT_QUERY_PARAM": () => (/* binding */ ADD_NEW_SORT_QUERY_PARAM)
+/* harmony export */   "ADD_NEW_SORT_QUERY_PARAM": () => (/* binding */ ADD_NEW_SORT_QUERY_PARAM),
+/* harmony export */   "RESET_DATA_FILTER_PAGE": () => (/* binding */ RESET_DATA_FILTER_PAGE)
 /* harmony export */ });
 // Home Page
 var ADD_NEW_BANNER = "ADD_NEW_BANNER";
@@ -7836,6 +7901,7 @@ var ADD_NEW_POPULAR = "ADD_NEW_POPULAR"; // Product Page
 var ADD_NEW_DATA_SIDEBAR = "ADD_NEW_DATA_SIDEBAR";
 var ADD_NEW_FILTER_QUERY_PARAM = "ADD_NEW_FILTER_QUERY_PARAM";
 var ADD_NEW_SORT_QUERY_PARAM = "ADD_NEW_SORT_QUERY_PARAM";
+var RESET_DATA_FILTER_PAGE = "RESET_DATA_FILTER_PAGE";
 
 /***/ }),
 
@@ -7944,11 +8010,24 @@ var searchReducer = function searchReducer() {
       state.showTitle = action.content.showTitle;
       return state;
 
+    case _const_index__WEBPACK_IMPORTED_MODULE_0__.RESET_DATA_FILTER_PAGE:
+      state.sortQueryParam = {
+        sort: 'sale',
+        show: 20
+      };
+      state.filterQueryParam = {};
+      state.sortTitle = "Sort by on sale";
+      state.showTitle = "Show 20";
+      state.mainTitle = "";
+      return state;
+
     default:
       state.sortQueryParam = {
         sort: 'sale',
         show: 20
       };
+      state.filterQueryParam = {};
+      state.mainTitle = "";
       state.sortTitle = "Sort by on sale";
       state.showTitle = 'Show 20', state.mainTitle = "";
       state.sidebar = {

@@ -1,9 +1,46 @@
 import React from 'react';
 import './style.scss';
 
+import { connect } from 'react-redux';
+
 import {Navbar, Nav} from 'react-bootstrap';
 
+import { Link } from 'react-router-dom';
+
+import { withRouter } from 'react-router';
+
+import qs from 'query-string';
+
+import { actResetDataFilterPage } from '../../actions/index';
+import { getQueryVariable } from '../../utils/queryVariable';
+
+const mapDispatchToProps = dispatch => {
+    return {
+        resetFilterPage: content => dispatch(actResetDataFilterPage(content))
+    };
+};
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        search: state.search
+    }
+}
+
 class Header extends React.Component {
+
+    componentDidMount() {
+
+    }
+
+    handleQuerySearch(query) {
+        const queryParam = getQueryVariable(this.props);
+        const newQueryParam = {
+           ...queryParam,
+           ...query
+        }
+        return newQueryParam;
+    }
+
     render() {
         return (
             <header className="my-0">
@@ -18,7 +55,13 @@ class Header extends React.Component {
                             <Nav.Link eventKey={1} href="#/">
                                 Home
                             </Nav.Link>
-                            <Nav.Link eventKey={2} href="#/product/filter?sort=sale&show=20">
+                            <Nav.Link eventKey={2} as={Link} to={{
+                                pathname: '/product/filter',
+                                search: qs.stringify(this.handleQuerySearch({
+                                        sort: 'sale',
+                                        show: 20
+                                    }))
+                                }} onClick={() => this.props.resetFilterPage()} replace>
                                 Shop
                             </Nav.Link>
                             <Nav.Link eventKey={3} href="#/about">
@@ -35,4 +78,4 @@ class Header extends React.Component {
     }
 }
 
-export default Header;
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));
