@@ -5,7 +5,6 @@ import {
     ADD_NEW_DATA_SIDEBAR,
     ADD_NEW_FILTER_QUERY_PARAM,
     ADD_NEW_SORT_QUERY_PARAM,
-    GET_MAIN_TITLE_FILTER_PRODUCT
 } from "../const/index";
 
 // Home Page
@@ -49,12 +48,5 @@ export const actAddNewSortQueryParam = (content) => {
     return {
         type: ADD_NEW_SORT_QUERY_PARAM,
         content,
-    }
-}
-
-export const actGetMainTitleFilterProduct = () => {
-    return {
-        type: GET_MAIN_TITLE_FILTER_PRODUCT,
-        content
     }
 }

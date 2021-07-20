@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -9,13 +10,23 @@ const mapStateToProps = (state, ownProps) => {
 
 class MainTitle extends React.Component {
 // ERROR
+    state = {
+        mainTitle: this.props.search.mainTitle,
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.state.mainTitle != this.props.search.mainTitle) {
+            this.setState({
+                mainTitle: this.props.search.mainTitle
+            })
+        }
+    }
+
     render() {
         return (
             <div className="main-title mx-5">
                 <div className="main-title-information">
                     <b className="main-title-information-1">Books</b>
-                    {/* {this.props.search.title.main.length > 0 ? (<span className="ml-3">(Filtered by {this.props.search.title.main} )</span>) : (<span></span>)} */}
-                    <span className="ml-3">(Filtered by {this.props.search.title.main} )</span>
+                    {this.state.mainTitle.length > 0 ? (<span className="ml-3">(Filtered by {this.state.mainTitle} )</span>) : (<span></span>)}
                 </div>
                 <hr />
             </div>
@@ -23,4 +34,4 @@ class MainTitle extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, null)(MainTitle);
+export default connect(mapStateToProps)(withRouter(MainTitle));

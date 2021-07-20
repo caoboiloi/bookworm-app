@@ -16,7 +16,7 @@ import { getQueryVariable } from '../../../utils/queryVariable';
 
 const mapDispatchToProps = dispatch => {
     return {
-        pushQueryOrderby: content => dispatch(actAddNewSortQueryParam(content))
+        pushSortFilter: content => dispatch(actAddNewSortQueryParam(content))
     };
 };
 
@@ -30,92 +30,30 @@ class FilterProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sort : {
-                title: 'Sort by on sale',
-                code: 'sale'
-            },
-            show : {
-                title: 'Show 20',
-                code: 20
-            }
+            sort : this.props.search.sortQueryParam.sort,
+            show: this.props.search.sortQueryParam.show,
+            sortTitle: this.props.search.sortTitle,
+            showTitle: this.props.search.showTitle
         }
     }
 
     componentDidMount() {
         // console.log(this.props.search);
     }
-    static getDerivedStateFromProps(nextProps, prevState) {
-        // console.log(prevState);
-        return null;
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // console.log(this.props.search)
     }
-
-    handleSelectSort(event) {
-        var sort = null;
-        switch (event) {
-            case 'popular':
-                sort = {
-                    title: 'Sort by popularity',
-                    code: 'popular'
-                }
-                break;
-            case 'asc':
-                sort = {
-                    title: 'Sort by price: low to high',
-                    code: 'asc'
-                }
-                break;
-            case 'desc':
-                sort = {
-                    title: 'Sort by price: high to low',
-                    code: 'desc'
-                }
-                break;
-            default:
-                sort = {
-                    title: 'Sort by on sale',
-                    code: 'sale'
-                }
-        }
-        this.setState({
-            sort: sort
+    shouldComponentUpdate(nextProps, nextState) {
+        // Error, re-render the sidebar when start app to this routes and switch the other routes, this routes is re-rendered
+        this.props.pushSortFilter({
+            sort: {
+                sort: nextState.sort,
+                show: nextState.show
+            },
+            sortTitle: nextState.sortTitle,
+            showTitle: nextState.showTitle
         })
-    }
-    handleSelectShow(event) {
-        var show = 20;
-        switch (event) {
-            case '100':
-                show = {
-                    title: 'Show 100',
-                    code: 100
-                }
-                break;
-            case '80':
-                show = {
-                    title: 'Show 80',
-                    code: 100
-                }
-                break;
-            case '60':
-                show = {
-                    title: 'Show 60',
-                    code: 100
-                }
-                break;
-            case '40':
-                show = {
-                    title: 'Show 40',
-                    code: 100
-                }
-                break;
-            default:
-                show = {
-                    title: 'Show 20',
-                    code: 100
-                }
-        }
-        this.setState({
-            show: show
-        })
+        return true;
     }
 
     handleQuerySearch(query) {
@@ -140,15 +78,17 @@ class FilterProduct extends React.Component {
                         key='sortFilter'
                         id='dropdown-variants-sort'
                         variant='secondary'
-                        title={this.state.sort.title}
-                        className="ml-4"
-                        onSelect={this.handleSelectSort.bind(this)}>
+                        title={this.state.sortTitle}
+                        className="ml-4">
                         <Dropdown.Item eventKey="sale" as={Link} to={{
                                 pathname: '/product/filter',
                                 search: qs.stringify(this.handleQuerySearch({
                                         sort: 'sale'
                                     }))
-                                }} replace>
+                                }} onClick={() => this.setState({
+                                    sortTitle: `Sort by on sale`,
+                                    sort: 'sale'
+                                })} replace >
                                     Sort by on sale
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="popular" as={Link} to={{
@@ -156,7 +96,10 @@ class FilterProduct extends React.Component {
                                 search: qs.stringify(this.handleQuerySearch({
                                         sort: 'popular'
                                     }))
-                                }} replace>
+                                }} onClick={() => this.setState({
+                                    sortTitle: `Sort by popularity`,
+                                    sort: 'popular'
+                                })} replace >
                                     Sort by popularity
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="asc" as={Link} to={{
@@ -164,7 +107,10 @@ class FilterProduct extends React.Component {
                                 search: qs.stringify(this.handleQuerySearch({
                                         sort: 'asc'
                                     }))
-                                }} replace>
+                                }} onClick={() => this.setState({
+                                    sortTitle: `Sort by price: low to high`,
+                                    sort: 'asc'
+                                })} replace >
                                     Sort by price: low to high
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="desc" as={Link} to={{
@@ -172,7 +118,10 @@ class FilterProduct extends React.Component {
                                 search: qs.stringify(this.handleQuerySearch({
                                         sort: 'desc'
                                     }))
-                                }} replace>
+                                }} onClick={() => this.setState({
+                                    sortTitle: `Sort by price: high to low`,
+                                    sort: 'desc'
+                                })} replace >
                                     Sort by price: high to low
                         </Dropdown.Item>
                     </DropdownButton>
@@ -181,15 +130,17 @@ class FilterProduct extends React.Component {
                         key='showFilter '
                         id='dropdown-variants-show'
                         variant='secondary'
-                        title= {this.state.show.title}
-                        className="ml-4"
-                        onSelect={this.handleSelectShow.bind(this)}>
+                        title= {this.state.showTitle}
+                        className="ml-4">
                         <Dropdown.Item eventKey="20" as={Link} to={{
                                 pathname: '/product/filter',
                                 search: qs.stringify(this.handleQuerySearch({
                                         show: 20
                                     }))
-                                }} replace>
+                                }} onClick={() => this.setState({
+                                    showTitle: `Show 20`,
+                                    show: 20
+                                })} replace >
                                     Show 20
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="40" as={Link} to={{
@@ -197,7 +148,10 @@ class FilterProduct extends React.Component {
                                 search: qs.stringify(this.handleQuerySearch({
                                         show: 40
                                     }))
-                                }} replace>
+                                }} onClick={() => this.setState({
+                                    showTitle: `Show 40`,
+                                    show: 40
+                                })} replace >
                                     Show 40
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="60" as={Link} to={{
@@ -205,7 +159,10 @@ class FilterProduct extends React.Component {
                                 search: qs.stringify(this.handleQuerySearch({
                                         show: 60
                                     }))
-                                }} replace>
+                                }} onClick={() => this.setState({
+                                    showTitle: `Show 60`,
+                                    show: 60
+                                })} replace >
                                     Show 60
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="80" as={Link} to={{
@@ -213,7 +170,10 @@ class FilterProduct extends React.Component {
                                 search: qs.stringify(this.handleQuerySearch({
                                         show: 80
                                     }))
-                                }} replace>
+                                }} onClick={() => this.setState({
+                                    showTitle: `Show 80`,
+                                    show: 80
+                                })} replace >
                                     Show 80
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="100" as={Link} to={{
@@ -221,7 +181,10 @@ class FilterProduct extends React.Component {
                                 search: qs.stringify(this.handleQuerySearch({
                                         show: 100
                                     }))
-                                }} replace>
+                                }} onClick={() => this.setState({
+                                    showTitle: `Show 100`,
+                                    show: 100
+                                })} replace >
                                     Show 100
                         </Dropdown.Item>
                     </DropdownButton>

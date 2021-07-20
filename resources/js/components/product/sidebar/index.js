@@ -32,7 +32,7 @@ class LeftSidebar extends React.Component {
         categories: this.props.search.sidebar.categories,
         authors: this.props.search.sidebar.authors,
         stars: this.props.search.sidebar.stars,
-        mainTitle: this.props.search.title.main,
+        mainTitle: this.props.search.mainTitle,
         filter: this.props.search.filterQueryParam
     };
 
@@ -65,22 +65,9 @@ class LeftSidebar extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        // Error, re-render the sidebar when start app to this routes and switch the other routes, this routes is re-rendered
-        // if (nextState.filter != undefined) {
-        //     if (nextState.mainTitle != this.state.mainTitle) {
-        //         this.props.pushQueryFilter({
-        //             filter: nextState.filter,
-        //             titleMain: nextState.mainTitle
-        //         })
-        //         return true;
-        //     }
-        //     return false;
-        // }
-
-        // Temporary
         this.props.pushQueryFilter({
             filter: nextState.filter,
-            titleMain: nextState.mainTitle
+            mainTitle: nextState.mainTitle
         })
         return true;
     }
@@ -123,7 +110,7 @@ class LeftSidebar extends React.Component {
                                                 }} onClick={() => this.setState({
                                                     mainTitle: `Category: ${category.category_name}`,
                                                     filter: {category: category.id}
-                                                })}>
+                                                })} replace >
                                                     {category.category_name}
                                             </Dropdown.Item>
                                         )) : (<span></span>)
@@ -151,7 +138,7 @@ class LeftSidebar extends React.Component {
                                                 }} onClick={() => this.setState({
                                                     mainTitle: `Author: ${author.author_name}`,
                                                     filter: {author: author.id}
-                                                })}>
+                                                })} replace >
                                                     {author.author_name}
                                             </Dropdown.Item>
                                         )) : (<span></span>)
@@ -179,7 +166,7 @@ class LeftSidebar extends React.Component {
                                                 }} onClick={() => this.setState({
                                                     mainTitle: `Star: ${star} Star`,
                                                     filter: {star: star}
-                                                })}>
+                                                })} replace >
                                                     {star} Star
                                             </Dropdown.Item>
                                         )) : (<span></span>)

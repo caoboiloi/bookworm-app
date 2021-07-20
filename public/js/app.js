@@ -5455,8 +5455,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "actNewPopular": () => (/* binding */ actNewPopular),
 /* harmony export */   "actAddNewDataSidebar": () => (/* binding */ actAddNewDataSidebar),
 /* harmony export */   "actAddNewFilterQueryParam": () => (/* binding */ actAddNewFilterQueryParam),
-/* harmony export */   "actAddNewSortQueryParam": () => (/* binding */ actAddNewSortQueryParam),
-/* harmony export */   "actGetMainTitleFilterProduct": () => (/* binding */ actGetMainTitleFilterProduct)
+/* harmony export */   "actAddNewSortQueryParam": () => (/* binding */ actAddNewSortQueryParam)
 /* harmony export */ });
 /* harmony import */ var _const_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../const/index */ "./resources/js/const/index.js");
  // Home Page
@@ -5495,12 +5494,6 @@ var actAddNewFilterQueryParam = function actAddNewFilterQueryParam(content) {
 var actAddNewSortQueryParam = function actAddNewSortQueryParam(content) {
   return {
     type: _const_index__WEBPACK_IMPORTED_MODULE_0__.ADD_NEW_SORT_QUERY_PARAM,
-    content: content
-  };
-};
-var actGetMainTitleFilterProduct = function actGetMainTitleFilterProduct() {
-  return {
-    type: _const_index__WEBPACK_IMPORTED_MODULE_0__.GET_MAIN_TITLE_FILTER_PRODUCT,
     content: content
   };
 };
@@ -5629,7 +5622,11 @@ var App = /*#__PURE__*/function (_React$Component) {
   return App;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(App, {}), document.getElementById('root'));
+var render = function render() {
+  return react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(App, {}), document.getElementById("root"));
+};
+
+render();
 
 /***/ }),
 
@@ -6654,7 +6651,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    pushQueryOrderby: function pushQueryOrderby(content) {
+    pushSortFilter: function pushSortFilter(content) {
       return dispatch((0,_actions_index__WEBPACK_IMPORTED_MODULE_4__.actAddNewSortQueryParam)(content));
     }
   };
@@ -6678,14 +6675,10 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      sort: {
-        title: 'Sort by on sale',
-        code: 'sale'
-      },
-      show: {
-        title: 'Show 20',
-        code: 20
-      }
+      sort: _this.props.search.sortQueryParam.sort,
+      show: _this.props.search.sortQueryParam.show,
+      sortTitle: _this.props.search.sortTitle,
+      showTitle: _this.props.search.showTitle
     };
     return _this;
   }
@@ -6695,87 +6688,22 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
     value: function componentDidMount() {// console.log(this.props.search);
     }
   }, {
-    key: "handleSelectSort",
-    value: function handleSelectSort(event) {
-      var sort = null;
-
-      switch (event) {
-        case 'popular':
-          sort = {
-            title: 'Sort by popularity',
-            code: 'popular'
-          };
-          break;
-
-        case 'asc':
-          sort = {
-            title: 'Sort by price: low to high',
-            code: 'asc'
-          };
-          break;
-
-        case 'desc':
-          sort = {
-            title: 'Sort by price: high to low',
-            code: 'desc'
-          };
-          break;
-
-        default:
-          sort = {
-            title: 'Sort by on sale',
-            code: 'sale'
-          };
-      }
-
-      this.setState({
-        sort: sort
-      });
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState, snapshot) {// console.log(this.props.search)
     }
   }, {
-    key: "handleSelectShow",
-    value: function handleSelectShow(event) {
-      var show = 20;
-
-      switch (event) {
-        case '100':
-          show = {
-            title: 'Show 100',
-            code: 100
-          };
-          break;
-
-        case '80':
-          show = {
-            title: 'Show 80',
-            code: 100
-          };
-          break;
-
-        case '60':
-          show = {
-            title: 'Show 60',
-            code: 100
-          };
-          break;
-
-        case '40':
-          show = {
-            title: 'Show 40',
-            code: 100
-          };
-          break;
-
-        default:
-          show = {
-            title: 'Show 20',
-            code: 100
-          };
-      }
-
-      this.setState({
-        show: show
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      // Error, re-render the sidebar when start app to this routes and switch the other routes, this routes is re-rendered
+      this.props.pushSortFilter({
+        sort: {
+          sort: nextState.sort,
+          show: nextState.show
+        },
+        sortTitle: nextState.sortTitle,
+        showTitle: nextState.showTitle
       });
+      return true;
     }
   }, {
     key: "handleQuerySearch",
@@ -6789,6 +6717,8 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "col-lg-10 col-md-9 col-sm-12 pr-0 product-show-list",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
@@ -6801,9 +6731,8 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
               as: react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default,
               id: "dropdown-variants-sort",
               variant: "secondary",
-              title: this.state.sort.title,
+              title: this.state.sortTitle,
               className: "ml-4",
-              onSelect: this.handleSelectSort.bind(this),
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
                 eventKey: "sale",
                 as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
@@ -6812,6 +6741,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                   search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
                     sort: 'sale'
                   }))
+                },
+                onClick: function onClick() {
+                  return _this2.setState({
+                    sortTitle: "Sort by on sale",
+                    sort: 'sale'
+                  });
                 },
                 replace: true,
                 children: "Sort by on sale"
@@ -6824,6 +6759,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                     sort: 'popular'
                   }))
                 },
+                onClick: function onClick() {
+                  return _this2.setState({
+                    sortTitle: "Sort by popularity",
+                    sort: 'popular'
+                  });
+                },
                 replace: true,
                 children: "Sort by popularity"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
@@ -6834,6 +6775,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                   search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
                     sort: 'asc'
                   }))
+                },
+                onClick: function onClick() {
+                  return _this2.setState({
+                    sortTitle: "Sort by price: low to high",
+                    sort: 'asc'
+                  });
                 },
                 replace: true,
                 children: "Sort by price: low to high"
@@ -6846,6 +6793,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                     sort: 'desc'
                   }))
                 },
+                onClick: function onClick() {
+                  return _this2.setState({
+                    sortTitle: "Sort by price: high to low",
+                    sort: 'desc'
+                  });
+                },
                 replace: true,
                 children: "Sort by price: high to low"
               })]
@@ -6853,9 +6806,8 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
               as: react_bootstrap__WEBPACK_IMPORTED_MODULE_8__.default,
               id: "dropdown-variants-show",
               variant: "secondary",
-              title: this.state.show.title,
+              title: this.state.showTitle,
               className: "ml-4",
-              onSelect: this.handleSelectShow.bind(this),
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
                 eventKey: "20",
                 as: react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Link,
@@ -6864,6 +6816,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                   search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
                     show: 20
                   }))
+                },
+                onClick: function onClick() {
+                  return _this2.setState({
+                    showTitle: "Show 20",
+                    show: 20
+                  });
                 },
                 replace: true,
                 children: "Show 20"
@@ -6876,6 +6834,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                     show: 40
                   }))
                 },
+                onClick: function onClick() {
+                  return _this2.setState({
+                    showTitle: "Show 40",
+                    show: 40
+                  });
+                },
                 replace: true,
                 children: "Show 40"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
@@ -6886,6 +6850,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                   search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
                     show: 60
                   }))
+                },
+                onClick: function onClick() {
+                  return _this2.setState({
+                    showTitle: "Show 60",
+                    show: 60
+                  });
                 },
                 replace: true,
                 children: "Show 60"
@@ -6898,6 +6868,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                     show: 80
                   }))
                 },
+                onClick: function onClick() {
+                  return _this2.setState({
+                    showTitle: "Show 80",
+                    show: 80
+                  });
+                },
                 replace: true,
                 children: "Show 80"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default.Item, {
@@ -6908,6 +6884,12 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
                   search: query_string__WEBPACK_IMPORTED_MODULE_2__.stringify(this.handleQuerySearch({
                     show: 100
                   }))
+                },
+                onClick: function onClick() {
+                  return _this2.setState({
+                    showTitle: "Show 100",
+                    show: 100
+                  });
                 },
                 replace: true,
                 children: "Show 100"
@@ -7308,12 +7290,6 @@ var FilterProduct = /*#__PURE__*/function (_React$Component) {
         })]
       });
     }
-  }], [{
-    key: "getDerivedStateFromProps",
-    value: function getDerivedStateFromProps(nextProps, prevState) {
-      // console.log(prevState);
-      return null;
-    }
   }]);
 
   return FilterProduct;
@@ -7425,7 +7401,7 @@ var LeftSidebar = /*#__PURE__*/function (_React$Component) {
       categories: _this.props.search.sidebar.categories,
       authors: _this.props.search.sidebar.authors,
       stars: _this.props.search.sidebar.stars,
-      mainTitle: _this.props.search.title.main,
+      mainTitle: _this.props.search.mainTitle,
       filter: _this.props.search.filterQueryParam
     });
 
@@ -7468,21 +7444,9 @@ var LeftSidebar = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "shouldComponentUpdate",
     value: function shouldComponentUpdate(nextProps, nextState) {
-      // Error, re-render the sidebar when start app to this routes and switch the other routes, this routes is re-rendered
-      // if (nextState.filter != undefined) {
-      //     if (nextState.mainTitle != this.state.mainTitle) {
-      //         this.props.pushQueryFilter({
-      //             filter: nextState.filter,
-      //             titleMain: nextState.mainTitle
-      //         })
-      //         return true;
-      //     }
-      //     return false;
-      // }
-      // Temporary
       this.props.pushQueryFilter({
         filter: nextState.filter,
-        titleMain: nextState.mainTitle
+        mainTitle: nextState.mainTitle
       });
       return true;
     }
@@ -7547,6 +7511,7 @@ var LeftSidebar = /*#__PURE__*/function (_React$Component) {
                             }
                           });
                         },
+                        replace: true,
                         children: category.category_name
                       }, category.id);
                     }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {})
@@ -7586,6 +7551,7 @@ var LeftSidebar = /*#__PURE__*/function (_React$Component) {
                             }
                           });
                         },
+                        replace: true,
                         children: author.author_name
                       }, author.id);
                     }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {})
@@ -7625,6 +7591,7 @@ var LeftSidebar = /*#__PURE__*/function (_React$Component) {
                             }
                           });
                         },
+                        replace: true,
                         children: [star, " Star"]
                       }, star);
                     }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {})
@@ -7658,6 +7625,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -7681,6 +7649,9 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 
 
@@ -7698,15 +7669,35 @@ var MainTitle = /*#__PURE__*/function (_React$Component) {
   var _super = _createSuper(MainTitle);
 
   function MainTitle() {
+    var _this;
+
     _classCallCheck(this, MainTitle);
 
-    return _super.apply(this, arguments);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      mainTitle: _this.props.search.mainTitle
+    });
+
+    return _this;
   }
 
   _createClass(MainTitle, [{
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState, snapshot) {
+      if (this.state.mainTitle != this.props.search.mainTitle) {
+        this.setState({
+          mainTitle: this.props.search.mainTitle
+        });
+      }
+    }
+  }, {
     key: "render",
-    value: // ERROR
-    function render() {
+    value: function render() {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "main-title mx-5",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -7714,10 +7705,10 @@ var MainTitle = /*#__PURE__*/function (_React$Component) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("b", {
             className: "main-title-information-1",
             children: "Books"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+          }), this.state.mainTitle.length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
             className: "ml-3",
-            children: ["(Filtered by ", this.props.search.title.main, " )"]
-          })]
+            children: ["(Filtered by ", this.state.mainTitle, " )"]
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {})]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("hr", {})]
       });
     }
@@ -7726,7 +7717,7 @@ var MainTitle = /*#__PURE__*/function (_React$Component) {
   return MainTitle;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapStateToProps, null)(MainTitle));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapStateToProps)((0,react_router__WEBPACK_IMPORTED_MODULE_3__.withRouter)(MainTitle)));
 
 /***/ }),
 
@@ -7835,8 +7826,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ADD_NEW_POPULAR": () => (/* binding */ ADD_NEW_POPULAR),
 /* harmony export */   "ADD_NEW_DATA_SIDEBAR": () => (/* binding */ ADD_NEW_DATA_SIDEBAR),
 /* harmony export */   "ADD_NEW_FILTER_QUERY_PARAM": () => (/* binding */ ADD_NEW_FILTER_QUERY_PARAM),
-/* harmony export */   "ADD_NEW_SORT_QUERY_PARAM": () => (/* binding */ ADD_NEW_SORT_QUERY_PARAM),
-/* harmony export */   "GET_MAIN_TITLE_FILTER_PRODUCT": () => (/* binding */ GET_MAIN_TITLE_FILTER_PRODUCT)
+/* harmony export */   "ADD_NEW_SORT_QUERY_PARAM": () => (/* binding */ ADD_NEW_SORT_QUERY_PARAM)
 /* harmony export */ });
 // Home Page
 var ADD_NEW_BANNER = "ADD_NEW_BANNER";
@@ -7846,7 +7836,6 @@ var ADD_NEW_POPULAR = "ADD_NEW_POPULAR"; // Product Page
 var ADD_NEW_DATA_SIDEBAR = "ADD_NEW_DATA_SIDEBAR";
 var ADD_NEW_FILTER_QUERY_PARAM = "ADD_NEW_FILTER_QUERY_PARAM";
 var ADD_NEW_SORT_QUERY_PARAM = "ADD_NEW_SORT_QUERY_PARAM";
-var GET_MAIN_TITLE_FILTER_PRODUCT = "GET_MAIN_TITLE_FILTER_PRODUCT";
 
 /***/ }),
 
@@ -7946,32 +7935,22 @@ var searchReducer = function searchReducer() {
 
     case _const_index__WEBPACK_IMPORTED_MODULE_0__.ADD_NEW_FILTER_QUERY_PARAM:
       state.filterQueryParam = action.content.filter;
-      state.title = {
-        main: action.content.titleMain
-      };
+      state.mainTitle = action.content.mainTitle;
       return state;
 
     case _const_index__WEBPACK_IMPORTED_MODULE_0__.ADD_NEW_SORT_QUERY_PARAM:
-      state.orderbyQueryParam = action.content.sort;
-      state.title = {
-        sort: action.content.titleSort,
-        show: action.content.titleShow
-      };
+      state.sortQueryParam = action.content.sort;
+      state.sortTitle = action.content.sortTitle;
+      state.showTitle = action.content.showTitle;
       return state;
 
-    case _const_index__WEBPACK_IMPORTED_MODULE_0__.GET_MAIN_TITLE_FILTER_PRODUCT:
-      return state.title.main;
-
     default:
-      state.orderbyQueryParam = {
+      state.sortQueryParam = {
         sort: 'sale',
         show: 20
       };
-      state.title = {
-        sort: "Sort by on sale",
-        show: 20,
-        main: ""
-      };
+      state.sortTitle = "Sort by on sale";
+      state.showTitle = 'Show 20', state.mainTitle = "";
       state.sidebar = {
         categories: [],
         authors: [],
