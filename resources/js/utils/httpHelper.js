@@ -27,3 +27,7 @@ export function getBookFilter(query) {
 export function getSidebarFilter() {
     return axios.get(endpoint + '/api/filters');
 }
+
+export function getDetailBookById(id) {
+    return axios.get(endpoint + '/api/books/' + id);
+}

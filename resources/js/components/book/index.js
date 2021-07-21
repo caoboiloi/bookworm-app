@@ -2,6 +2,8 @@ import React from 'react';
 
 import { isNull } from 'lodash';
 
+import { Link } from 'react-router-dom';
+
 class BookCardRow extends React.Component {
 
     checkFinalPrice(book) {
@@ -36,8 +38,10 @@ class BookCardRow extends React.Component {
                 }
                 return (
                     <div className="col-lg-3 col-xl-3 col-md-6 col-sm-12 mb-4" key = {"book_" + book.book_id}>
-                        <div className="card h-100">
-                            <img className="card-img-top" src={'/assets/bookcover/' + book.book_cover_photo + '.jpg'} alt={book.book_cover_photo} />
+                        <div className="card h-100" as={Link}>
+                            <Link to={'/detail/' + book.book_id}>
+                                <img className="card-img-top" src={'/assets/bookcover/' + book.book_cover_photo + '.jpg'} alt={book.book_cover_photo} />
+                            </Link>
                             <div className="card-body">
                                 <h5 className="card-title">{book.book_title}</h5>
                                 <p className="card-text">
