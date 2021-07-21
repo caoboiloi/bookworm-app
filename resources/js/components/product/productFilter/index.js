@@ -35,6 +35,7 @@ class ProductFilterList extends React.Component {
         show : this.props.search.showTitle,
         filter : this.props.search.mainTitle,
         queryDefault : this.props.search.queryDefault,
+        queryPagination : this.parseQueryPaginate(),
         prevUrlPaginate: '#',
         nextUrlPaginate: '#',
         lastUrlPaginate: '#',
@@ -46,7 +47,8 @@ class ProductFilterList extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchBookFilter(this.state.queryDefault);
+        let query = this.parseQueryString();
+        this.fetchBookFilter(query);
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.location.search !== prevProps.location.search) {
@@ -54,13 +56,18 @@ class ProductFilterList extends React.Component {
             if (prevProps.search.mainTitle != this.state.filter ||
                 prevProps.search.sortTitle != this.state.sort ||
                 prevProps.search.showTitle != this.state.show) {
-                    let query = this.parseQueryString()
+                    let query = this.parseQueryString();
+                    let temp = this.parseQueryPaginate();
+                    console.log('filter change url');
+                    this.setState({
+                        queryPagination: temp
+                    });
                     this.fetchBookFilter(query);
             }
             if (prevProps.search.mainTitle == this.state.filter &&
                 prevProps.search.sortTitle == this.state.sort &&
                 prevProps.search.showTitle == this.state.show) {
-                    console.log('pagination')
+                    console.log('pagination change url')
                     let query = this.parseQueryString()
                     this.fetchBookFilter(query);
                 }
@@ -83,7 +90,14 @@ class ProductFilterList extends React.Component {
         });
         return query_string;
     }
-    parseQueryPaginate(url) {
+
+    parseQueryPaginate() {
+        let query_params = this.handleQuerySearch();
+        let query_string = qs.stringify(query_params);
+        return query_string;
+    }
+
+    parseQueryPaginateUrl(url) {
         if (url != null) {
             let query = qs.parseUrl(url).query
             if (query.category) {
@@ -120,10 +134,10 @@ class ProductFilterList extends React.Component {
             var data = response.data.data;
             this.setState({
                 books: data,
-                prevUrlPaginate: this.parseQueryPaginate(response.data.link.prev_url),
-                nextUrlPaginate: this.parseQueryPaginate(response.data.link.next_url),
-                lastUrlPaginate: this.parseQueryPaginate(response.data.link.last_url),
-                firstUrlPaginate: this.parseQueryPaginate(response.data.link.first_url),
+                prevUrlPaginate: this.parseQueryPaginateUrl(response.data.link.prev_url),
+                nextUrlPaginate: this.parseQueryPaginateUrl(response.data.link.next_url),
+                lastUrlPaginate: this.parseQueryPaginateUrl(response.data.link.last_url),
+                firstUrlPaginate: this.parseQueryPaginateUrl(response.data.link.first_url),
                 totalProduct: response.data.meta.total,
                 currentPage: response.data.meta.current_page,
                 lastPage: response.data.meta.last_page,
@@ -147,42 +161,78 @@ class ProductFilterList extends React.Component {
     }
 
     render() {
+        const {lastPage, queryPagination, nextUrlPaginate, prevUrlPaginate, currentPage } = this.state;
+
+        const pageNumbers = [];
+        for (let i = 1; i <= lastPage; i++) {
+          pageNumbers.push(i);
+        }
+
+        const renderPageNumbers = pageNumbers.map(number => {
+            if (number == currentPage) {
+                return (
+                    <li className='page-item active' key={number} id={number}>
+                        <Link to={{
+                            pathname: "/product/filter",
+                            search: queryPagination + '&page=' + number,
+                        }} className="page-link"
+                        data-page={number} replace>{number}</Link>
+                    </li>
+                )
+            }
+            else {
+                return (
+                    <li className='page-item' key={number} id={number}>
+                        <Link to={{
+                            pathname: "/product/filter",
+                            search: queryPagination + '&page=' + number,
+                        }} className="page-link"
+                        data-page={number} replace>{number}</Link>
+                    </li>
+                );
+            }
+        });
+
+        const prevButton = (
+            <Link to={{
+                pathname: "/product/filter",
+                search: prevUrlPaginate,
+            }} className="page-link" replace>Previous</Link>
+        )
+
+        const nextButton = (
+            <Link to={{
+                pathname: "/product/filter",
+                search: nextUrlPaginate,
+            }} className="page-link" replace>Next</Link>
+        )
+
         return (
             <>
                 {this.dataBindingGrid()}
                 <div className="mt-4 mb-3 pagination">
                     <nav aria-label=" Page navigation product">
-                    <ul className="pagination justify-content-end">
-                        <li className="page-item">
-                            <Link to={{
-                                pathname: "/product/filter",
-                                search: this.state.prevUrlPaginate,
-                            }} className="page-link" replace>Previous</Link>
-                        </li>
-                        <li className="page-item disabled">
-                            <Link to={{
-                                pathname: "/product/filter",
-                                search: "?sort=name",
-                            }} className="page-link">1</Link>
-                        </li>
-                        <li className="page-item">
-                            <Link to={{
-                                pathname: "/product/filter",
-                                search: "?sort=name",
-                            }} className="page-link">2</Link>
-                        </li>
-                        <li className="page-item">
-                            <Link to={{
-                                pathname: "/product/filter",
-                                search: "?sort=name",
-                            }} className="page-link">3</Link>
-                        </li>
-                        <li className="page-item">
-                            <Link to={{
-                                pathname: "/product/filter",
-                                search: this.state.nextUrlPaginate,
-                            }} className="page-link" replace>Next</Link>
-                        </li>
+                    <ul className="pagination justify-content-end" id='pagination-ul'>
+                        {currentPage == 1 ? (
+                            <li className="page-item disabled">
+                                {prevButton}
+                            </li>
+                        ) : (
+                            <li className="page-item">
+                                {prevButton}
+                            </li>
+                        )}
+
+                        {renderPageNumbers}
+                        {currentPage == lastPage ? (
+                            <li className="page-item disabled">
+                                {nextButton}
+                            </li>
+                        ) : (
+                            <li className="page-item">
+                                {nextButton}
+                            </li>
+                        )}
                     </ul>
                     </nav>
                 </div>

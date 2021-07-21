@@ -7066,6 +7066,7 @@ var ProductFilterList = /*#__PURE__*/function (_React$Component) {
       show: _this.props.search.showTitle,
       filter: _this.props.search.mainTitle,
       queryDefault: _this.props.search.queryDefault,
+      queryPagination: _this.parseQueryPaginate(),
       prevUrlPaginate: '#',
       nextUrlPaginate: '#',
       lastUrlPaginate: '#',
@@ -7082,7 +7083,8 @@ var ProductFilterList = /*#__PURE__*/function (_React$Component) {
   _createClass(ProductFilterList, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.fetchBookFilter(this.state.queryDefault);
+      var query = this.parseQueryString();
+      this.fetchBookFilter(query);
     }
   }, {
     key: "componentDidUpdate",
@@ -7092,11 +7094,16 @@ var ProductFilterList = /*#__PURE__*/function (_React$Component) {
 
         if (prevProps.search.mainTitle != this.state.filter || prevProps.search.sortTitle != this.state.sort || prevProps.search.showTitle != this.state.show) {
           var query = this.parseQueryString();
+          var temp = this.parseQueryPaginate();
+          console.log('filter change url');
+          this.setState({
+            queryPagination: temp
+          });
           this.fetchBookFilter(query);
         }
 
         if (prevProps.search.mainTitle == this.state.filter && prevProps.search.sortTitle == this.state.sort && prevProps.search.showTitle == this.state.show) {
-          console.log('pagination');
+          console.log('pagination change url');
 
           var _query = this.parseQueryString();
 
@@ -7126,7 +7133,14 @@ var ProductFilterList = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "parseQueryPaginate",
-    value: function parseQueryPaginate(url) {
+    value: function parseQueryPaginate() {
+      var query_params = this.handleQuerySearch();
+      var query_string = query_string__WEBPACK_IMPORTED_MODULE_5__.stringify(query_params);
+      return query_string;
+    }
+  }, {
+    key: "parseQueryPaginateUrl",
+    value: function parseQueryPaginateUrl(url) {
       if (url != null) {
         var query = query_string__WEBPACK_IMPORTED_MODULE_5__.parseUrl(url).query;
 
@@ -7173,10 +7187,10 @@ var ProductFilterList = /*#__PURE__*/function (_React$Component) {
 
         _this2.setState({
           books: data,
-          prevUrlPaginate: _this2.parseQueryPaginate(response.data.link.prev_url),
-          nextUrlPaginate: _this2.parseQueryPaginate(response.data.link.next_url),
-          lastUrlPaginate: _this2.parseQueryPaginate(response.data.link.last_url),
-          firstUrlPaginate: _this2.parseQueryPaginate(response.data.link.first_url),
+          prevUrlPaginate: _this2.parseQueryPaginateUrl(response.data.link.prev_url),
+          nextUrlPaginate: _this2.parseQueryPaginateUrl(response.data.link.next_url),
+          lastUrlPaginate: _this2.parseQueryPaginateUrl(response.data.link.last_url),
+          firstUrlPaginate: _this2.parseQueryPaginateUrl(response.data.link.first_url),
           totalProduct: response.data.meta.total,
           currentPage: response.data.meta.current_page,
           lastPage: response.data.meta.last_page,
@@ -7205,6 +7219,72 @@ var ProductFilterList = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this$state = this.state,
+          lastPage = _this$state.lastPage,
+          queryPagination = _this$state.queryPagination,
+          nextUrlPaginate = _this$state.nextUrlPaginate,
+          prevUrlPaginate = _this$state.prevUrlPaginate,
+          currentPage = _this$state.currentPage;
+      var pageNumbers = [];
+
+      for (var i = 1; i <= lastPage; i++) {
+        pageNumbers.push(i);
+      }
+
+      var renderPageNumbers = pageNumbers.map(function (number) {
+        if (number == currentPage) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
+            className: "page-item active",
+            id: number,
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
+              to: {
+                pathname: "/product/filter",
+                search: queryPagination + '&page=' + number
+              },
+              className: "page-link",
+              "data-page": number,
+              replace: true,
+              children: number
+            })
+          }, number);
+        } else {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
+            className: "page-item",
+            id: number,
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
+              to: {
+                pathname: "/product/filter",
+                search: queryPagination + '&page=' + number
+              },
+              className: "page-link",
+              "data-page": number,
+              replace: true,
+              children: number
+            })
+          }, number);
+        }
+      });
+
+      var prevButton = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
+        to: {
+          pathname: "/product/filter",
+          search: prevUrlPaginate
+        },
+        className: "page-link",
+        replace: true,
+        children: "Previous"
+      });
+
+      var nextButton = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
+        to: {
+          pathname: "/product/filter",
+          search: nextUrlPaginate
+        },
+        className: "page-link",
+        replace: true,
+        children: "Next"
+      });
+
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
         children: [this.dataBindingGrid(), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "mt-4 mb-3 pagination",
@@ -7212,58 +7292,19 @@ var ProductFilterList = /*#__PURE__*/function (_React$Component) {
             "aria-label": " Page navigation product",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("ul", {
               className: "pagination justify-content-end",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-                className: "page-item",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
-                  to: {
-                    pathname: "/product/filter",
-                    search: this.state.prevUrlPaginate
-                  },
-                  className: "page-link",
-                  replace: true,
-                  children: "Previous"
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
+              id: "pagination-ul",
+              children: [currentPage == 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
                 className: "page-item disabled",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
-                  to: {
-                    pathname: "/product/filter",
-                    search: "?sort=name"
-                  },
-                  className: "page-link",
-                  children: "1"
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
+                children: prevButton
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
                 className: "page-item",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
-                  to: {
-                    pathname: "/product/filter",
-                    search: "?sort=name"
-                  },
-                  className: "page-link",
-                  children: "2"
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
+                children: prevButton
+              }), renderPageNumbers, currentPage == lastPage ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
+                className: "page-item disabled",
+                children: nextButton
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
                 className: "page-item",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
-                  to: {
-                    pathname: "/product/filter",
-                    search: "?sort=name"
-                  },
-                  className: "page-link",
-                  children: "3"
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-                className: "page-item",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
-                  to: {
-                    pathname: "/product/filter",
-                    search: this.state.nextUrlPaginate
-                  },
-                  className: "page-link",
-                  replace: true,
-                  children: "Next"
-                })
+                children: nextButton
               })]
             })
           })
