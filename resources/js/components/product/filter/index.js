@@ -1,9 +1,13 @@
 import React from 'react';
 
-import ProductFilterList from '../productFilter';
-
-import { Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap';
+import { Dropdown, DropdownButton, ButtonGroup, ResponsiveEmbed } from 'react-bootstrap';
 import "./style.scss";
+
+import BookCardRow from './../../book';
+
+import { getBookFilter } from './../../../utils/httpHelper';
+
+import { chunk } from 'lodash';
 
 import { Link } from 'react-router-dom';
 
@@ -13,12 +17,13 @@ import qs from 'query-string';
 
 import { connect } from 'react-redux';
 
-import { actAddNewSortQueryParam } from '../../../actions/index';
+import { actAddNewSortQueryParam, actResetDataFilterPage } from '../../../actions/index';
 import { getQueryVariable } from '../../../utils/queryVariable';
 
 const mapDispatchToProps = dispatch => {
     return {
-        pushSortFilter: content => dispatch(actAddNewSortQueryParam(content))
+        pushSortFilter: content => dispatch(actAddNewSortQueryParam(content)),
+        resetFilterPage: content => dispatch(actResetDataFilterPage(content))
     };
 };
 
@@ -32,24 +37,24 @@ class FilterProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            books : [],
             sort : this.props.search.sortQueryParam.sort,
             show: this.props.search.sortQueryParam.show,
             sortTitle: this.props.search.sortTitle,
             showTitle: this.props.search.showTitle,
-            queryDefault: this.props.search.queryDefault
-        }
-    }
-
-    componentDidMount() {
-    }
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.location.search !== prevProps.location.search) {
-            if (this.props.location.search == '?' + this.state.queryDefault) {
-                this.setState({
-                    sortTitle: this.props.search.sortTitle,
-                    showTitle: this.props.search.showTitle
-                })
-            }
+            mainTitle : this.props.search.mainTitle,
+            queryDefault: this.props.search.queryDefault,
+            queryPagination : this.parseQueryPaginate(),
+            prevUrlPaginate: '#',
+            nextUrlPaginate: '#',
+            lastUrlPaginate: '#',
+            firstUrlPaginate: '#',
+            totalProduct: 0,
+            currentPage: 0,
+            lastPage: 0,
+            perPage: 0,
+            from: 0,
+            to: 0,
         }
     }
     shouldComponentUpdate(nextProps, nextState) {
@@ -64,6 +69,115 @@ class FilterProduct extends React.Component {
         })
         return true;
     }
+    componentDidMount() {
+        let query = this.parseQueryString();
+        this.fetchBookFilter(query);
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.location.search !== prevProps.location.search) {
+            console.log('ROUTER CHANGE - filter component')
+            if (prevProps.search.mainTitle != this.state.mainTitle ||
+                prevState.sort != this.state.sort ||
+                prevState.show != this.state.show) {
+                    console.log('filter-sort change url')
+                    let query = this.parseQueryString();
+                    let temp = this.parseQueryPaginate();
+                    this.setState({
+                        queryPagination: temp
+                    });
+                    this.fetchBookFilter(query);
+            }
+            if (prevProps.search.mainTitle == this.state.mainTitle &&
+                prevState.sort == this.state.sort &&
+                prevState.show == this.state.show) {
+                    console.log('pagination change url')
+                    let query = this.parseQueryString()
+                    this.fetchBookFilter(query);
+                }
+            if (this.props.location.search == '?' + this.state.queryDefault) {
+                this.props.resetFilterPage();
+                this.setState({
+                    sortTitle: this.props.search.sortTitle,
+                    showTitle: this.props.search.showTitle
+                })
+            }
+        }
+    }
+    parseQueryString() {
+        let query_params = this.handleQueryNotChange()
+        query_params[query_params.filter] = query_params.id;
+        delete query_params.filter;
+        delete query_params.id;
+        let query_string = qs.stringify(query_params);
+        this.setState({
+            sortTitle : this.props.search.sortTitle,
+            showTitle : this.props.search.showTitle,
+            mainTitle : this.props.search.mainTitle,
+        });
+        return query_string;
+    }
+
+    parseQueryPaginate() {
+        let query_params = this.handleQueryNotChange();
+        let query_string = qs.stringify(query_params);
+        return query_string;
+    }
+
+    parseQueryPaginateUrl(url) {
+        if (url != null) {
+            let query = qs.parseUrl(url).query
+            if (query.category) {
+                query.filter = 'category';
+                query.id = query.category;
+                delete query.category;
+            }
+            if (query.star) {
+                query.filter = 'star';
+                query.id = query.star;
+                delete query.star;
+            }
+            if (query.author) {
+                query.filter = 'author';
+                query.id = query.author;
+                delete query.author;
+            }
+            let query_string = qs.stringify(query)
+            return query_string
+        }
+        return "#";
+    }
+    fetchBookFilter(query) {
+        getBookFilter(query)
+        .then((response) => {
+            var data = response.data.data;
+            this.setState({
+                books: data,
+                prevUrlPaginate: this.parseQueryPaginateUrl(response.data.link.prev_url),
+                nextUrlPaginate: this.parseQueryPaginateUrl(response.data.link.next_url),
+                lastUrlPaginate: this.parseQueryPaginateUrl(response.data.link.last_url),
+                firstUrlPaginate: this.parseQueryPaginateUrl(response.data.link.first_url),
+                totalProduct: response.data.meta.total,
+                currentPage: response.data.meta.current_page,
+                lastPage: response.data.meta.last_page,
+                perPage: response.data.meta.per_page,
+                from: response.data.meta.from,
+                to: response.data.meta.to
+            });
+        })
+        .catch((error) => console.log(error));
+    }
+    dataBindingGrid() {
+        const rows = chunk(this.state.books, 4);
+        return rows.map((arrayBook, index) =>{
+            return (
+                <div className="mt-4 mb-3 product-show-list" key={index}>
+                    <div className="row">
+                        <BookCardRow books = {arrayBook} />
+                    </div>
+                </div>
+            );
+        })
+    }
 
     handleQuerySearch(query) {
         let queryParam = getQueryVariable(this.props);
@@ -76,13 +190,67 @@ class FilterProduct extends React.Component {
         }
         return newQueryParam;
     }
+    handleQueryNotChange() {
+        const queryParam = getQueryVariable(this.props);
+        const newQueryParam = {
+           ...queryParam,
+        }
+        return newQueryParam;
+    }
 
     render() {
+
+        const {lastPage, queryPagination, nextUrlPaginate, prevUrlPaginate, currentPage, perPage, totalProduct, to, from } = this.state;
+
+        const pageNumbers = [];
+        for (let i = 1; i <= lastPage; i++) {
+          pageNumbers.push(i);
+        }
+
+        const renderPageNumbers = pageNumbers.map(number => {
+            if (number == currentPage) {
+                return (
+                    <li className='page-item active' key={number} id={number}>
+                        <Link to={{
+                            pathname: "/product/filter",
+                            search: queryPagination + '&page=' + number,
+                        }} className="page-link"
+                        data-page={number} replace>{number}</Link>
+                    </li>
+                )
+            }
+            else {
+                return (
+                    <li className='page-item' key={number} id={number}>
+                        <Link to={{
+                            pathname: "/product/filter",
+                            search: queryPagination + '&page=' + number,
+                        }} className="page-link"
+                        data-page={number} replace>{number}</Link>
+                    </li>
+                );
+            }
+        });
+
+        const prevButton = (
+            <Link to={{
+                pathname: "/product/filter",
+                search: prevUrlPaginate,
+            }} className="page-link" replace>Previous</Link>
+        )
+
+        const nextButton = (
+            <Link to={{
+                pathname: "/product/filter",
+                search: nextUrlPaginate,
+            }} className="page-link" replace>Next</Link>
+        )
+
         return (
         <div className="col-lg-10 col-md-9 col-sm-12 pr-0 product-show-list">
             <div className="mt-4 mb-3 filter-dropdown">
                 <div>
-                    Showing 1-20 of 126 of books
+                    Showing {from}-{to} of {totalProduct} of books
                 </div>
                 <div className="filter-dropdown-button">
                     <DropdownButton
@@ -203,7 +371,35 @@ class FilterProduct extends React.Component {
                 </div>
             </div>
 
-            <ProductFilterList />
+            <>
+                {this.dataBindingGrid()}
+                <div className="mt-4 mb-3 pagination">
+                    <nav aria-label=" Page navigation product">
+                    <ul className="pagination justify-content-end" id='pagination-ul'>
+                        {currentPage == 1 ? (
+                            <li className="page-item disabled">
+                                {prevButton}
+                            </li>
+                        ) : (
+                            <li className="page-item">
+                                {prevButton}
+                            </li>
+                        )}
+
+                        {renderPageNumbers}
+                        {currentPage == lastPage ? (
+                            <li className="page-item disabled">
+                                {nextButton}
+                            </li>
+                        ) : (
+                            <li className="page-item">
+                                {nextButton}
+                            </li>
+                        )}
+                    </ul>
+                    </nav>
+                </div>
+            </>
         </div>
         )
     }
