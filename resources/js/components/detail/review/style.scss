@@ -1,0 +1,34 @@
+/* -- Review List */
+/* ---- 1. Filter Review */
+div.wrapper-detail .review-list {
+    .border {
+        background-color: #fafafa;
+    }
+    .filter-star-review {
+        margin-left: 0.4rem;
+        color: black;
+        text-decoration: underline;
+    }
+    .filter-all-star-review {
+        color: black;
+        text-decoration: underline;
+    }
+    .filter-date-review button {
+        background-color: #6A777D;
+        color: white;
+    }
+    .pagination-review {
+        display: flex;
+        justify-content: center;
+    }
+    .pagination-review ul li a {
+        color: #8475A7;
+    }
+    .write-a-review .btn-submit-review {
+        width: 100%;
+        background-color: #e6e6e6;
+        border: none;
+        color: black;
+        font-weight: bold;
+    }
+}

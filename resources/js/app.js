@@ -21,6 +21,7 @@ import WrapperProduct from './components/product/wrapper';
 
 // Call reducers
 import reducers from "./reducers/index";
+import WrapperDetail from './components/detail/wrapper';
 // Create store
 const store = createStore(
     reducers,
@@ -51,8 +52,12 @@ class App extends React.Component {
                             <h1>cart</h1>
                         </Route>
 
+                        <Route exact path="/detail/:idBook">
+                            <WrapperDetail />
+                        </Route>
+
                         <Footer />
-                        <Route path="**" render={() => <h1>Route not found!</h1>}></Route>
+                        {/* <Route path="**" render={() => <h1>Route not found!</h1>}></Route> */}
                     </div>
                 </Router>
             </Provider>

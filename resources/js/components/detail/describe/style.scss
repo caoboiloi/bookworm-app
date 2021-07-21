@@ -1,0 +1,25 @@
+/* -- Detail Book */
+/* ---- .1 Quantify Item */
+div.wrapper-detail .detail-book {
+    .quantity-item {
+        background-color: #e6e6e6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .quantity-item button {
+        background-color: #e6e6e6;
+        border: none;
+    }
+    .quantity-item .fa {
+        color: #7a7a7a;
+    }
+    // Button Order
+    .btn-order {
+        background-color: #e6e6e6;
+        border: none;
+        color: black;
+        font-weight: bold;
+    }
+
+}
