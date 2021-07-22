@@ -43,7 +43,11 @@ class Describe extends React.Component {
                         <div className="card mb-3">
                             <div className="row no-gutters">
                                 <div className="col-md-3 d-flex align-items-end flex-column mb-4">
-                                    <img src={'/assets/bookcover/' + book.book_cover_photo + '.jpg'} alt="book" width="100%" />
+                                    {book.book_cover_photo ? (
+                                        <img src={'/assets/bookcover/' + book.book_cover_photo + '.jpg'} alt="book" width="100%" />
+                                    ) : (
+                                        <img src={'/assets/bookcover/book5.jpg'} alt="book" width="100%" />
+                                    )}
                                     <div className="card-text mt-4 author-detail-book">
                                         By (author) <b>{book.author.author_name}</b>
                                     </div>

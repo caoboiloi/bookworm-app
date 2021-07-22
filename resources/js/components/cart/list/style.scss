@@ -1,0 +1,62 @@
+/* -- List Cart */
+div.wrapper-cart {
+    .list-cart {
+        table {
+            background-color: #fafafa;
+
+            tr:hover {
+                background-color: #f7f1f1;
+            }
+
+            td {
+                vertical-align: middle;
+            }
+
+            td.book-title-cart {
+                width: 100px;
+            }
+        }
+    }
+
+    .quantity-item-cart {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .quantity-number-cart {
+            background-color: #e6e6e6;
+            width: 38px;
+            justify-content: center;
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        button {
+            border-radius: 0%;
+            background-color: #e6e6e6;
+            border: none;
+        }
+
+        .fa {
+            color: #7a7a7a;
+        }
+    }
+    /* -- Place Order */
+    .place-order {
+        button.btn-place-order {
+            background-color: #e6e6e6;
+            color: black;
+            border: none;
+            width: 100%;
+        }
+
+        .card-body {
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}

@@ -19,6 +19,8 @@ import About from './components/about';
 
 import WrapperProduct from './components/product/wrapper';
 
+import WrapperCart from './components/cart/wrapper';
+
 // Call reducers
 import reducers from "./reducers/index";
 import WrapperDetail from './components/detail/wrapper';
@@ -49,7 +51,7 @@ class App extends React.Component {
                         </Route>
 
                         <Route exact path="/cart">
-                            <h1>cart</h1>
+                            <WrapperCart />
                         </Route>
 
                         <Route exact path="/detail/:idBook">
