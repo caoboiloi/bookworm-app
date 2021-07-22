@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = (state, ownProps) => {
     return {
         search: state.search,
-        cartAmount: state.cart.length
+        cartAmount: state.cart.carts.length
     }
 }
 

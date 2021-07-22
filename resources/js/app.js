@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter as Router, Route } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 import '../scss/app.scss';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,17 +13,22 @@ import Header from './components/header';
 import Footer from './components/footer';
 
 import Banner from './components/home/banner';
-import WrapperHome from './components/home/wrapper';
 
-import About from './components/about';
+import WrapperHome from './components/home/wrapper';
 
 import WrapperProduct from './components/product/wrapper';
 
 import WrapperCart from './components/cart/wrapper';
 
+import WrapperDetail from './components/detail/wrapper';
+
+import About from './components/about';
+
+import NotFound from './components/404';
+
 // Call reducers
 import reducers from "./reducers/index";
-import WrapperDetail from './components/detail/wrapper';
+
 // Create store
 const store = createStore(
     reducers,
@@ -36,27 +41,32 @@ class App extends React.Component {
                 <Router>
                     <div className="App">
                         <Header />
+                        <Switch>
+                            <Route exact path="/">
+                                <Banner />
+                                <WrapperHome />
+                            </Route>
 
-                        <Route exact path="/">
-                            <Banner />
-                            <WrapperHome />
-                        </Route>
+                            <Route exact path="/product/:redirectParams">
+                                <WrapperProduct />
+                            </Route>
 
-                        <Route exact path="/product/:redirectParams">
-                            <WrapperProduct />
-                        </Route>
+                            <Route exact path="/about">
+                                <About />
+                            </Route>
 
-                        <Route exact path="/about">
-                            <About />
-                        </Route>
+                            <Route exact path="/cart">
+                                <WrapperCart />
+                            </Route>
 
-                        <Route exact path="/cart">
-                            <WrapperCart />
-                        </Route>
+                            <Route exact path="/detail/:idBook">
+                                <WrapperDetail />
+                            </Route>
 
-                        <Route exact path="/detail/:idBook">
-                            <WrapperDetail />
-                        </Route>
+                            <Route>
+                                <NotFound></NotFound>
+                            </Route>
+                        </Switch>
 
                         <Footer />
                         {/* <Route path="**" render={() => <h1>Route not found!</h1>}></Route> */}

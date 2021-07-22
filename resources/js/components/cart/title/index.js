@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        cart: state.cart
+        cart: state.cart.carts
     }
 }
 

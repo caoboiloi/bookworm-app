@@ -26,6 +26,16 @@ class Describe extends React.Component {
         book : this.props.book,
         show : false,
         bookCart : null,
+        message : this.props.cart.message
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.cart.message != this.props.cart.message) {
+            this.setState({
+                message : nextProps.cart.message
+            })
+        }
+        return true;
     }
 
     handleSelectAdd() {
@@ -72,12 +82,12 @@ class Describe extends React.Component {
         this.props.addCart(data);
         this.setState({
             show : true,
-            bookCart : data
+            bookCart : data,
         })
     }
 
     render() {
-        const { book, show, bookCart } = this.state;
+        const { book, show, bookCart, message } = this.state;
         return(
         <>
             {book ? (
@@ -137,7 +147,7 @@ class Describe extends React.Component {
                         </div>
                         {bookCart && show ? (
                             <Alert variant="info" onClose={() => this.setState({show : false})} dismissible className='mt-3'>
-                                <Alert.Heading>Success! You have added a product to your cart!</Alert.Heading>
+                                <Alert.Heading>{message}</Alert.Heading>
                             </Alert>
                         ) : <></>}
                     </div>

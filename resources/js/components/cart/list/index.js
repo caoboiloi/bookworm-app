@@ -18,7 +18,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        cart: state.cart
+        cart: state.cart.carts
     }
 }
 
