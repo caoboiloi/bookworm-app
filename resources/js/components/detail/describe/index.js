@@ -3,9 +3,29 @@ import "./style.scss";
 
 import { withRouter } from 'react-router';
 
+import { actAddProductToCart } from '../../../actions/index';
+
+import { Alert } from 'react-bootstrap';
+
+import { connect } from 'react-redux';
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addCart: data => dispatch(actAddProductToCart(data)),
+    };
+};
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        cart: state.cart
+    }
+}
+
 class Describe extends React.Component {
     state = {
-        book : this.props.book
+        book : this.props.book,
+        show : false,
+        bookCart : null,
     }
 
     handleSelectAdd() {
@@ -32,9 +52,32 @@ class Describe extends React.Component {
         }
     }
 
-    render() {
-        const { book } = this.state;
+    handleAddToCart(book) {
+        const idBook = book.book_id;
+        const bookTitle = book.book_title;
+        const bookImg = book.book_cover_photo;
+        const bookAuthor = book.author.author_name;
+        const final_price = book.final_price;
+        const book_price = book.book_price;
+        let amount = document.getElementById('number-order').innerHTML;
+        const data = {
+            idBook,
+            bookTitle,
+            bookImg,
+            bookAuthor,
+            final_price,
+            book_price,
+            amount: parseInt(amount)
+        }
+        this.props.addCart(data);
+        this.setState({
+            show : true,
+            bookCart : data
+        })
+    }
 
+    render() {
+        const { book, show, bookCart } = this.state;
         return(
         <>
             {book ? (
@@ -88,10 +131,15 @@ class Describe extends React.Component {
                                     <i className="fa fa-plus"></i>
                                 </button>
                             </div>
-                            <button type="button" className="btn btn-secondary btn-order mx-5 mb-5">
+                            <button type="button" className="btn btn-secondary btn-order mx-5 mb-5" onClick={this.handleAddToCart.bind(this, book)}>
                                 Add to cart
                             </button>
                         </div>
+                        {bookCart && show ? (
+                            <Alert variant="info" onClose={() => this.setState({show : false})} dismissible className='mt-3'>
+                                <Alert.Heading>Success! You have added a product to your cart!</Alert.Heading>
+                            </Alert>
+                        ) : <></>}
                     </div>
                 </div>
             ) : (<></>)}
@@ -101,4 +149,4 @@ class Describe extends React.Component {
     }
 }
 
-export default withRouter(Describe);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Describe));

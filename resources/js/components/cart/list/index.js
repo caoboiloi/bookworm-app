@@ -1,7 +1,32 @@
 import React from 'react';
 import "./style.scss";
 
+import { connect } from 'react-redux';
+
+import { withRouter } from 'react-router';
+
+import { actDeleteAllProductCart } from '../../../actions/index';
+
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteAllCart: () => dispatch(actDeleteAllProductCart())
+    };
+};
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        cart: state.cart
+    }
+}
+
 class CartList extends React.Component {
+
+    componentDidMount() {
+        console.log('hello')
+        console.log(this.props.cart)
+        // this.props.deleteAllCart();
+    }
+
     render() {
         return(
             <div className="mx-5 mb-4">
@@ -132,4 +157,4 @@ class CartList extends React.Component {
     }
 }
 
-export default CartList;
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CartList));

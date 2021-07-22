@@ -5,7 +5,12 @@ import {
     ADD_NEW_DATA_SIDEBAR,
     ADD_NEW_FILTER_QUERY_PARAM,
     ADD_NEW_SORT_QUERY_PARAM,
-    RESET_DATA_FILTER_PAGE
+    RESET_DATA_FILTER_PAGE,
+    ADD_PRODUCT_TO_CART,
+    UPDATE_AMOUNT_PRODUCT_CART_BY_ID,
+    DELETE_PRODUCT_CART_BY_ID,
+    IS_VALID_PRODUCT,
+    DELETE_ALL_PRODUCT_CART
 } from "../const/index";
 
 // Home Page
@@ -56,5 +61,39 @@ export const actResetDataFilterPage = (content) => {
     return {
         type: RESET_DATA_FILTER_PAGE,
         content,
+    }
+}
+
+export const actAddProductToCart = (data) => {
+    return {
+        type: ADD_PRODUCT_TO_CART,
+        data
+    }
+}
+
+export const actUpdateAmountProductCart = (amount, id) => {
+    return {
+        type: UPDATE_AMOUNT_PRODUCT_CART_BY_ID,
+        amount, id
+    }
+}
+
+export const actDeleteProductById = (id) => {
+    return {
+        type: DELETE_PRODUCT_CART_BY_ID,
+        id
+    }
+}
+
+export const actIsValidProductCartById = (id) => {
+    return {
+        type: IS_VALID_PRODUCT,
+        id
+    }
+}
+
+export const actDeleteAllProductCart = () => {
+    return {
+        type: DELETE_ALL_PRODUCT_CART
     }
 }

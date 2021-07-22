@@ -22,7 +22,8 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        search: state.search
+        search: state.search,
+        cartAmount: state.cart.length
     }
 }
 
@@ -53,7 +54,7 @@ class Header extends React.Component {
                                 About
                             </Nav.Link>
                             <Nav.Link eventKey={4} href="#/cart">
-                                Cart (<span>0</span>)
+                                Cart (<span>{this.props.cartAmount}</span>)
                             </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
