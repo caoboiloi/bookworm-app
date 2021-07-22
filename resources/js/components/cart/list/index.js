@@ -5,14 +5,16 @@ import { connect } from 'react-redux';
 
 import { withRouter } from 'react-router';
 
-import { actDeleteAllProductCart } from '../../../actions/index';
+import { actDeleteAllProductCart, actDeleteProductById, actUpdateAmountProductCart } from '../../../actions/index';
 
 import { isNull } from 'lodash';
 import { Link } from 'react-router-dom';
 
 const mapDispatchToProps = dispatch => {
     return {
-        deleteAllCart: () => dispatch(actDeleteAllProductCart())
+        deleteAllCart: () => dispatch(actDeleteAllProductCart()),
+        deleteProductById: (id) => dispatch(actDeleteProductById(id)),
+        updateQuantityProductById: (amount, id) => dispatch(actUpdateAmountProductCart(amount, id))
     };
 };
 
@@ -25,6 +27,41 @@ const mapStateToProps = (state, ownProps) => {
 class CartList extends React.Component {
     state = {
         carts : this.props.cart
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.cart.length != this.props.cart.length) {
+            this.setState({
+                carts: nextProps.cart
+            })
+        }
+        return true;
+    }
+
+    handleSubAmountProductCart(id) {
+        let quantity = document.getElementById('quantity-cart-' + id).innerHTML;
+        let btnSub = document.getElementById('btn-sub-quantity-cart-' + id);
+        if (quantity == 1) {
+            this.props.deleteProductById(id);
+        }
+        else {
+            quantity = parseInt(quantity) - 1;
+            this.props.updateQuantityProductById(quantity,id);
+            document.getElementById('quantity-cart-' + id).innerHTML = quantity;
+        }
+    }
+
+    handleAddAmountProductCart(id) {
+        let quantity = document.getElementById('quantity-cart-' + id).innerHTML;
+        let btnAdd = document.getElementById('btn-add-quantity-cart-' + id);
+        if (quantity == 8) {
+            btnAdd.className += ' disabled';
+        }
+        else {
+            quantity = parseInt(quantity) + 1;
+            this.props.updateQuantityProductById(quantity,id);
+            document.getElementById('quantity-cart-' + id).innerHTML = quantity;
+        }
     }
 
     render() {
@@ -61,11 +98,13 @@ class CartList extends React.Component {
                     </td>
                     <td>
                         <div className="quantity-item-cart">
-                            <button type="button" className="btn btn-secondary">
+                            <button type="button" className="btn btn-secondary"
+                            id={'btn-sub-quantity-cart-' + book.idBook} onClick={this.handleSubAmountProductCart.bind(this, book.idBook)}>
                                 <i className="fa fa-minus"></i>
                             </button>
-                            <div className="quantity-number-cart">{book.amount}</div>
-                            <button type="button" className="btn btn-secondary">
+                            <div className="quantity-number-cart" id={'quantity-cart-' + book.idBook}>{book.amount}</div>
+                            <button type="button" className="btn btn-secondary"
+                            id={'btn-add-quantity-cart-' + book.idBook} onClick={this.handleAddAmountProductCart.bind(this, book.idBook)}>
                                 <i className="fa fa-plus"></i>
                             </button>
                         </div>

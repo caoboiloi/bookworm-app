@@ -6056,6 +6056,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     deleteAllCart: function deleteAllCart() {
       return dispatch((0,_actions_index__WEBPACK_IMPORTED_MODULE_3__.actDeleteAllProductCart)());
+    },
+    deleteProductById: function deleteProductById(id) {
+      return dispatch((0,_actions_index__WEBPACK_IMPORTED_MODULE_3__.actDeleteProductById)(id));
+    },
+    updateQuantityProductById: function updateQuantityProductById(amount, id) {
+      return dispatch((0,_actions_index__WEBPACK_IMPORTED_MODULE_3__.actUpdateAmountProductCart)(amount, id));
     }
   };
 };
@@ -6090,8 +6096,49 @@ var CartList = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(CartList, [{
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      if (nextProps.cart.length != this.props.cart.length) {
+        this.setState({
+          carts: nextProps.cart
+        });
+      }
+
+      return true;
+    }
+  }, {
+    key: "handleSubAmountProductCart",
+    value: function handleSubAmountProductCart(id) {
+      var quantity = document.getElementById('quantity-cart-' + id).innerHTML;
+      var btnSub = document.getElementById('btn-sub-quantity-cart-' + id);
+
+      if (quantity == 1) {
+        this.props.deleteProductById(id);
+      } else {
+        quantity = parseInt(quantity) - 1;
+        this.props.updateQuantityProductById(quantity, id);
+        document.getElementById('quantity-cart-' + id).innerHTML = quantity;
+      }
+    }
+  }, {
+    key: "handleAddAmountProductCart",
+    value: function handleAddAmountProductCart(id) {
+      var quantity = document.getElementById('quantity-cart-' + id).innerHTML;
+      var btnAdd = document.getElementById('btn-add-quantity-cart-' + id);
+
+      if (quantity == 8) {
+        btnAdd.className += ' disabled';
+      } else {
+        quantity = parseInt(quantity) + 1;
+        this.props.updateQuantityProductById(quantity, id);
+        document.getElementById('quantity-cart-' + id).innerHTML = quantity;
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var carts = this.state.carts;
 
       var bookCarts = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
@@ -6143,15 +6190,20 @@ var CartList = /*#__PURE__*/function (_React$Component) {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                   type: "button",
                   className: "btn btn-secondary",
+                  id: 'btn-sub-quantity-cart-' + book.idBook,
+                  onClick: _this2.handleSubAmountProductCart.bind(_this2, book.idBook),
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
                     className: "fa fa-minus"
                   })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                   className: "quantity-number-cart",
+                  id: 'quantity-cart-' + book.idBook,
                   children: book.amount
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                   type: "button",
                   className: "btn btn-secondary",
+                  id: 'btn-add-quantity-cart-' + book.idBook,
+                  onClick: _this2.handleAddAmountProductCart.bind(_this2, book.idBook),
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
                     className: "fa fa-plus"
                   })
@@ -9302,6 +9354,17 @@ function resetMaxAmountProductCart(array, product) {
   return false;
 }
 
+function updateAmountProductCartById(array, amount, id) {
+  for (var i = 0; i < array.length; i++) {
+    if (array[i].idBook === id) {
+      array[i].amount = amount;
+      return true;
+    }
+  }
+
+  return false;
+}
+
 var filterReducer = function filterReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var action = arguments.length > 1 ? arguments[1] : undefined;
@@ -9357,6 +9420,53 @@ var filterReducer = function filterReducer() {
       return {
         error: false,
         message: 'Delete all products successfully',
+        carts: []
+      };
+
+    case _const_index__WEBPACK_IMPORTED_MODULE_0__.DELETE_PRODUCT_CART_BY_ID:
+      if (localStorage.getItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART) != null) {
+        var _newData = JSON.parse(localStorage.getItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART));
+
+        _newData = _newData.filter(function (item) {
+          return item.idBook !== action.id;
+        });
+        localStorage.setItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART, JSON.stringify(_newData));
+        return {
+          error: false,
+          message: 'Delete product successfully',
+          carts: _newData
+        };
+      }
+
+      return {
+        error: true,
+        message: 'Error!!! Please reset the page',
+        carts: []
+      };
+
+    case _const_index__WEBPACK_IMPORTED_MODULE_0__.UPDATE_AMOUNT_PRODUCT_CART_BY_ID:
+      if (localStorage.getItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART) != null) {
+        var _newData2 = JSON.parse(localStorage.getItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART));
+
+        if (updateAmountProductCartById(_newData2, action.amount, action.id)) {
+          localStorage.setItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART, JSON.stringify(_newData2));
+          return {
+            error: false,
+            message: 'Update quantity product successfully',
+            carts: _newData2
+          };
+        } else {
+          return {
+            error: true,
+            message: 'Error!!! Please reset the page',
+            carts: []
+          };
+        }
+      }
+
+      return {
+        error: true,
+        message: 'Error!!! Please reset the page',
         carts: []
       };
 

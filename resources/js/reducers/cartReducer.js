@@ -1,6 +1,6 @@
 
 import { ADD_PRODUCT_TO_CART,
-    UPDATE_PRODUCT_CART_BY_ID,
+    UPDATE_AMOUNT_PRODUCT_CART_BY_ID,
     DELETE_PRODUCT_CART_BY_ID,
     IS_VALID_PRODUCT,
     DELETE_ALL_PRODUCT_CART } from "../const/index";
@@ -30,6 +30,16 @@ function resetMaxAmountProductCart(array, product) {
     for(let i = 0; i < array.length; i++){
         if(array[i].idBook === product.idBook){
             array[i].amount = 8;
+            return true;
+        }
+    }
+    return false;
+}
+
+function updateAmountProductCartById(array, amount, id) {
+    for(let i = 0; i < array.length; i++){
+        if(array[i].idBook === id){
+            array[i].amount = amount;
             return true;
         }
     }
@@ -84,6 +94,46 @@ const filterReducer = (state = [], action) => {
                 error: false,
                 message: 'Delete all products successfully',
                 carts:[]
+            }
+        case DELETE_PRODUCT_CART_BY_ID:
+            if (localStorage.getItem(KEY_CONFIG_CART) != null) {
+                let newData = JSON.parse(localStorage.getItem(KEY_CONFIG_CART));
+                newData = newData.filter(item => item.idBook !== action.id);
+                localStorage.setItem(KEY_CONFIG_CART, JSON.stringify(newData));
+                return {
+                    error: false,
+                    message: 'Delete product successfully',
+                    carts: newData
+                }
+            }
+            return {
+                error: true,
+                message: 'Error!!! Please reset the page',
+                carts: []
+            }
+        case UPDATE_AMOUNT_PRODUCT_CART_BY_ID:
+            if (localStorage.getItem(KEY_CONFIG_CART) != null) {
+                let newData = JSON.parse(localStorage.getItem(KEY_CONFIG_CART));
+                if (updateAmountProductCartById(newData, action.amount, action.id)) {
+                    localStorage.setItem(KEY_CONFIG_CART, JSON.stringify(newData));
+                    return {
+                        error: false,
+                        message: 'Update quantity product successfully',
+                        carts: newData
+                    }
+                }
+                else {
+                    return {
+                        error: true,
+                        message: 'Error!!! Please reset the page',
+                        carts: []
+                    }
+                }
+            }
+            return {
+                error: true,
+                message: 'Error!!! Please reset the page',
+                carts: []
             }
         default:
             let data = [];
