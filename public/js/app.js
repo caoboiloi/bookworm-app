@@ -6068,7 +6068,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 var mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
-    cart: state.cart.carts
+    cart: state.cart.carts,
+    totalAmount: state.cart.totalAmount
   };
 };
 
@@ -6089,7 +6090,8 @@ var CartList = /*#__PURE__*/function (_React$Component) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      carts: _this.props.cart
+      carts: _this.props.cart,
+      totalAmount: _this.props.totalAmount
     });
 
     return _this;
@@ -6107,10 +6109,18 @@ var CartList = /*#__PURE__*/function (_React$Component) {
       return true;
     }
   }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState, snapshot) {
+      if (prevProps.totalAmount != this.props.totalAmount) {
+        this.setState({
+          carts: this.props.cart
+        });
+      }
+    }
+  }, {
     key: "handleSubAmountProductCart",
     value: function handleSubAmountProductCart(id) {
       var quantity = document.getElementById('quantity-cart-' + id).innerHTML;
-      var btnSub = document.getElementById('btn-sub-quantity-cart-' + id);
 
       if (quantity == 1) {
         this.props.deleteProductById(id);
@@ -6139,7 +6149,9 @@ var CartList = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var carts = this.state.carts;
+      var _this$state = this.state,
+          carts = _this$state.carts,
+          totalAmount = _this$state.totalAmount;
 
       var bookCarts = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
         children: carts.map(function (book) {
@@ -6222,7 +6234,7 @@ var CartList = /*#__PURE__*/function (_React$Component) {
       });
 
       var total = 0;
-      carts.slice(0).reverse().map(function (book) {
+      carts.map(function (book) {
         total += book.final_price * book.amount;
       });
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
@@ -9365,6 +9377,14 @@ function updateAmountProductCartById(array, amount, id) {
   return false;
 }
 
+function totalAmountProductCart(array) {
+  var total = 0;
+  array.map(function (book) {
+    total += book.final_price * book.amount;
+  });
+  return total;
+}
+
 var filterReducer = function filterReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var action = arguments.length > 1 ? arguments[1] : undefined;
@@ -9381,26 +9401,36 @@ var filterReducer = function filterReducer() {
         if (updateAmountProductCart(newData, item)) {
           if (getAmountProductCart(newData, item) > 8) {
             if (resetMaxAmountProductCart(newData, item)) {
+              var _totalAmount2 = totalAmountProductCart(newData);
+
               return {
                 error: true,
                 message: 'Error!!! Limited quantity is 8 in cart',
-                carts: _toConsumableArray(newData)
+                carts: _toConsumableArray(newData),
+                totalAmount: _totalAmount2
               };
             } else {
+              var _totalAmount3 = totalAmountProductCart(newData);
+
               return {
                 error: true,
                 message: 'Error!!! Please reset the page',
-                carts: _toConsumableArray(newData)
+                carts: _toConsumableArray(newData),
+                totalAmount: _totalAmount3
               };
             }
           } // console.log('check sản phẩm có tồn tại');
 
 
           localStorage.setItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART, JSON.stringify(newData));
+
+          var _totalAmount = totalAmountProductCart(newData);
+
           return {
             error: false,
             message: 'The product is already in the cart! The quantity has been updated successfully',
-            carts: _toConsumableArray(newData)
+            carts: _toConsumableArray(newData),
+            totalAmount: _totalAmount
           };
         }
       } // console.log('check cart không sản phẩm');
@@ -9408,10 +9438,12 @@ var filterReducer = function filterReducer() {
 
       newData.push(item);
       localStorage.setItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART, JSON.stringify(newData));
+      var totalAmount = totalAmountProductCart(newData);
       return {
         error: false,
         message: 'Success! You have added a product to your cart',
-        carts: _toConsumableArray(newData)
+        carts: _toConsumableArray(newData),
+        totalAmount: totalAmount
       };
 
     case _const_index__WEBPACK_IMPORTED_MODULE_0__.DELETE_ALL_PRODUCT_CART:
@@ -9420,7 +9452,8 @@ var filterReducer = function filterReducer() {
       return {
         error: false,
         message: 'Delete all products successfully',
-        carts: []
+        carts: [],
+        totalAmount: 0
       };
 
     case _const_index__WEBPACK_IMPORTED_MODULE_0__.DELETE_PRODUCT_CART_BY_ID:
@@ -9431,17 +9464,22 @@ var filterReducer = function filterReducer() {
           return item.idBook !== action.id;
         });
         localStorage.setItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART, JSON.stringify(_newData));
+
+        var _totalAmount4 = totalAmountProductCart(_newData);
+
         return {
           error: false,
           message: 'Delete product successfully',
-          carts: _newData
+          carts: _newData,
+          totalAmount: _totalAmount4
         };
       }
 
       return {
         error: true,
         message: 'Error!!! Please reset the page',
-        carts: []
+        carts: [],
+        totalAmount: 0
       };
 
     case _const_index__WEBPACK_IMPORTED_MODULE_0__.UPDATE_AMOUNT_PRODUCT_CART_BY_ID:
@@ -9450,16 +9488,21 @@ var filterReducer = function filterReducer() {
 
         if (updateAmountProductCartById(_newData2, action.amount, action.id)) {
           localStorage.setItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART, JSON.stringify(_newData2));
+
+          var _totalAmount5 = totalAmountProductCart(_newData2);
+
           return {
             error: false,
             message: 'Update quantity product successfully',
-            carts: _newData2
+            carts: _newData2,
+            totalAmount: _totalAmount5
           };
         } else {
           return {
             error: true,
             message: 'Error!!! Please reset the page',
-            carts: []
+            carts: [],
+            totalAmount: 0
           };
         }
       }
@@ -9467,20 +9510,24 @@ var filterReducer = function filterReducer() {
       return {
         error: true,
         message: 'Error!!! Please reset the page',
-        carts: []
+        carts: [],
+        totalAmount: 0
       };
 
     default:
       var data = [];
+      var total = 0;
 
       if (localStorage.getItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART) != null) {
         data = JSON.parse(localStorage.getItem(_utils_config__WEBPACK_IMPORTED_MODULE_1__.KEY_CONFIG_CART));
+        total = totalAmountProductCart(data);
       }
 
       return {
         error: '',
         message: '',
-        carts: _toConsumableArray(data)
+        carts: _toConsumableArray(data),
+        totalAmount: total
       };
   }
 };

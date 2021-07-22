@@ -46,6 +46,14 @@ function updateAmountProductCartById(array, amount, id) {
     return false;
 }
 
+function totalAmountProductCart(array) {
+    let total = 0;
+    array.map(book => {
+        total += book.final_price * book.amount
+    })
+    return total;
+}
+
 const filterReducer = (state = [], action) => {
     switch (action.type) {
         case ADD_PRODUCT_TO_CART:
@@ -57,35 +65,43 @@ const filterReducer = (state = [], action) => {
                 if (updateAmountProductCart(newData, item)) {
                     if (getAmountProductCart(newData, item) > 8) {
                         if (resetMaxAmountProductCart(newData, item)) {
+                            let totalAmount = totalAmountProductCart(newData);
                             return {
                                 error: true,
                                 message: 'Error!!! Limited quantity is 8 in cart',
-                                carts:[...newData]
+                                carts:[...newData],
+                                totalAmount
                             }
                         } else {
+                            let totalAmount = totalAmountProductCart(newData);
                             return {
                                 error: true,
                                 message: 'Error!!! Please reset the page',
-                                carts:[...newData]
+                                carts:[...newData],
+                                totalAmount
                             }
                         }
                     }
                     // console.log('check sản phẩm có tồn tại');
                     localStorage.setItem(KEY_CONFIG_CART, JSON.stringify(newData));
+                    let totalAmount = totalAmountProductCart(newData);
                     return {
                         error: false,
                         message: 'The product is already in the cart! The quantity has been updated successfully',
-                        carts:[...newData]
+                        carts:[...newData],
+                        totalAmount
                     }
                 }
             }
             // console.log('check cart không sản phẩm');
             newData.push(item);
             localStorage.setItem(KEY_CONFIG_CART, JSON.stringify(newData));
+            let totalAmount = totalAmountProductCart(newData);
             return {
                 error: false,
                 message: 'Success! You have added a product to your cart',
-                carts:[...newData]
+                carts:[...newData],
+                totalAmount
             }
         case DELETE_ALL_PRODUCT_CART:
             // console.log('delete all product cart')
@@ -93,57 +109,68 @@ const filterReducer = (state = [], action) => {
             return {
                 error: false,
                 message: 'Delete all products successfully',
-                carts:[]
+                carts:[],
+                totalAmount: 0
             }
         case DELETE_PRODUCT_CART_BY_ID:
             if (localStorage.getItem(KEY_CONFIG_CART) != null) {
                 let newData = JSON.parse(localStorage.getItem(KEY_CONFIG_CART));
                 newData = newData.filter(item => item.idBook !== action.id);
                 localStorage.setItem(KEY_CONFIG_CART, JSON.stringify(newData));
+                let totalAmount = totalAmountProductCart(newData);
                 return {
                     error: false,
                     message: 'Delete product successfully',
-                    carts: newData
+                    carts: newData,
+                    totalAmount
                 }
             }
             return {
                 error: true,
                 message: 'Error!!! Please reset the page',
-                carts: []
+                carts: [],
+                totalAmount: 0
             }
         case UPDATE_AMOUNT_PRODUCT_CART_BY_ID:
             if (localStorage.getItem(KEY_CONFIG_CART) != null) {
                 let newData = JSON.parse(localStorage.getItem(KEY_CONFIG_CART));
                 if (updateAmountProductCartById(newData, action.amount, action.id)) {
                     localStorage.setItem(KEY_CONFIG_CART, JSON.stringify(newData));
+                    let totalAmount = totalAmountProductCart(newData);
                     return {
                         error: false,
                         message: 'Update quantity product successfully',
-                        carts: newData
+                        carts: newData,
+                        totalAmount
                     }
                 }
                 else {
                     return {
                         error: true,
                         message: 'Error!!! Please reset the page',
-                        carts: []
+                        carts: [],
+                        totalAmount: 0
                     }
                 }
             }
             return {
                 error: true,
                 message: 'Error!!! Please reset the page',
-                carts: []
+                carts: [],
+                totalAmount: 0
             }
         default:
             let data = [];
+            let total = 0;
             if (localStorage.getItem(KEY_CONFIG_CART) != null) {
-                data = JSON.parse(localStorage.getItem(KEY_CONFIG_CART))
+                data = JSON.parse(localStorage.getItem(KEY_CONFIG_CART));
+                total = totalAmountProductCart(data);
             }
             return {
                 error: '',
                 message: '',
-                carts:[...data]
+                carts:[...data],
+                totalAmount: total
             }
     }
 };

@@ -20,13 +20,15 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        cart: state.cart.carts
+        cart: state.cart.carts,
+        totalAmount : state.cart.totalAmount
     }
 }
 
 class CartList extends React.Component {
     state = {
-        carts : this.props.cart
+        carts : this.props.cart,
+        totalAmount : this.props.totalAmount
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -38,9 +40,16 @@ class CartList extends React.Component {
         return true;
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.totalAmount != this.props.totalAmount) {
+            this.setState({
+                carts: this.props.cart
+            })
+        }
+    }
+
     handleSubAmountProductCart(id) {
         let quantity = document.getElementById('quantity-cart-' + id).innerHTML;
-        let btnSub = document.getElementById('btn-sub-quantity-cart-' + id);
         if (quantity == 1) {
             this.props.deleteProductById(id);
         }
@@ -65,7 +74,7 @@ class CartList extends React.Component {
     }
 
     render() {
-        const { carts } = this.state;
+        const { carts, totalAmount } = this.state;
         const bookCarts = <>{carts.map((book) => {
             if (isNull(book.bookImg)) {
                 book.bookImg = 'book5'
@@ -116,7 +125,7 @@ class CartList extends React.Component {
             )
         })}</>
         let total = 0
-        carts.slice(0).reverse().map(book => {
+        carts.map(book => {
             total += book.final_price * book.amount
         })
         return(
