@@ -7,6 +7,9 @@ import { withRouter } from 'react-router';
 
 import { actDeleteAllProductCart } from '../../../actions/index';
 
+import { isNull } from 'lodash';
+import { Link } from 'react-router-dom';
+
 const mapDispatchToProps = dispatch => {
     return {
         deleteAllCart: () => dispatch(actDeleteAllProductCart())
@@ -20,14 +23,63 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 class CartList extends React.Component {
-
-    componentDidMount() {
-        console.log('hello')
-        console.log(this.props.cart)
-        // this.props.deleteAllCart();
+    state = {
+        carts : this.props.cart
     }
 
     render() {
+        const { carts } = this.state;
+        const bookCarts = <>{carts.map((book) => {
+            if (isNull(book.bookImg)) {
+                book.bookImg = 'book5'
+            }
+            return (
+                <tr key={book.idBook}>
+                    <td className="book-title-cart pl-4 py-4">
+                        <Link to={'/detail/' + book.idBook}>
+                            <img src={"./assets/bookcover/" + book.bookImg + ".jpg"} alt={book.bookTitle} width="120rem" height="160rem" />
+                        </Link>
+                    </td>
+                    <td>
+                        <div className="h4">
+                            {book.bookTitle}
+                        </div>
+                        <div>
+                            {book.bookAuthor}
+                        </div>
+                    </td>
+                    <td>
+                        {book.final_price == book.book_price ? (
+                            <div className="h5"><b>${book.book_price}</b></div>
+                        ) : (
+                            <>
+                            <div className="h5"><b>${book.final_price}</b></div>
+                            <div><del>${book.book_price}</del></div>
+                            </>
+                        )}
+
+                    </td>
+                    <td>
+                        <div className="quantity-item-cart">
+                            <button type="button" className="btn btn-secondary">
+                                <i className="fa fa-minus"></i>
+                            </button>
+                            <div className="quantity-number-cart">{book.amount}</div>
+                            <button type="button" className="btn btn-secondary">
+                                <i className="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>
+                        <div className="h5"><b>${(book.final_price * book.amount).toFixed(2)}</b></div>
+                    </td>
+                </tr>
+            )
+        })}</>
+        let total = 0
+        carts.slice(0).reverse().map(book => {
+            total += book.final_price * book.amount
+        })
         return(
             <div className="mx-5 mb-4">
                 <div className="row">
@@ -42,99 +94,7 @@ class CartList extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td className="book-title-cart pl-4 py-4">
-                                        <img src="./assets/bookcover/book1.jpg" alt="" width="120rem" height="160rem" />
-                                    </td>
-                                    <td>
-                                        <div className="h4">
-                                            Book title
-                                        </div>
-                                        <div>
-                                            Author name
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="h5"><b>$29.99</b></div>
-                                        <div><del>$49.99</del></div>
-                                    </td>
-                                    <td>
-                                        <div className="quantity-item-cart">
-                                            <button type="button" className="btn btn-secondary">
-                                                <i className="fa fa-minus"></i>
-                                            </button>
-                                            <div className="quantity-number-cart">1</div>
-                                            <button type="button" className="btn btn-secondary">
-                                                <i className="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="h5"><b>$29.99</b></div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="book-title-cart pl-4 py-4">
-                                        <img src="./assets/bookcover/book2.jpg" alt="" width="120rem" height="160rem" />
-                                    </td>
-                                    <td>
-                                        <div className="h4">
-                                            Book title
-                                        </div>
-                                        <div>
-                                            Author name
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="h5"><b>$29.99</b></div>
-                                        <div><del>$49.99</del></div>
-                                    </td>
-                                    <td>
-                                        <div className="quantity-item-cart">
-                                            <button type="button" className="btn btn-secondary">
-                                                <i className="fa fa-minus"></i>
-                                            </button>
-                                            <div className="quantity-number-cart">1</div>
-                                            <button type="button" className="btn btn-secondary">
-                                                <i className="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="h5"><b>$29.99</b></div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="book-title-cart pl-4 py-4">
-                                        <img src="./assets/bookcover/book3.jpg" alt="" width="120rem" height="160rem" />
-                                    </td>
-                                    <td>
-                                        <div className="h4">
-                                            Book title
-                                        </div>
-                                        <div>
-                                            Author name
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="h5"><b>$29.99</b></div>
-                                        <div><del>$49.99</del></div>
-                                    </td>
-                                    <td>
-                                        <div className="quantity-item-cart">
-                                            <button type="button" className="btn btn-secondary">
-                                                <i className="fa fa-minus"></i>
-                                            </button>
-                                            <div className="quantity-number-cart">1</div>
-                                            <button type="button" className="btn btn-secondary">
-                                                <i className="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="h5"><b>$29.99</b></div>
-                                    </td>
-                                </tr>
+                                {bookCarts}
                             </tbody>
                         </table>
                     </div>
@@ -144,7 +104,7 @@ class CartList extends React.Component {
                                 <span className="h5"><b>Cart Totals</b></span>
                             </div>
                             <div className="card-body px-5">
-                                <h4 className="card-title my-4"><b>$99.99</b></h4>
+                                <h4 className="card-title my-4"><b>${total.toFixed(2)}</b></h4>
                                 <button type="button" className="btn btn-secondary btn-place-order mb-3">
                                     <b>Place order</b>
                                 </button>
