@@ -28,9 +28,20 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 class Header extends React.Component {
-
+    state = {
+        pathname: this.props.location.pathname
+    }
     componentDidMount() {
+        console.log(this.state.pathname)
+    }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.location.pathname != this.state.pathname) {
+            this.setState({
+                pathname: nextProps.location.pathname
+            })
+        }
+        return true;
     }
 
     render() {
@@ -43,18 +54,18 @@ class Header extends React.Component {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="ml-auto">
-                            <Nav.Link eventKey={1} href="#/">
+                        <Nav className="ml-auto" activeKey={this.state.pathname}>
+                            <Nav.Link eventKey={'/'} as={Link} to="/">
                                 Home
                             </Nav.Link>
-                            <Nav.Link eventKey={2} as={Link} to="/product/filter?show=20&sort=sale" onClick={() => this.props.resetFilterPage()} replace>
+                            <Nav.Link eventKey={'/product/filter'} as={Link} to="/product/filter?show=20&sort=sale" onClick={() => this.props.resetFilterPage()} replace>
                                 Shop
                             </Nav.Link>
-                            <Nav.Link eventKey={3} href="#/about">
+                            <Nav.Link eventKey={'/about'} as={Link} to="/about">
                                 About
                             </Nav.Link>
-                            <Nav.Link eventKey={4} href="#/cart">
-                                Cart (<span>{this.props.cartAmount}</span>)
+                            <Nav.Link eventKey={'/cart'} as={Link} to="/cart">
+                                Cart <b>(<span>{this.props.cartAmount}</span>)</b>
                             </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>

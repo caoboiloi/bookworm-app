@@ -147,7 +147,8 @@ class Describe extends React.Component {
                         </div>
                         {bookCart && show ? (
                             <Alert variant="info" onClose={() => this.setState({show : false})} dismissible className='mt-3'>
-                                <Alert.Heading>{message}</Alert.Heading>
+                                <Alert.Heading>Notification</Alert.Heading>
+                                <p>{message}</p>
                             </Alert>
                         ) : <></>}
                     </div>

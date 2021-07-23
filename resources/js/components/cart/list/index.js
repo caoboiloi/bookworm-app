@@ -3,12 +3,16 @@ import "./style.scss";
 
 import { connect } from 'react-redux';
 
+import { Alert, Modal, Button } from 'react-bootstrap';
+
 import { withRouter } from 'react-router';
+
+import { postDataOrder } from '../../../utils/httpHelper';
 
 import { actDeleteAllProductCart, actDeleteProductById, actUpdateAmountProductCart } from '../../../actions/index';
 
 import { isNull } from 'lodash';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -21,14 +25,23 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = (state, ownProps) => {
     return {
         cart: state.cart.carts,
-        totalAmount : state.cart.totalAmount
+        totalAmount : state.cart.totalAmount,
     }
 }
 
 class CartList extends React.Component {
-    state = {
-        carts : this.props.cart,
-        totalAmount : this.props.totalAmount
+    constructor(props) {
+        super(props);
+        this.state = {
+            carts : this.props.cart,
+            totalAmount : this.props.totalAmount,
+            show : false,
+            showAlert: false,
+            seconds: 10,
+            interval: null,
+            isRedirected: false,
+            isError: null
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -46,6 +59,38 @@ class CartList extends React.Component {
                 carts: this.props.cart
             })
         }
+    }
+
+    startTimer = () => {
+        let interval = setInterval(this.timer.bind(this), 1000);
+        this.setState({
+            interval
+        })
+    };
+
+    timer() {
+        let seconds = this.state.seconds - 1;
+        this.setState({
+          seconds: seconds,
+        });
+
+        if (seconds == 0) {
+          clearInterval(this.state.interval);
+          this.setState({
+            isRedirected: true
+          })
+        }
+    }
+
+    fetchPostOrderData(data) {
+        postDataOrder(data)
+        .then(res => {
+
+        }).catch(error => {
+            this.setState({
+                isError: error
+            })
+        })
     }
 
     handleSubAmountProductCart(id) {
@@ -73,8 +118,23 @@ class CartList extends React.Component {
         }
     }
 
+    handleSubmitDataCart(carts) {
+        this.startTimer();
+        console.log(carts)
+        this.setState({
+            show : false,
+            showAlert : true
+        })
+    }
+
     render() {
-        const { carts, totalAmount } = this.state;
+        const { carts, show, seconds, isRedirected, showAlert, isError } = this.state;
+        if (isRedirected) {
+            return <Redirect to='/'  />
+        }
+        if (!isNull(isError)) {
+            return <Redirect to='/error'  />
+        }
         const bookCarts = <>{carts.map((book) => {
             if (isNull(book.bookImg)) {
                 book.bookImg = 'book5'
@@ -153,11 +213,33 @@ class CartList extends React.Component {
                             </div>
                             <div className="card-body px-5">
                                 <h4 className="card-title my-4"><b>${total.toFixed(2)}</b></h4>
-                                <button type="button" className="btn btn-secondary btn-place-order mb-3">
+                                <button type="button" className="btn btn-secondary btn-place-order mb-3"
+                                        id="btn-place-order" onClick={() => this.setState({show: true})}
+                                        >
                                     <b>Place order</b>
                                 </button>
                             </div>
                         </div>
+                        <Modal show={show} onHide={() => this.setState({show : false})}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Place order</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>Are you sure to order?</Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="outline-dark" onClick={() => this.setState({show : false})}>
+                                    Close
+                                </Button>
+                                <Button variant="secondary" onClick={this.handleSubmitDataCart.bind(this, carts)}>
+                                    Order
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+                        {showAlert ? (
+                            <Alert variant="secondary" className="mt-5 text-center">
+                                <Alert.Heading>Order Success</Alert.Heading>
+                                Go back to <Alert.Link as={Link} to="/">Home Page</Alert.Link> after {seconds} seconds
+                            </Alert>
+                        ):<></>}
                     </div>
                 </div>
             </div>

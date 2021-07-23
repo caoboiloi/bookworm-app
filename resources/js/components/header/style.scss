@@ -7,9 +7,16 @@ header {
         background-color: #868f96;
         overflow: hidden;
         position: fixed;
-        z-index: 10000000000;
+        z-index: 850;
         top: 0;
         width: 100%;
+
+        .navbar-nav {
+            .nav-link.active {
+                color: rgb(79, 81, 83);
+                font-weight: bold;
+            }
+        }
 
         .collapse {
             margin-right: 1.5rem;

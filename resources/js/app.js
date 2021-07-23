@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
 import '../scss/app.scss';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -63,9 +63,8 @@ class App extends React.Component {
                                 <WrapperDetail />
                             </Route>
 
-                            <Route>
-                                <NotFound></NotFound>
-                            </Route>
+                            <Route path='/error' component={NotFound} />
+                            <Redirect from='*' to='/error' />
                         </Switch>
 
                         <Footer />

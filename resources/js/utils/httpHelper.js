@@ -32,3 +32,7 @@ export function getSidebarFilter() {
 export function getDetailBookById(id) {
     return axios.get(endpoint + '/api/books/' + id);
 }
+
+export function postDataOrder(body) {
+    return axios.post(endpoint + '/api/orders', body);
+}
