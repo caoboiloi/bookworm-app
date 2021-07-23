@@ -31,9 +31,6 @@ class Header extends React.Component {
     state = {
         pathname: this.props.location.pathname
     }
-    componentDidMount() {
-        console.log(this.state.pathname)
-    }
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.location.pathname != this.state.pathname) {

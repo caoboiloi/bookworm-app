@@ -37,10 +37,12 @@ class CartList extends React.Component {
             totalAmount : this.props.totalAmount,
             show : false,
             showAlert: false,
+            showError: false,
             seconds: 10,
             interval: null,
             isRedirected: false,
-            isError: null
+            isError: null,
+            error: ''
         }
     }
 
@@ -82,15 +84,14 @@ class CartList extends React.Component {
         }
     }
 
-    fetchPostOrderData(data) {
-        postDataOrder(data)
-        .then(res => {
-
-        }).catch(error => {
-            this.setState({
-                isError: error
-            })
+    async fetchPostOrderData(data) {
+        let res = await postDataOrder(data)
+        .then(async res => {
+            return await res.status;
+        }).catch(async error => {
+            return await error.response.status;
         })
+        return res;
     }
 
     handleSubAmountProductCart(id) {
@@ -118,20 +119,41 @@ class CartList extends React.Component {
         }
     }
 
-    handleSubmitDataCart(carts) {
-        this.startTimer();
-        console.log(carts)
-        this.setState({
-            show : false,
-            showAlert : true
+    async handleSubmitDataCart(carts) {
+        let newCarts = {
+            book: []
+        }
+        newCarts.book = carts.map((book) => {
+            return {
+                id : book.idBook,
+                quantity : book.amount,
+                price : book.final_price
+            }
         })
+        const data = await this.fetchPostOrderData(newCarts);
+        if (data == 201) {
+            this.startTimer();
+            this.props.deleteAllCart();
+            this.setState({
+                show : false,
+                showAlert : true
+            })
+        }
+        else if (data == 500) {
+            this.props.deleteAllCart();
+            this.setState({
+                show : false,
+                showError : true
+            })
+        }
     }
 
     render() {
-        const { carts, show, seconds, isRedirected, showAlert, isError } = this.state;
+        const { carts, show, seconds, isRedirected, showAlert, isError, showError } = this.state;
         if (isRedirected) {
             return <Redirect to='/'  />
         }
+        // thêm bộ đếm time ở đây
         if (!isNull(isError)) {
             return <Redirect to='/error'  />
         }
@@ -238,6 +260,12 @@ class CartList extends React.Component {
                             <Alert variant="secondary" className="mt-5 text-center">
                                 <Alert.Heading>Order Success</Alert.Heading>
                                 Go back to <Alert.Link as={Link} to="/">Home Page</Alert.Link> after {seconds} seconds
+                            </Alert>
+                        ):<></>}
+                        {showError ? (
+                            <Alert variant="warning" className="mt-5 text-center">
+                                <Alert.Heading>Order Failed</Alert.Heading>
+                                An error occurred, please refresh the page
                             </Alert>
                         ):<></>}
                     </div>

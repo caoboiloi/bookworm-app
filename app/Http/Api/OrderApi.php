@@ -51,12 +51,12 @@ class OrderApi extends Controller
                     \DB::table('order_items')->insert($data_items);
                 }, 4);
                 return response()->json([
-                    'message' => 'Shopping cart payment successful.'
-                ], Response::HTTP_ACCEPTED);
+                    'message' => 'Order created successfully'
+                ], Response::HTTP_CREATED);
             } catch (\Throwable $th) {
                 return response()->json([
-                    'error' => $th
-                ], Response::HTTP_UNPROCESSABLE_ENTITY);
+                    'error' => 'Server error',
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
     }
