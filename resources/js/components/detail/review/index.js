@@ -1,8 +1,150 @@
 import React from 'react';
 import "./style.scss";
 
+import { DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
+
+import { getQueryVariable } from '../../../utils/queryVariable';
+import { getReviewFilterByBook, getCountReviewByBook } from '../../../utils/httpHelper';
+
+import { withRouter } from 'react-router';
+
+import qs from 'query-string';
+
+import { Link } from 'react-router-dom';
+
+import ReviewCard from '../card';
+import SubmitForm from '../submit';
+
 class Review extends React.Component {
+    state = {
+        sortTitle : 'Default',
+        showTitle : 'Show 20',
+        starTitle : null,
+        sort : 'none',
+        show : 20,
+        star : 0,
+        codeCount : -1,
+        codeData : -1,
+        starCount : {
+            one_star: 0,
+            two_star: 0,
+            three_star: 0,
+            four_star: 0,
+            five_star: 0,
+            count_star: 0,
+            avg_star: 0
+        },
+        queryDefault : 'show=20',
+        reviews : []
+    }
+    async componentDidMount() {
+        var codeCount = await this.fetchDataCountReview();
+        var codeData = await this.fetchDataReview(this.state.queryDefault);
+        this.setState({
+            codeCount,
+            codeData
+        })
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.location.search !== prevProps.location.search) {
+            console.log('ROUTER CHANGE REVIEW')
+            if (prevState.sort != this.state.sort ||
+                prevState.show != this.state.show ||
+                prevState.star != this.state.star)
+            {
+                let query_params = {
+                    sort: this.state.sort,
+                    show: this.state.show,
+                    star: this.state.star
+                };
+                let query = qs.stringify(query_params)
+                this.fetchDataReview(query);
+            }
+        }
+    }
+
+    async fetchDataCountReview() {
+        let data = await getCountReviewByBook(this.props.idBook)
+        .then(async res => {
+            this.setState({
+                starCount: res.data.count
+            })
+            return await res.status;
+        }).catch(async error => {
+            return await error.response.status;
+        })
+        return data;
+    }
+    async fetchDataReview(query) {
+        let data = await getReviewFilterByBook(this.props.idBook, query)
+        .then(async res => {
+            this.setState({
+                reviews: res.data.reviews.data
+            })
+            return await res.status;
+        }).catch(async error => {
+            return await error.response.status;
+        })
+        return data;
+    }
+
+    handleQuerySearch(query) {
+        let queryParam = getQueryVariable(this.props);
+        if (queryParam.page) {
+            delete queryParam.page;
+        }
+        const newQueryParam = {
+           ...queryParam,
+           ...query
+        }
+        return newQueryParam;
+    }
+
     render() {
+        const { star, starTitle, sortTitle, showTitle, starCount, reviews } = this.state
+        const starArr = [5, 4, 3, 2, 1];
+        const starElement = starArr.map(s => {
+            let temp = 0;
+            switch (s) {
+                case 1:
+                    temp = starCount.one_star;
+                    break;
+                case 2:
+                    temp = starCount.two_star;
+                    break;
+                case 3:
+                    temp = starCount.three_star;
+                    break;
+                case 4:
+                    temp = starCount.four_star;
+                    break;
+                case 5:
+                    temp = starCount.five_star;
+                    break;
+                default:
+                    temp = 0;
+                    break;
+            }
+            return (
+                <span key={s}>
+                    <Link className="filter-star-review" to={{
+                        pathname: '/detail/' + this.props.idBook,
+                        search: qs.stringify(this.handleQuerySearch({
+                                star: s
+                            }))
+                        }} onClick={() => this.setState({
+                            starTitle: s + ' star',
+                            star: s
+                        })} replace >
+                            {s} star (<span>{temp}</span>)
+                    </Link> |
+                </span>
+            )
+        })
+        const reviewsElement = reviews.map(re => {
+            return <ReviewCard review={re} key={re.id}/>
+        })
         return (
             // Review List
             <div className="row review-list">
@@ -10,22 +152,28 @@ class Review extends React.Component {
                     <div className="border px-5 my-4 pt-5">
                         <div className="d-flex flex-row justify-content-start align-items-center">
                             <h4><b>Customer Reviews</b></h4>
-                            <span className="ml-2">(Filtered by 5 star)</span>
+                            {star != 0 ? (
+                                <span className="ml-2">(Filtered by {starTitle})</span>
+                            ) : (<></>)}
                         </div>
                         <div className="d-flex flex-row justify-content-start align-items-center mt-3">
-                            <p className="h2 font-weight-bold">4.6</p>
+                            <p className="h2 font-weight-bold">{starCount.avg_star}</p>
                             <p className="h2 font-weight-bold ml-3">Star</p>
                         </div>
                         <div className="d-flex flex-row justify-content-start align-items-center">
                             <div>
-                                <a href="#" className="filter-all-star-review">(3,123)</a>
+                                <Link className="filter-all-star-review" to={{
+                                    pathname: '/detail/' + this.props.idBook,
+                                    search: qs.stringify(this.handleQuerySearch({
+                                            star: 0
+                                        }))
+                                    }} onClick={() => this.setState({
+                                        starTitle: null,
+                                        star: 0
+                                    })} replace >Total ({starCount.count_star})</Link>
                             </div>
                             <div className="ml-3">
-                                <a className="filter-star-review" href="#">5 star (<span>200</span>)</a> |
-                                <a className="filter-star-review" href="#">4 star (<span>200</span>)</a> |
-                                <a className="filter-star-review" href="#">3 star (<span>200</span>)</a> |
-                                <a className="filter-star-review" href="#">2 star (<span>200</span>)</a> |
-                                <a className="filter-star-review" href="#">1 star (<span>200</span>)</a>
+                                    {starElement}
                             </div>
                         </div>
                         <div className="d-flex flex-row justify-content-between align-items-center mt-4 filter-date-review">
@@ -34,120 +182,106 @@ class Review extends React.Component {
                             </div>
                             <div className="d-flex flex-row justify-content-start align-items-center">
                                 <div className="input-group mx-4">
-                                    <div className="input-group-prepend">
-                                        <button className="btn btn-outline-secondary dropdown-toggle" type="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort by
-                                            date</button>
-                                        <div className="dropdown-menu">
-                                            <a className="dropdown-item" href="#">Sort by date: newest to oldest</a>
-                                            <a className="dropdown-item" href="#">Sort by date: oldest to newest</a>
-                                        </div>
-                                    </div>
+                                    <DropdownButton
+                                        as={ButtonGroup}
+                                        key='sort'
+                                        id='dropdown-variants-sort-review'
+                                        variant='secondary'
+                                        title={sortTitle}>
+                                        <Dropdown.Item eventKey="none" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook
+                                        }}
+                                        onClick={() => this.setState({
+                                            sortTitle : 'Default',
+                                            showTitle : 'Show 20',
+                                            starTitle : null,
+                                            sort : 'none',
+                                            show : 20,
+                                            star : 0
+                                        })} replace >Default</Dropdown.Item>
+                                        <Dropdown.Item eventKey="desc" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                sort: 'desc'
+                                            }))
+                                        }} onClick={() => this.setState({
+                                            sortTitle: `Sort by date: newest to oldest`,
+                                            sort: 'desc'
+                                        })} replace >Sort by date: newest to oldest</Dropdown.Item>
+                                        <Dropdown.Item eventKey="asc" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                sort: 'asc'
+                                            }))
+                                        }} onClick={() => this.setState({
+                                            sortTitle: `Sort by date: oldest to newest`,
+                                            sort: 'asc'
+                                        })} replace >Sort by date: oldest to newest</Dropdown.Item>
+                                    </DropdownButton>
                                 </div>
                                 <div className="input-group">
-                                    <div className="input-group-prepend">
-                                        <button className="btn btn-outline-secondary dropdown-toggle" type="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Show
-                                            20</button>
-                                        <div className="dropdown-menu">
-                                            <a className="dropdown-item" href="#">Show 40</a>
-                                            <a className="dropdown-item" href="#">Show 60</a>
-                                            <a className="dropdown-item" href="#">Show 80</a>
-                                            <a className="dropdown-item" href="#">Show All</a>
-                                        </div>
-                                    </div>
+                                    <DropdownButton
+                                        as={ButtonGroup}
+                                        key='show'
+                                        id='dropdown-variants-show-review'
+                                        variant='secondary'
+                                        title={showTitle}>
+                                        <Dropdown.Item eventKey="20" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                show: 20
+                                            }))
+                                        }}
+                                        onClick={() => this.setState({
+                                            showTitle: `Show 20`,
+                                            show: 20
+                                        })} replace >Show 20</Dropdown.Item>
+                                        <Dropdown.Item eventKey="40" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                show: 40
+                                            }))
+                                        }}
+                                        onClick={() => this.setState({
+                                            showTitle: `Show 40`,
+                                            show: 40
+                                        })} replace >Show 40</Dropdown.Item>
+                                        <Dropdown.Item eventKey="60" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                show: 60
+                                            }))
+                                        }}
+                                        onClick={() => this.setState({
+                                            showTitle: `Show 60`,
+                                            show: 60
+                                        })} replace >Show 60</Dropdown.Item>
+                                        <Dropdown.Item eventKey="80" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                show: 80
+                                            }))
+                                        }}
+                                        onClick={() => this.setState({
+                                            showTitle: `Show 80`,
+                                            show: 80
+                                        })} replace >Show 80</Dropdown.Item>
+                                        <Dropdown.Item eventKey="100" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                show: 100
+                                            }))
+                                        }}
+                                        onClick={() => this.setState({
+                                            showTitle: `Show 100`,
+                                            show: 100
+                                        })} replace >Show 100</Dropdown.Item>
+                                    </DropdownButton>
                                 </div>
                             </div>
                         </div>
                         <div className="list-card-review">
-                            <div className="card-review my-4">
-                                <div className="review-title">
-                                    <span className="review-content-title">
-                                        <span className="h5"><b>Review title</b></span>
-                                    </span>
-                                    <span className="review-star-title">
-                                        | 5 star
-                                    </span>
-                                </div>
-                                <div className="review-body my-4">
-                                    review content - Lorem Ipsum is simply dummy text of the printing and typesetting
-                                    industry. Lorem Ipsum has been the industry's standard dummy text ever since the
-                                    1500s,
-                                    when an unknown printer took a galley of type and scrambled it to make a type
-                                    specimen
-                                    book. It has survived not only five centuries,
-                                </div>
-                                <div className="review-date">
-                                    April 12, 2021
-                                </div>
-                                <hr />
-                            </div>
-                            <div className="card-review my-4">
-                                <div className="review-title">
-                                    <span className="review-content-title">
-                                        <span className="h5"><b>Review title</b></span>
-                                    </span>
-                                    <span className="review-star-title">
-                                        | 5 star
-                                    </span>
-                                </div>
-                                <div className="review-body my-4">
-                                    review content - Lorem Ipsum is simply dummy text of the printing and typesetting
-                                    industry. Lorem Ipsum has been the industry's standard dummy text ever since the
-                                    1500s,
-                                    when an unknown printer took a galley of type and scrambled it to make a type
-                                    specimen
-                                    book. It has survived not only five centuries,
-                                </div>
-                                <div className="review-date">
-                                    April 12, 2021
-                                </div>
-                                <hr />
-                            </div>
-                            <div className="card-review my-4">
-                                <div className="review-title">
-                                    <span className="review-content-title">
-                                        <span className="h5"><b>Review title</b></span>
-                                    </span>
-                                    <span className="review-star-title">
-                                        | 5 star
-                                    </span>
-                                </div>
-                                <div className="review-body my-4">
-                                    review content - Lorem Ipsum is simply dummy text of the printing and typesetting
-                                    industry. Lorem Ipsum has been the industry's standard dummy text ever since the
-                                    1500s,
-                                    when an unknown printer took a galley of type and scrambled it to make a type
-                                    specimen
-                                    book. It has survived not only five centuries,
-                                </div>
-                                <div className="review-date">
-                                    April 12, 2021
-                                </div>
-                                <hr />
-                            </div>
-                            <div className="card-review my-4">
-                                <div className="review-title">
-                                    <span className="review-content-title">
-                                        <span className="h5"><b>Review title</b></span>
-                                    </span>
-                                    <span className="review-star-title">
-                                        | 5 star
-                                    </span>
-                                </div>
-                                <div className="review-body my-4">
-                                    review content - Lorem Ipsum is simply dummy text of the printing and typesetting
-                                    industry. Lorem Ipsum has been the industry's standard dummy text ever since the
-                                    1500s,
-                                    when an unknown printer took a galley of type and scrambled it to make a type
-                                    specimen
-                                    book. It has survived not only five centuries,
-                                </div>
-                                <div className="review-date">
-                                    April 12, 2021
-                                </div>
-                                <hr />
-                            </div>
+                            {reviewsElement}
                         </div>
                         <div className="pagination-review mb-3">
                             <nav aria-label=" Page navigation review">
@@ -166,58 +300,10 @@ class Review extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-4 col-md-4 col-sm-12">
-                    <div className="write-a-review py-4">
-                        <div className="card">
-                            <ul className="list-group list-group-flush">
-                                <li className="list-group-item ml-2">
-                                    <span className="h4">
-                                        <b>Write a review</b>
-                                    </span>
-                                </li>
-                                <li className="list-group-item">
-                                    <div>
-                                        <form>
-                                            <div className="form-group">
-                                                <label htmlFor="reviewTitle">Add a title</label>
-                                                <input type="text" className="form-control" id="reviewTitle" />
-                                                <small className="form-text text-muted">
-                                                    Please enter the review title.
-                                                </small>
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="detailBook">
-                                                    Details please! Your review helps other shoppers
-                                                </label>
-                                                <textarea className="form-control" id="detailBook" rows="3"></textarea>
-                                                <small className="form-text text-muted">Please enter the detail.</small>
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="ratingStar">Select a rating star</label>
-                                                <select className="custom-select my-1 mr-sm-2" id="ratingStar">
-                                                    <option value="1" defaultValue='1'>1 Star</option>
-                                                    <option value="2">2 Star</option>
-                                                    <option value="3">3 Star</option>
-                                                    <option value="4">4 Star</option>
-                                                    <option value="5">5 Star</option>
-                                                </select>
-                                                <small className="form-text text-muted">Please rate the product.</small>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </li>
-                                <li className="list-group-item mx-5">
-                                    <button type="button" className="btn btn-secondary btn-submit-review">
-                                        Submit Review
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <SubmitForm />
             </div>
         )
     }
 }
 
-export default Review;
+export default withRouter(Review);

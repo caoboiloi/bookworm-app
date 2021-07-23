@@ -24,6 +24,8 @@ class ReviewBookCollection extends ResourceCollection
             ],
             'meta' => [
                 'total' => $this->total(),
+                'from' => $this->firstItem(),
+                'to' => $this->lastItem(),
                 'current_page' => $this->currentPage(),
                 'last_page' => $this->lastPage(),
                 'per_page' => $this->perPage()

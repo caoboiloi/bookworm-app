@@ -29,7 +29,7 @@ class WrapperDetail extends React.Component {
         }).catch((error) => console.log(error));
     }
     render() {
-        const { book } = this.state;
+        const { book, idBook } = this.state;
         return (
             <>
             {book ? (
@@ -37,7 +37,7 @@ class WrapperDetail extends React.Component {
                     <MainTitle category={book.category} />
                     <div className="mx-5">
                         <Describe book={book} />
-                        <Review />
+                        <Review idBook = {idBook} />
                     </div>
                 </div>
             ) : (

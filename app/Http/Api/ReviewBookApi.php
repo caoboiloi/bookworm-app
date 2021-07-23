@@ -58,27 +58,33 @@ class ReviewBookApi extends Controller
 
     public function filter(Request $request, $book)
     {
-        $params = $request->all();
-        if (!key_exists('show', $params)) {
+        try {
+            $params = $request->all();
+            if (!key_exists('show', $params)) {
+                return response()->json([
+                    'error' => 'Request is missing pagination attribute'
+                ], Response::HTTP_MISDIRECTED_REQUEST);
+            }
+            $filterReview = Review::where('book_id', $book)
+            ->filter($params)
+            ->paginate($params['show'])
+            ->appends(request()->query());
+
+            $filterReview = new ReviewBookCollection($filterReview);
+            if (key_exists('group', $params) && $params['group'] == 'count') {
+                $group = Review::group($book)->get();
+                return response()->json([
+                    'count' => $group[0],
+                    'reviews' => $filterReview
+                ], Response::HTTP_OK);
+            }
             return response()->json([
-                'error' => 'Please try again.'
+                'reviews' => $filterReview
+            ], Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => $th
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        $filterReview = Review::where('book_id', $book)
-        ->filter($params)
-        ->paginate($params['show'])
-        ->appends(request()->query());
-
-        $filterReview = new ReviewBookCollection($filterReview);
-        if (key_exists('group', $params) && $params['group'] == 'count') {
-            $group = Review::group($book)->get();
-            return response()->json([
-                'count' => $group,
-                'reviews' => $filterReview
-            ], Response::HTTP_ACCEPTED);
-        }
-        return response()->json([
-            'reviews' => $filterReview
-        ], Response::HTTP_ACCEPTED);
     }
 }

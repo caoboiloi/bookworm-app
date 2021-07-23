@@ -20,7 +20,7 @@ export function getPopularLimit() {
     return axios.get(endpoint + '/api/books/filter?show=8&sort=popular');
 }
 
-
+// Product Page
 export function getBookFilter(query) {
     return axios.get(endpoint + '/api/books/filter?' + query);
 }
@@ -35,4 +35,13 @@ export function getDetailBookById(id) {
 
 export function postDataOrder(body) {
     return axios.post(endpoint + '/api/orders', body);
+}
+
+// Detail Page
+export function getReviewFilterByBook(id, query) {
+    return axios.get(endpoint + '/api/books/' + id + '/reviews/filter?' + query);
+}
+
+export function getCountReviewByBook(id) {
+    return axios.get(endpoint + '/api/books/' + id + '/reviews/filter?show=1&group=count');
 }

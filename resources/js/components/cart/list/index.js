@@ -130,21 +130,31 @@ class CartList extends React.Component {
                 price : book.final_price
             }
         })
-        const data = await this.fetchPostOrderData(newCarts);
-        if (data == 201) {
-            this.startTimer();
-            this.props.deleteAllCart();
+        if (carts.length == 0) {
             this.setState({
                 show : false,
-                showAlert : true
+                showError : true,
+                isError : 'There are no products in the cart'
             })
         }
-        else if (data == 500) {
-            this.props.deleteAllCart();
-            this.setState({
-                show : false,
-                showError : true
-            })
+        else {
+            const data = await this.fetchPostOrderData(newCarts);
+            if (data == 201) {
+                this.startTimer();
+                this.props.deleteAllCart();
+                this.setState({
+                    show : false,
+                    showAlert : true
+                })
+            }
+            else if (data == 500) {
+                this.props.deleteAllCart();
+                this.setState({
+                    show : false,
+                    showError : true,
+                    isError : 'An error occurred, please refresh the page'
+                })
+            }
         }
     }
 
@@ -153,10 +163,7 @@ class CartList extends React.Component {
         if (isRedirected) {
             return <Redirect to='/'  />
         }
-        // thêm bộ đếm time ở đây
-        if (!isNull(isError)) {
-            return <Redirect to='/error'  />
-        }
+
         const bookCarts = <>{carts.map((book) => {
             if (isNull(book.bookImg)) {
                 book.bookImg = 'book5'
@@ -262,10 +269,10 @@ class CartList extends React.Component {
                                 Go back to <Alert.Link as={Link} to="/">Home Page</Alert.Link> after {seconds} seconds
                             </Alert>
                         ):<></>}
-                        {showError ? (
+                        {showError && !isNull(isError) ? (
                             <Alert variant="warning" className="mt-5 text-center">
                                 <Alert.Heading>Order Failed</Alert.Heading>
-                                An error occurred, please refresh the page
+                                {isError}
                             </Alert>
                         ):<></>}
                     </div>
