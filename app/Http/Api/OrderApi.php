@@ -5,6 +5,7 @@ namespace App\Http\Api;
 use Illuminate\Http\Request;
 USE Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class OrderApi extends Controller
 {
@@ -44,7 +45,7 @@ class OrderApi extends Controller
                     };
                     \DB::table('orders')->insert([
                         'id' => $id,
-                        'order_date' => now(),
+                        'order_date' => Carbon::now()->timezone('Asia/Ho_Chi_Minh'),
                         'order_amount' => $order_amount
                     ]);
 

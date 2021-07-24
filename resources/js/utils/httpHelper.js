@@ -45,3 +45,7 @@ export function getReviewFilterByBook(id, query) {
 export function getCountReviewByBook(id) {
     return axios.get(endpoint + '/api/books/' + id + '/reviews/filter?show=1&group=count');
 }
+
+export function postDataReview(id, body) {
+    return axios.post(endpoint + '/api/books/' + id + '/reviews', body);
+}

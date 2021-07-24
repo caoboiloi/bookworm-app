@@ -12,18 +12,34 @@ import qs from 'query-string';
 
 import { Link } from 'react-router-dom';
 
-import { isUndefined, slice } from 'lodash';
+import { connect } from 'react-redux';
+
+import { isUndefined } from 'lodash';
 
 import ReviewCard from '../card';
 import SubmitForm from '../submit';
 
+import { actSetDefaultReloadReviewList } from '../../../actions';
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        review: state.review
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setDefaultReloadReviewList: () => dispatch(actSetDefaultReloadReviewList()),
+    };
+};
+
 class Review extends React.Component {
     state = {
         sortTitle : 'Default',
-        showTitle : 'Show 20',
+        showTitle : 'Show 5',
         starTitle : null,
         sort : 'none',
-        show : 20,
+        show : 5,
         star : 0,
         codeCount : -1,
         codeData : -1,
@@ -36,7 +52,7 @@ class Review extends React.Component {
             count_star: 0,
             avg_star: 0,
         },
-        queryDefault : 'show=20',
+        queryDefault : 'show=5',
         reviews : [],
         prevUrlPaginate: '#',
         nextUrlPaginate: '#',
@@ -60,32 +76,35 @@ class Review extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.review.isReload != prevProps.review.isReload && this.props.review.isReload) {
+            let query_params = {
+                sort: this.state.sort,
+                show: this.state.show,
+                star: this.state.star
+            };
+            let queryPagination = qs.stringify(query_params);
+            let query = this.parseQuery();
+            this.setState({
+                queryPagination
+            });
+            this.fetchDataReview(query);
+            this.fetchDataCountReview();
+            this.props.setDefaultReloadReviewList();
+        }
         if (this.props.location.search !== prevProps.location.search) {
-            console.log('-------------------------\nROUTER CHANGE - detail page')
-            if (prevState.sort != this.state.sort ||
-                prevState.show != this.state.show ||
-                prevState.star != this.state.star)
-            {
-                let query_params = {
-                    sort: this.state.sort,
-                    show: this.state.show,
-                    star: this.state.star
-                };
-                let queryPagination = qs.stringify(query_params);
-                let query = this.parseQuery();
-                this.setState({
-                    queryPagination
-                });
-                this.fetchDataReview(query);
-                console.log('filter with ' + query);
-            }
-
-            if (prevState.sort == this.state.sort &&
-                prevState.show == this.state.show &&
-                prevState.star == this.state.star) {
-                    let query = this.parseQuery();
-                    console.log('pagination with ' + query);
-                }
+            let query_params = {
+                sort: this.state.sort,
+                show: this.state.show,
+                star: this.state.star
+            };
+            let queryPagination = qs.stringify(query_params);
+            let query = this.parseQuery();
+            this.setState({
+                queryPagination
+            });
+            this.fetchDataReview(query);
+            console.log('filter with ' + query);
+            console.log('pagination query: ', queryPagination);
         }
     }
 
@@ -130,13 +149,10 @@ class Review extends React.Component {
         let query_params = newQueryParam;
         if (isUndefined(query_params.show) && isUndefined(query_params.sort) && isUndefined(query_params.star)) {
             query_params.star = 0;
-            query_params.show = 20;
+            query_params.show = 5;
         }
         else if (isUndefined(query_params.show)) {
-            query_params.show = 20;
-        }
-        else if (!isUndefined(query_params.page)) {
-            delete query_params.page
+            query_params.show = 5;
         }
         let query_string = qs.stringify(query_params);
         return query_string;
@@ -144,6 +160,7 @@ class Review extends React.Component {
 
     parseQueryPaginateUrl(url) {
         if (url != null) {
+            let query = qs.parseUrl(url).query
             let query_string = qs.stringify(query)
             return query_string
         }
@@ -314,10 +331,10 @@ class Review extends React.Component {
                                         }}
                                         onClick={() => this.setState({
                                             sortTitle : 'Default',
-                                            showTitle : 'Show 20',
+                                            showTitle : 'Show 5',
                                             starTitle : null,
                                             sort : 'none',
-                                            show : 20,
+                                            show : 5,
                                             star : 0
                                         })} replace >Default</Dropdown.Item>
                                         <Dropdown.Item eventKey="desc" as={Link} to={{
@@ -347,6 +364,36 @@ class Review extends React.Component {
                                         id='dropdown-variants-show-review'
                                         variant='secondary'
                                         title={showTitle}>
+                                        <Dropdown.Item eventKey="5" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                show: 5
+                                            }))
+                                        }}
+                                        onClick={() => this.setState({
+                                            showTitle: `Show 5`,
+                                            show: 5
+                                        })} replace >Show 5</Dropdown.Item>
+                                        <Dropdown.Item eventKey="10" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                show: 10
+                                            }))
+                                        }}
+                                        onClick={() => this.setState({
+                                            showTitle: `Show 10`,
+                                            show: 10
+                                        })} replace >Show 10</Dropdown.Item>
+                                        <Dropdown.Item eventKey="15" as={Link} to={{
+                                        pathname: '/detail/' + this.props.idBook,
+                                        search: qs.stringify(this.handleQuerySearch({
+                                                show: 15
+                                            }))
+                                        }}
+                                        onClick={() => this.setState({
+                                            showTitle: `Show 15`,
+                                            show: 15
+                                        })} replace >Show 15</Dropdown.Item>
                                         <Dropdown.Item eventKey="20" as={Link} to={{
                                         pathname: '/detail/' + this.props.idBook,
                                         search: qs.stringify(this.handleQuerySearch({
@@ -357,46 +404,16 @@ class Review extends React.Component {
                                             showTitle: `Show 20`,
                                             show: 20
                                         })} replace >Show 20</Dropdown.Item>
-                                        <Dropdown.Item eventKey="40" as={Link} to={{
+                                        <Dropdown.Item eventKey="25" as={Link} to={{
                                         pathname: '/detail/' + this.props.idBook,
                                         search: qs.stringify(this.handleQuerySearch({
-                                                show: 40
+                                                show: 25
                                             }))
                                         }}
                                         onClick={() => this.setState({
-                                            showTitle: `Show 40`,
-                                            show: 40
-                                        })} replace >Show 40</Dropdown.Item>
-                                        <Dropdown.Item eventKey="60" as={Link} to={{
-                                        pathname: '/detail/' + this.props.idBook,
-                                        search: qs.stringify(this.handleQuerySearch({
-                                                show: 60
-                                            }))
-                                        }}
-                                        onClick={() => this.setState({
-                                            showTitle: `Show 60`,
-                                            show: 60
-                                        })} replace >Show 60</Dropdown.Item>
-                                        <Dropdown.Item eventKey="80" as={Link} to={{
-                                        pathname: '/detail/' + this.props.idBook,
-                                        search: qs.stringify(this.handleQuerySearch({
-                                                show: 80
-                                            }))
-                                        }}
-                                        onClick={() => this.setState({
-                                            showTitle: `Show 80`,
-                                            show: 80
-                                        })} replace >Show 80</Dropdown.Item>
-                                        <Dropdown.Item eventKey="100" as={Link} to={{
-                                        pathname: '/detail/' + this.props.idBook,
-                                        search: qs.stringify(this.handleQuerySearch({
-                                                show: 100
-                                            }))
-                                        }}
-                                        onClick={() => this.setState({
-                                            showTitle: `Show 100`,
-                                            show: 100
-                                        })} replace >Show 100</Dropdown.Item>
+                                            showTitle: `Show 25`,
+                                            show: 25
+                                        })} replace >Show 25</Dropdown.Item>
                                     </DropdownButton>
                                 </div>
                             </div>
@@ -431,10 +448,10 @@ class Review extends React.Component {
                         </div>
                     </div>
                 </div>
-                <SubmitForm />
+                <SubmitForm idBook={this.props.idBook}/>
             </div>
         )
     }
 }
 
-export default withRouter(Review);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Review));

@@ -32,8 +32,7 @@ class LeftSidebar extends React.Component {
         categories: this.props.search.sidebar.categories,
         authors: this.props.search.sidebar.authors,
         stars: this.props.search.sidebar.stars,
-        mainTitle: this.props.search.mainTitle,
-        filter: this.props.search.filterQueryParam
+        mainTitle: this.props.search.mainTitle
     };
 
     componentDidMount() {
@@ -65,10 +64,12 @@ class LeftSidebar extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        this.props.pushQueryFilter({
-            filter: nextState.filter,
-            mainTitle: nextState.mainTitle
-        })
+        if (nextState.mainTitle != this.state.mainTitle) {
+            console.log('filter: ',nextState.mainTitle);
+            this.props.pushQueryFilter({
+                mainTitle: nextState.mainTitle
+            })
+        }
         return true;
     }
 
@@ -112,7 +113,6 @@ class LeftSidebar extends React.Component {
                                                     }))
                                                 }} onClick={() => this.setState({
                                                     mainTitle: `Category: ${category.category_name}`,
-                                                    filter: {category: category.id}
                                                 })} replace >
                                                     {category.category_name}
                                             </Dropdown.Item>
@@ -140,7 +140,6 @@ class LeftSidebar extends React.Component {
                                                     }))
                                                 }} onClick={() => this.setState({
                                                     mainTitle: `Author: ${author.author_name}`,
-                                                    filter: {author: author.id}
                                                 })} replace >
                                                     {author.author_name}
                                             </Dropdown.Item>
@@ -168,7 +167,6 @@ class LeftSidebar extends React.Component {
                                                     }))
                                                 }} onClick={() => this.setState({
                                                     mainTitle: `Star: ${star} Star`,
-                                                    filter: {star: star}
                                                 })} replace >
                                                     {star} Star
                                             </Dropdown.Item>

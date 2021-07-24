@@ -5,6 +5,7 @@ namespace App\Http\Api;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
@@ -59,7 +60,7 @@ class ReviewBookApi extends Controller
             $review->review_title = $data['review_title'];
             $review->review_details = $data['review_details'];
             $review->rating_start = $data['rating_start'];
-            $review->review_date = now();
+            $review->review_date = Carbon::now()->timezone('Asia/Ho_Chi_Minh');
             $review->save();
             return response()->json([
                 'message' => 'Review created successfully'

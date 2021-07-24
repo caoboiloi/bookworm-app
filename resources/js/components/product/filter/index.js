@@ -23,7 +23,7 @@ import { getQueryVariable } from '../../../utils/queryVariable';
 const mapDispatchToProps = dispatch => {
     return {
         pushSortFilter: content => dispatch(actAddNewSortQueryParam(content)),
-        resetFilterPage: content => dispatch(actResetDataFilterPage(content))
+        resetFilterPage: () => dispatch(actResetDataFilterPage())
     };
 };
 
@@ -38,8 +38,6 @@ class FilterProduct extends React.Component {
         super(props);
         this.state = {
             books : [],
-            sort : this.props.search.sortQueryParam.sort,
-            show: this.props.search.sortQueryParam.show,
             sortTitle: this.props.search.sortTitle,
             showTitle: this.props.search.showTitle,
             mainTitle : this.props.search.mainTitle,
@@ -58,17 +56,21 @@ class FilterProduct extends React.Component {
         }
     }
     shouldComponentUpdate(nextProps, nextState) {
-        // Error, re-render the sidebar when start app to this routes and switch the other routes, this routes is re-rendered
-        this.props.pushSortFilter({
-            sort: {
-                sort: nextState.sort,
-                show: nextState.show
-            },
+        let dataPush = {
             sortTitle: nextState.sortTitle,
             showTitle: nextState.showTitle
-        })
+        }
+        if (this.state.sortTitle != nextState.sortTitle) {
+            console.log('sort: ',nextState.sortTitle)
+            this.props.pushSortFilter(dataPush)
+        }
+        if (this.state.showTitle != nextState.showTitle) {
+            console.log('show: ',nextState.showTitle)
+            this.props.pushSortFilter(dataPush)
+        }
         return true;
     }
+
     componentDidMount() {
         let query = this.parseQueryString();
         this.fetchBookFilter(query);
@@ -76,25 +78,13 @@ class FilterProduct extends React.Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.location.search !== prevProps.location.search) {
-            console.log('----------------------------\nROUTER CHANGE - product page')
-            if (prevProps.search.mainTitle != this.state.mainTitle ||
-                prevState.sort != this.state.sort ||
-                prevState.show != this.state.show) {
-                    let query = this.parseQueryString();
-                    let temp = this.parseQueryPaginate();
-                    this.setState({
-                        queryPagination: temp
-                    });
-                    this.fetchBookFilter(query);
-                    console.log('filter-sort change url with ' + query)
-            }
-            if (prevProps.search.mainTitle == this.state.mainTitle &&
-                prevState.sort == this.state.sort &&
-                prevState.show == this.state.show) {
-                    let query = this.parseQueryString()
-                    this.fetchBookFilter(query);
-                    console.log('pagination change url ' + query);
-                }
+            let query = this.parseQueryString();
+            let temp = this.parseQueryPaginate();
+            this.setState({
+                queryPagination: temp
+            });
+            this.fetchBookFilter(query);
+            console.log('----\nquery string: ' + query + '\n----');
             if (this.props.location.search == '?' + this.state.queryDefault) {
                 this.props.resetFilterPage();
                 this.setState({
@@ -110,11 +100,6 @@ class FilterProduct extends React.Component {
         delete query_params.filter;
         delete query_params.id;
         let query_string = qs.stringify(query_params);
-        this.setState({
-            sortTitle : this.props.search.sortTitle,
-            showTitle : this.props.search.showTitle,
-            mainTitle : this.props.search.mainTitle,
-        });
         return query_string;
     }
 
@@ -271,7 +256,6 @@ class FilterProduct extends React.Component {
                                     }))
                                 }} onClick={() => this.setState({
                                     sortTitle: `Sort by on sale`,
-                                    sort: 'sale'
                                 })} replace >
                                     Sort by on sale
                         </Dropdown.Item>
@@ -282,7 +266,6 @@ class FilterProduct extends React.Component {
                                     }))
                                 }} onClick={() => this.setState({
                                     sortTitle: `Sort by popularity`,
-                                    sort: 'popular'
                                 })} replace >
                                     Sort by popularity
                         </Dropdown.Item>
@@ -293,7 +276,6 @@ class FilterProduct extends React.Component {
                                     }))
                                 }} onClick={() => this.setState({
                                     sortTitle: `Sort by price: low to high`,
-                                    sort: 'asc'
                                 })} replace >
                                     Sort by price: low to high
                         </Dropdown.Item>
@@ -304,7 +286,6 @@ class FilterProduct extends React.Component {
                                     }))
                                 }} onClick={() => this.setState({
                                     sortTitle: `Sort by price: high to low`,
-                                    sort: 'desc'
                                 })} replace >
                                     Sort by price: high to low
                         </Dropdown.Item>
@@ -323,7 +304,6 @@ class FilterProduct extends React.Component {
                                     }))
                                 }} onClick={() => this.setState({
                                     showTitle: `Show 20`,
-                                    show: 20
                                 })} replace >
                                     Show 20
                         </Dropdown.Item>
@@ -334,7 +314,6 @@ class FilterProduct extends React.Component {
                                     }))
                                 }} onClick={() => this.setState({
                                     showTitle: `Show 40`,
-                                    show: 40
                                 })} replace >
                                     Show 40
                         </Dropdown.Item>
@@ -345,7 +324,6 @@ class FilterProduct extends React.Component {
                                     }))
                                 }} onClick={() => this.setState({
                                     showTitle: `Show 60`,
-                                    show: 60
                                 })} replace >
                                     Show 60
                         </Dropdown.Item>
@@ -356,7 +334,6 @@ class FilterProduct extends React.Component {
                                     }))
                                 }} onClick={() => this.setState({
                                     showTitle: `Show 80`,
-                                    show: 80
                                 })} replace >
                                     Show 80
                         </Dropdown.Item>
@@ -367,7 +344,6 @@ class FilterProduct extends React.Component {
                                     }))
                                 }} onClick={() => this.setState({
                                     showTitle: `Show 100`,
-                                    show: 100
                                 })} replace >
                                     Show 100
                         </Dropdown.Item>

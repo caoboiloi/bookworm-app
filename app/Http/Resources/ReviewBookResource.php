@@ -15,7 +15,7 @@ class ReviewBookResource extends JsonResource
      */
     public function toArray($request)
     {
-        $this->review_date = date('F j, Y',strtotime($this->review_date));
+        $this->review_date = date('H:i - F j, Y',strtotime($this->review_date));
         return [
             "id" => $this->id,
             "review_title" => $this->review_title,

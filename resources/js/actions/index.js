@@ -10,7 +10,9 @@ import {
     UPDATE_AMOUNT_PRODUCT_CART_BY_ID,
     DELETE_PRODUCT_CART_BY_ID,
     IS_VALID_PRODUCT,
-    DELETE_ALL_PRODUCT_CART
+    DELETE_ALL_PRODUCT_CART,
+    RELOAD_REVIEW_LIST_BOOK,
+    DEFAULT_RELOAD_REVIEW_LIST_BOOK
 } from "../const/index";
 
 // Home Page
@@ -57,10 +59,9 @@ export const actAddNewSortQueryParam = (content) => {
     }
 }
 
-export const actResetDataFilterPage = (content) => {
+export const actResetDataFilterPage = () => {
     return {
-        type: RESET_DATA_FILTER_PAGE,
-        content,
+        type: RESET_DATA_FILTER_PAGE
     }
 }
 
@@ -95,5 +96,17 @@ export const actIsValidProductCartById = (id) => {
 export const actDeleteAllProductCart = () => {
     return {
         type: DELETE_ALL_PRODUCT_CART
+    }
+}
+
+export const actReloadReviewList = () => {
+    return {
+        type: RELOAD_REVIEW_LIST_BOOK
+    }
+}
+
+export const actSetDefaultReloadReviewList = () => {
+    return {
+        type: DEFAULT_RELOAD_REVIEW_LIST_BOOK
     }
 }

@@ -15,32 +15,19 @@ const searchReducer = (state = [], action) => {
             };
             return state;
         case ADD_NEW_FILTER_QUERY_PARAM:
-            state.filterQueryParam = action.content.filter;
             state.mainTitle = action.content.mainTitle;
             return state;
         case ADD_NEW_SORT_QUERY_PARAM:
-            state.sortQueryParam = action.content.sort;
             state.sortTitle = action.content.sortTitle;
             state.showTitle = action.content.showTitle
             return state;
         case RESET_DATA_FILTER_PAGE:
-            state.sortQueryParam = {
-                sort : 'sale',
-                show : 20
-            };
-            state.filterQueryParam = {};
             state.sortTitle = "Sort by on sale";
             state.showTitle = "Show 20";
             state.mainTitle = "";
-            state.queryDefault = qs.stringify(state.sortQueryParam);
+            state.queryDefault = "show=20&sort=sale";
             return state;
         default:
-            state.sortQueryParam = {
-                sort : 'sale',
-                show : 20
-            };
-            state.filterQueryParam = {};
-            state.mainTitle = "";
             state.sortTitle = "Sort by on sale";
             state.showTitle = 'Show 20',
             state.mainTitle = "";
@@ -49,7 +36,7 @@ const searchReducer = (state = [], action) => {
                 authors: [],
                 stars: []
             };
-            state.queryDefault = qs.stringify(state.sortQueryParam);
+            state.queryDefault = "show=20&sort=sale";
             return state;
     }
 };
