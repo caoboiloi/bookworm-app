@@ -4,6 +4,7 @@ namespace App\Http\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
@@ -17,43 +18,77 @@ class ReviewBookApi extends Controller
 {
     public function index($book)
     {
-        $bookDetail = Book::detail()->findOrFail($book);
-        $bookDetail = new DetailBookResource($bookDetail);
+        try {
+            $bookDetail = Book::detail()->findOrFail($book);
+            $bookDetail = new DetailBookResource($bookDetail);
 
-        $reviews = Book::findOrFail($book)->reviews()->paginate(4);
-        $reviews = new ReviewBookCollection($reviews);
+            $reviews = Book::findOrFail($book)->reviews()->paginate(4);
+            $reviews = new ReviewBookCollection($reviews);
 
-        $group = Review::group($book)->get();
+            $group = Review::group($book)->get();
 
-        return response()->json([
-            'book' => $bookDetail,
-            'count' => $group,
-            'reviews' => $reviews
-        ], Response::HTTP_ACCEPTED);
+            return response()->json([
+                'book' => $bookDetail,
+                'count' => $group,
+                'reviews' => $reviews
+            ], Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'Server error',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function create()
+    public function store(Request $request, $book)
     {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
+        try {
+            $validation = Validator::make($request->all(),[
+                'review_title' => ['required','string'],
+                'review_details' => ['required','string'],
+                'rating_start' => ['required','numeric']
+            ]);
+            $errors = $validation->errors();
+            if (count($errors) != 0) {
+                return response()->json([
+                    'error' => $errors
+                ], Response::HTTP_MISDIRECTED_REQUEST);
+            }
+            $data = $request->all();
+            $review = new Review();
+            $review->book_id = $book;
+            $review->review_title = $data['review_title'];
+            $review->review_details = $data['review_details'];
+            $review->rating_start = $data['rating_start'];
+            $review->review_date = now();
+            $review->save();
+            return response()->json([
+                'message' => 'Review created successfully'
+            ], Response::HTTP_CREATED);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'Server error',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function show($book, $review)
     {
-        $bookDetail = Book::detail()->findOrFail($book);
-        $bookDetail = new DetailBookResource($bookDetail);
+        try {
+            $bookDetail = Book::detail()->findOrFail($book);
+            $bookDetail = new DetailBookResource($bookDetail);
 
-        $review = Book::findOrFail($book)->reviews()->findOrFail($review);
-        $review = new ReviewBookResource($review);
+            $review = Book::findOrFail($book)->reviews()->findOrFail($review);
+            $review = new ReviewBookResource($review);
 
-        return response()->json([
-            'book' => $bookDetail,
-            'review'=> $review,
-        ], Response::HTTP_ACCEPTED);
+            return response()->json([
+                'book' => $bookDetail,
+                'review'=> $review,
+            ], Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => 'Server error',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function filter(Request $request, $book)
@@ -62,7 +97,7 @@ class ReviewBookApi extends Controller
             $params = $request->all();
             if (!key_exists('show', $params)) {
                 return response()->json([
-                    'error' => 'Request is missing pagination attribute'
+                    'error' => 'Request is missing attribute'
                 ], Response::HTTP_MISDIRECTED_REQUEST);
             }
             $filterReview = Review::where('book_id', $book)
@@ -83,7 +118,7 @@ class ReviewBookApi extends Controller
             ], Response::HTTP_OK);
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => $th
+                'error' => 'Server error'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
