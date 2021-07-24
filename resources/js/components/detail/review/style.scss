@@ -20,6 +20,14 @@ div.wrapper-detail .review-list {
     .pagination-review {
         display: flex;
         justify-content: center;
+
+        #pagination-ul {
+            .page-item.active .page-link {
+                background-color: #93979b;
+                border-color: #b3b9c0;
+                color: white;
+            }
+        }
     }
     .pagination-review ul li a {
         color: #8475A7;

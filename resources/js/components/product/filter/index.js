@@ -7,7 +7,7 @@ import BookCardRow from './../../book';
 
 import { getBookFilter } from './../../../utils/httpHelper';
 
-import { chunk } from 'lodash';
+import { chunk, isUndefined } from 'lodash';
 
 import { Link } from 'react-router-dom';
 
@@ -72,27 +72,28 @@ class FilterProduct extends React.Component {
     componentDidMount() {
         let query = this.parseQueryString();
         this.fetchBookFilter(query);
+        console.log('-----------\nRefresh product page with ' + query + '\n-----------');
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.location.search !== prevProps.location.search) {
-            console.log('ROUTER CHANGE - filter component')
+            console.log('----------------------------\nROUTER CHANGE - product page')
             if (prevProps.search.mainTitle != this.state.mainTitle ||
                 prevState.sort != this.state.sort ||
                 prevState.show != this.state.show) {
-                    console.log('filter-sort change url')
                     let query = this.parseQueryString();
                     let temp = this.parseQueryPaginate();
                     this.setState({
                         queryPagination: temp
                     });
                     this.fetchBookFilter(query);
+                    console.log('filter-sort change url with ' + query)
             }
             if (prevProps.search.mainTitle == this.state.mainTitle &&
                 prevState.sort == this.state.sort &&
                 prevState.show == this.state.show) {
-                    console.log('pagination change url')
                     let query = this.parseQueryString()
                     this.fetchBookFilter(query);
+                    console.log('pagination change url ' + query);
                 }
             if (this.props.location.search == '?' + this.state.queryDefault) {
                 this.props.resetFilterPage();
@@ -119,6 +120,9 @@ class FilterProduct extends React.Component {
 
     parseQueryPaginate() {
         let query_params = this.handleQueryNotChange();
+        if (!isUndefined(query_params.page)) {
+            delete query_params.page
+        }
         let query_string = qs.stringify(query_params);
         return query_string;
     }

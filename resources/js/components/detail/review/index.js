@@ -12,6 +12,8 @@ import qs from 'query-string';
 
 import { Link } from 'react-router-dom';
 
+import { isUndefined, slice } from 'lodash';
+
 import ReviewCard from '../card';
 import SubmitForm from '../submit';
 
@@ -32,14 +34,25 @@ class Review extends React.Component {
             four_star: 0,
             five_star: 0,
             count_star: 0,
-            avg_star: 0
+            avg_star: 0,
         },
         queryDefault : 'show=20',
-        reviews : []
+        reviews : [],
+        prevUrlPaginate: '#',
+        nextUrlPaginate: '#',
+        totalProduct: 0,
+        currentPage: 0,
+        lastPage: 0,
+        perPage: 0,
+        from: 0,
+        to: 0,
+        queryPagination : this.parseQuery(),
     }
     async componentDidMount() {
         var codeCount = await this.fetchDataCountReview();
-        var codeData = await this.fetchDataReview(this.state.queryDefault);
+        var query = this.parseQuery();
+        console.log('-----------\nRefresh detail page with ' + query + '\n-----------');
+        var codeData = await this.fetchDataReview(query);
         this.setState({
             codeCount,
             codeData
@@ -48,7 +61,7 @@ class Review extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.location.search !== prevProps.location.search) {
-            console.log('ROUTER CHANGE REVIEW')
+            console.log('-------------------------\nROUTER CHANGE - detail page')
             if (prevState.sort != this.state.sort ||
                 prevState.show != this.state.show ||
                 prevState.star != this.state.star)
@@ -58,9 +71,21 @@ class Review extends React.Component {
                     show: this.state.show,
                     star: this.state.star
                 };
-                let query = qs.stringify(query_params)
+                let queryPagination = qs.stringify(query_params);
+                let query = this.parseQuery();
+                this.setState({
+                    queryPagination
+                });
                 this.fetchDataReview(query);
+                console.log('filter with ' + query);
             }
+
+            if (prevState.sort == this.state.sort &&
+                prevState.show == this.state.show &&
+                prevState.star == this.state.star) {
+                    let query = this.parseQuery();
+                    console.log('pagination with ' + query);
+                }
         }
     }
 
@@ -80,13 +105,49 @@ class Review extends React.Component {
         let data = await getReviewFilterByBook(this.props.idBook, query)
         .then(async res => {
             this.setState({
-                reviews: res.data.reviews.data
+                reviews: res.data.reviews.data,
+                prevUrlPaginate: this.parseQueryPaginateUrl(res.data.reviews.link.prev_url),
+                nextUrlPaginate: this.parseQueryPaginateUrl(res.data.reviews.link.next_url),
+                totalProduct: res.data.reviews.meta.total,
+                currentPage: res.data.reviews.meta.current_page,
+                lastPage: res.data.reviews.meta.last_page,
+                perPage: res.data.reviews.meta.per_page,
+                from: res.data.reviews.meta.from,
+                to: res.data.reviews.meta.to
             })
             return await res.status;
         }).catch(async error => {
             return await error.response.status;
         })
         return data;
+    }
+
+    parseQuery() {
+        const queryParam = getQueryVariable(this.props);
+        const newQueryParam = {
+           ...queryParam,
+        }
+        let query_params = newQueryParam;
+        if (isUndefined(query_params.show) && isUndefined(query_params.sort) && isUndefined(query_params.star)) {
+            query_params.star = 0;
+            query_params.show = 20;
+        }
+        else if (isUndefined(query_params.show)) {
+            query_params.show = 20;
+        }
+        else if (!isUndefined(query_params.page)) {
+            delete query_params.page
+        }
+        let query_string = qs.stringify(query_params);
+        return query_string;
+    }
+
+    parseQueryPaginateUrl(url) {
+        if (url != null) {
+            let query_string = qs.stringify(query)
+            return query_string
+        }
+        return "#";
     }
 
     handleQuerySearch(query) {
@@ -102,8 +163,23 @@ class Review extends React.Component {
     }
 
     render() {
-        const { star, starTitle, sortTitle, showTitle, starCount, reviews } = this.state
+        const { star,
+                starTitle,
+                sortTitle,
+                showTitle,
+                starCount,
+                reviews,
+                prevUrlPaginate,
+                nextUrlPaginate,
+                lastPage,
+                currentPage,
+                queryPagination,
+                totalProduct,
+                from,
+                to } = this.state
+
         const starArr = [5, 4, 3, 2, 1];
+
         const starElement = starArr.map(s => {
             let temp = 0;
             switch (s) {
@@ -145,6 +221,51 @@ class Review extends React.Component {
         const reviewsElement = reviews.map(re => {
             return <ReviewCard review={re} key={re.id}/>
         })
+
+        const pageNumbers = [];
+        for (let i = 1; i <= lastPage; i++) {
+            pageNumbers.push(i);
+        }
+
+        const renderPageNumbers = pageNumbers.map(number => {
+            if (number == currentPage) {
+                return (
+                    <li className='page-item active' key={number} id={number}>
+                        <Link to={{
+                            pathname: '/detail/' + this.props.idBook,
+                            search: queryPagination + '&page=' + number,
+                        }} className="page-link"
+                        data-page={number} replace>{number}</Link>
+                    </li>
+                )
+            }
+            else {
+                return (
+                    <li className='page-item' key={number} id={number}>
+                        <Link to={{
+                            pathname: '/detail/' + this.props.idBook,
+                            search: queryPagination + '&page=' + number,
+                        }} className="page-link"
+                        data-page={number} replace>{number}</Link>
+                    </li>
+                );
+            }
+        })
+
+        const prevButton = (
+            <Link to={{
+                pathname: '/detail/' + this.props.idBook,
+                search: prevUrlPaginate,
+            }} className="page-link" replace>Previous</Link>
+        )
+
+        const nextButton = (
+            <Link to={{
+                pathname: '/detail/' + this.props.idBook,
+                search: nextUrlPaginate,
+            }} className="page-link" replace>Next</Link>
+        )
+
         return (
             // Review List
             <div className="row review-list">
@@ -178,7 +299,7 @@ class Review extends React.Component {
                         </div>
                         <div className="d-flex flex-row justify-content-between align-items-center mt-4 filter-date-review">
                             <div>
-                                Show 1-12 of 3134 reviews
+                                Showing {from}-{to} of {totalProduct} of reviews
                             </div>
                             <div className="d-flex flex-row justify-content-start align-items-center">
                                 <div className="input-group mx-4">
@@ -285,16 +406,26 @@ class Review extends React.Component {
                         </div>
                         <div className="pagination-review mb-3">
                             <nav aria-label=" Page navigation review">
-                                <ul className="pagination justify-content-start">
-                                    <li className="page-item disabled">
-                                        <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">Previous</a>
-                                    </li>
-                                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                    <li className="page-item">
-                                        <a className="page-link" href="#">Next</a>
-                                    </li>
+                                <ul className="pagination justify-content-start" id='pagination-ul'>
+                                    {currentPage == 1 ? (
+                                        <li className="page-item disabled">
+                                            {prevButton}
+                                        </li>
+                                    ) : (
+                                        <li className="page-item">
+                                            {prevButton}
+                                        </li>
+                                    )}
+                                    {renderPageNumbers}
+                                    {currentPage == lastPage ? (
+                                        <li className="page-item disabled">
+                                            {nextButton}
+                                        </li>
+                                    ) : (
+                                        <li className="page-item">
+                                            {nextButton}
+                                        </li>
+                                    )}
                                 </ul>
                             </nav>
                         </div>
