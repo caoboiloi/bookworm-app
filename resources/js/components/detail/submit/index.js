@@ -75,6 +75,11 @@ class SubmitForm extends React.Component {
                 errorTitle: 'Please enter the review title'
             })
         }
+        else if (review_title.length >= 150) {
+            this.setState({
+                errorTitle: 'Review title no longer than 150 characters'
+            })
+        }
         else if (review_details.length == 0) {
             this.setState({
                 errorDetails: 'Please enter the detail'

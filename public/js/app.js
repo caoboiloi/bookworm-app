@@ -8127,43 +8127,55 @@ var SubmitForm = /*#__PURE__*/function (_React$Component) {
                 this.setState({
                   errorTitle: 'Please enter the review title'
                 });
-                _context.next = 19;
+                _context.next = 23;
                 break;
 
               case 5:
-                if (!(review_details.length == 0)) {
+                if (!(review_title.length >= 150)) {
                   _context.next = 9;
+                  break;
+                }
+
+                this.setState({
+                  errorTitle: 'Review title no longer than 150 characters'
+                });
+                _context.next = 23;
+                break;
+
+              case 9:
+                if (!(review_details.length == 0)) {
+                  _context.next = 13;
                   break;
                 }
 
                 this.setState({
                   errorDetails: 'Please enter the detail'
                 });
-                _context.next = 19;
+                _context.next = 23;
                 break;
 
-              case 9:
+              case 13:
                 if (!(rating_start == 0)) {
-                  _context.next = 13;
+                  _context.next = 17;
                   break;
                 }
 
                 this.setState({
                   errorStart: 'Please rate the product'
                 });
-                _context.next = 19;
+                _context.next = 23;
                 break;
 
-              case 13:
+              case 17:
                 review = {
                   review_title: review_title,
                   review_details: review_details,
                   rating_start: rating_start
                 };
-                _context.next = 16;
+                _context.next = 20;
                 return this.fetchPostDataReview(review);
 
-              case 16:
+              case 20:
                 code = _context.sent;
                 this.setState({
                   errorTitle: '',
@@ -8185,7 +8197,7 @@ var SubmitForm = /*#__PURE__*/function (_React$Component) {
                   });
                 }
 
-              case 19:
+              case 23:
               case "end":
                 return _context.stop();
             }
