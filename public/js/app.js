@@ -7700,6 +7700,10 @@ var Review = /*#__PURE__*/function (_React$Component) {
         children: "Next"
       });
 
+      if ((0,lodash__WEBPACK_IMPORTED_MODULE_7__.isNull)(starCount.avg_star)) {
+        starCount.avg_star = 0;
+      }
+
       return (
         /*#__PURE__*/
         // Review List

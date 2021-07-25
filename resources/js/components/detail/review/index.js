@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
-import { isUndefined } from 'lodash';
+import { isNull, isUndefined } from 'lodash';
 
 import ReviewCard from '../card';
 import SubmitForm from '../submit';
@@ -282,6 +282,10 @@ class Review extends React.Component {
                 search: nextUrlPaginate,
             }} className="page-link" replace>Next</Link>
         )
+
+        if (isNull(starCount.avg_star)) {
+            starCount.avg_star = 0;
+        }
 
         return (
             // Review List
