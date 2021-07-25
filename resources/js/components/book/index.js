@@ -33,7 +33,7 @@ class BookCardRow extends React.Component {
     render() {
         return (
             <>{this.props.books.map((book) => {
-                if (isNull(book.book_cover_photo)) {
+                if (isNull(book.book_cover_photo) || (book.book_cover_photo.length == 0)) {
                     book.book_cover_photo = 'book5';
                 }
                 return (

@@ -5970,7 +5970,7 @@ var BookCardRow = /*#__PURE__*/function (_React$Component) {
 
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
         children: this.props.books.map(function (book) {
-          if ((0,lodash__WEBPACK_IMPORTED_MODULE_1__.isNull)(book.book_cover_photo)) {
+          if ((0,lodash__WEBPACK_IMPORTED_MODULE_1__.isNull)(book.book_cover_photo) || book.book_cover_photo.length == 0) {
             book.book_cover_photo = 'book5';
           }
 
@@ -6367,7 +6367,7 @@ var CartList = /*#__PURE__*/function (_React$Component) {
 
       var bookCarts = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
         children: carts.map(function (book) {
-          if ((0,lodash__WEBPACK_IMPORTED_MODULE_6__.isNull)(book.bookImg)) {
+          if ((0,lodash__WEBPACK_IMPORTED_MODULE_6__.isNull)(book.bookImg) || book.bookImg.length == 0) {
             book.bookImg = 'book5';
           }
 
@@ -6376,6 +6376,8 @@ var CartList = /*#__PURE__*/function (_React$Component) {
               className: "book-title-cart pl-4 py-4",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
                 to: '/detail/' + book.idBook,
+                target: "_blank",
+                rel: "noopener noreferrer",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
                   src: "./assets/bookcover/" + book.bookImg + ".jpg",
                   alt: book.bookTitle,

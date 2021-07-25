@@ -165,13 +165,13 @@ class CartList extends React.Component {
         }
 
         const bookCarts = <>{carts.map((book) => {
-            if (isNull(book.bookImg)) {
+            if (isNull(book.bookImg) || (book.bookImg.length == 0)) {
                 book.bookImg = 'book5'
             }
             return (
                 <tr key={book.idBook}>
                     <td className="book-title-cart pl-4 py-4">
-                        <Link to={'/detail/' + book.idBook}>
+                        <Link to={'/detail/' + book.idBook} target="_blank" rel="noopener noreferrer">
                             <img src={"./assets/bookcover/" + book.bookImg + ".jpg"} alt={book.bookTitle} width="120rem" height="160rem" />
                         </Link>
                     </td>
