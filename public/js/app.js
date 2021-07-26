@@ -6638,6 +6638,12 @@ var MainTitle = /*#__PURE__*/function (_React$Component) {
   _createClass(MainTitle, [{
     key: "render",
     value: function render() {
+      var countCart = this.props.cart.length + ' items';
+
+      if (this.props.cart.length == 0) {
+        countCart = '0 item';
+      }
+
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
         className: "main-title mx-5 mb-4",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
@@ -6645,8 +6651,8 @@ var MainTitle = /*#__PURE__*/function (_React$Component) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("b", {
             className: "main-title-information-1",
             children: ["Your cart: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-              children: this.props.cart.length
-            }), " items"]
+              children: countCart
+            })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("hr", {})]
       });
@@ -10245,7 +10251,9 @@ var LeftSidebar = /*#__PURE__*/function (_React$Component) {
                           });
                         },
                         replace: true,
-                        children: category.category_name
+                        children: category.category_name.replace(/(\b[a-z](?!\s))/g, function (x) {
+                          return x.toUpperCase();
+                        })
                       }, category.id);
                     }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {})
                   })

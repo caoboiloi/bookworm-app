@@ -114,7 +114,7 @@ class LeftSidebar extends React.Component {
                                                 }} onClick={() => this.setState({
                                                     mainTitle: `Category: ${category.category_name}`,
                                                 })} replace >
-                                                    {category.category_name}
+                                                    {category.category_name.replace(/(\b[a-z](?!\s))/g,function(x){return x.toUpperCase()})}
                                             </Dropdown.Item>
                                         )) : (<span></span>)
                                     }
