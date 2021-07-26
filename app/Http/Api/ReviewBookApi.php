@@ -44,7 +44,7 @@ class ReviewBookApi extends Controller
     {
         try {
             $validation = Validator::make($request->all(),[
-                'review_title' => ['required','string'],
+                'review_title' => ['required','string','max:150'],
                 'review_details' => ['required','string'],
                 'rating_start' => ['required','numeric']
             ]);

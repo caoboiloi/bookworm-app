@@ -7985,6 +7985,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -8050,13 +8062,14 @@ var SubmitForm = /*#__PURE__*/function (_React$Component) {
       seconds: 5,
       review_title: '',
       review_details: '',
-      rating_start: 0,
+      rating_start: 'none',
       errorTitle: '',
       errorDetails: '',
       errorStart: '',
       code: -1,
       showAlert: false,
-      showError: false
+      showError: false,
+      errorSever: ''
     });
 
     _defineProperty(_assertThisInitialized(_this), "startTimer", function () {
@@ -8115,93 +8128,105 @@ var SubmitForm = /*#__PURE__*/function (_React$Component) {
     key: "submitFormReview",
     value: function () {
       var _submitFormReview = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var _this$state, review_title, review_details, rating_start, review, code;
+        var _this$state, review_title, review_details, rating_start, review, _yield$this$fetchPost, _yield$this$fetchPost2, code, errors;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _this$state = this.state, review_title = _this$state.review_title, review_details = _this$state.review_details, rating_start = _this$state.rating_start;
+                this.setState({
+                  errorTitle: '',
+                  errorDetails: '',
+                  errorStart: ''
+                });
 
                 if (!(review_title.length == 0)) {
-                  _context.next = 5;
+                  _context.next = 6;
                   break;
                 }
 
                 this.setState({
                   errorTitle: 'Please enter the review title'
                 });
-                _context.next = 23;
+                _context.next = 26;
                 break;
 
-              case 5:
+              case 6:
                 if (!(review_title.length >= 150)) {
-                  _context.next = 9;
+                  _context.next = 10;
                   break;
                 }
 
                 this.setState({
                   errorTitle: 'Review title no longer than 150 characters'
                 });
-                _context.next = 23;
+                _context.next = 26;
                 break;
 
-              case 9:
+              case 10:
                 if (!(review_details.length == 0)) {
-                  _context.next = 13;
+                  _context.next = 14;
                   break;
                 }
 
                 this.setState({
                   errorDetails: 'Please enter the detail'
                 });
-                _context.next = 23;
+                _context.next = 26;
                 break;
 
-              case 13:
-                if (!(rating_start == 0)) {
-                  _context.next = 17;
+              case 14:
+                if (!(rating_start == 'none')) {
+                  _context.next = 18;
                   break;
                 }
 
                 this.setState({
                   errorStart: 'Please rate the product'
                 });
-                _context.next = 23;
+                _context.next = 26;
                 break;
 
-              case 17:
+              case 18:
                 review = {
                   review_title: review_title,
                   review_details: review_details,
                   rating_start: rating_start
                 };
-                _context.next = 20;
+                _context.next = 21;
                 return this.fetchPostDataReview(review);
 
-              case 20:
-                code = _context.sent;
-                this.setState({
-                  errorTitle: '',
-                  errorDetails: '',
-                  errorStart: '',
-                  review_title: '',
-                  review_details: '',
-                  rating_start: 0
-                });
+              case 21:
+                _yield$this$fetchPost = _context.sent;
+                _yield$this$fetchPost2 = _slicedToArray(_yield$this$fetchPost, 2);
+                code = _yield$this$fetchPost2[0];
+                errors = _yield$this$fetchPost2[1];
 
                 if (code == 201) {
                   this.startTimer();
                   this.setState({
-                    showAlert: true
+                    showAlert: true,
+                    review_title: '',
+                    review_details: '',
+                    rating_start: 'none'
+                  });
+                } else if (code === 421) {
+                  this.setState({
+                    errorTitle: errors.error.review_title,
+                    errorDetails: errors.error.review_details,
+                    errorStart: errors.error.rating_start,
+                    showError: true,
+                    errorSever: "Error ".concat(code, " - Please provide complete information")
                   });
                 } else if (code == 500) {
                   this.setState({
-                    showError: true
+                    showError: true,
+                    errorSever: "Error ".concat(code, " - Please reset the page")
                   });
                 }
 
-              case 23:
+              case 26:
               case "end":
                 return _context.stop();
             }
@@ -8232,7 +8257,7 @@ var SubmitForm = /*#__PURE__*/function (_React$Component) {
                         switch (_context2.prev = _context2.next) {
                           case 0:
                             _context2.next = 2;
-                            return res.status;
+                            return [res.status, null];
 
                           case 2:
                             return _context2.abrupt("return", _context2.sent);
@@ -8255,7 +8280,7 @@ var SubmitForm = /*#__PURE__*/function (_React$Component) {
                         switch (_context3.prev = _context3.next) {
                           case 0:
                             _context3.next = 2;
-                            return error.response.status;
+                            return [error.response.status, error.response.data];
 
                           case 2:
                             return _context3.abrupt("return", _context3.sent);
@@ -8305,6 +8330,7 @@ var SubmitForm = /*#__PURE__*/function (_React$Component) {
           errorStart = _this$state2.errorStart,
           showAlert = _this$state2.showAlert,
           showError = _this$state2.showError,
+          errorSever = _this$state2.errorSever,
           seconds = _this$state2.seconds;
 
       var errorTitleElement = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("small", {
@@ -8377,7 +8403,7 @@ var SubmitForm = /*#__PURE__*/function (_React$Component) {
                         value: rating_start,
                         onChange: this.handleSelectStar.bind(this),
                         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-                          value: "0",
+                          value: "none",
                           children: "None"
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
                           value: "1",
@@ -8434,7 +8460,7 @@ var SubmitForm = /*#__PURE__*/function (_React$Component) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default.Heading, {
             children: "Error"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-            children: "Server error"
+            children: errorSever
           })]
         }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {})]
       });
