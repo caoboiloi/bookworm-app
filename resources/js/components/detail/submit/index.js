@@ -21,13 +21,14 @@ class SubmitForm extends React.Component {
         seconds: 5,
         review_title : '',
         review_details : '',
-        rating_start : 0,
+        rating_start : 'none',
         errorTitle : '',
         errorDetails : '',
         errorStart : '',
         code : -1,
         showAlert : false,
-        showError : false
+        showError : false,
+        errorSever : ''
     }
 
     handleChangeReviewTitle(event) {
@@ -70,6 +71,11 @@ class SubmitForm extends React.Component {
 
     async submitFormReview() {
         let {review_title, review_details, rating_start} = this.state;
+        this.setState({
+            errorTitle : '',
+            errorDetails : '',
+            errorStart : '',
+        })
         if (review_title.length == 0) {
             this.setState({
                 errorTitle: 'Please enter the review title'
@@ -85,7 +91,7 @@ class SubmitForm extends React.Component {
                 errorDetails: 'Please enter the detail'
             })
         }
-        else if (rating_start == 0) {
+        else if (rating_start == 'none') {
             this.setState({
                 errorStart: 'Please rate the product'
             })
@@ -96,24 +102,30 @@ class SubmitForm extends React.Component {
                 review_details,
                 rating_start
             }
-            let code = await this.fetchPostDataReview(review);
-            this.setState({
-                errorTitle : '',
-                errorDetails : '',
-                errorStart : '',
-                review_title : '',
-                review_details : '',
-                rating_start : 0,
-            })
+            let [code, errors] = await this.fetchPostDataReview(review);
             if (code == 201) {
                 this.startTimer();
                 this.setState({
-                    showAlert: true
+                    showAlert: true,
+                    review_title : '',
+                    review_details : '',
+                    rating_start : 'none',
+                })
+            }
+            else if (code === 421) {
+                this.setState({
+                    errorTitle : errors.error.review_title,
+                    errorDetails : errors.error.review_details,
+                    errorStart : errors.error.rating_start,
+                    showError: true,
+                    errorSever: `Error ${code} - Please provide complete information`
+
                 })
             }
             else if (code == 500) {
                 this.setState({
-                    showError: true
+                    showError: true,
+                    errorSever: `Error ${code} - Please reset the page`
                 })
             }
         }
@@ -122,15 +134,15 @@ class SubmitForm extends React.Component {
     async fetchPostDataReview(body) {
         let code = await postDataReview(this.props.idBook, body)
         .then(async res => {
-            return await res.status;
+            return await [res.status,null];
         }).catch(async error => {
-            return await error.response.status;
+            return await [error.response.status, error.response.data];
         })
         return code;
     }
 
     render() {
-        const {review_title, review_details, rating_start, errorTitle, errorDetails, errorStart, showAlert, showError, seconds} = this.state;
+        const {review_title, review_details, rating_start, errorTitle, errorDetails, errorStart, showAlert, showError, errorSever, seconds} = this.state;
 
         const errorTitleElement = (
             <small className="form-text text-muted">{errorTitle}</small>
@@ -182,7 +194,7 @@ class SubmitForm extends React.Component {
                                             id="ratingStar"
                                             value={rating_start}
                                             onChange={this.handleSelectStar.bind(this)}>
-                                                <option value="0">None</option>
+                                                <option value="none">None</option>
                                                 <option value="1">1 Star</option>
                                                 <option value="2">2 Star</option>
                                                 <option value="3">3 Star</option>
@@ -214,7 +226,7 @@ class SubmitForm extends React.Component {
                     <Alert variant="danger" onClose={() => this.setState({showError:false})} dismissible>
                         <Alert.Heading>Error</Alert.Heading>
                         <p>
-                            Server error
+                            {errorSever}
                         </p>
                     </Alert>
                 ) : (<></>)}
