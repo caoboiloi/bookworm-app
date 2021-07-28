@@ -10,7 +10,31 @@
 
 ## Note:
 * Rename the file `.env.example` to `.env`
-* MIX_APP_FRONT_URL must be defined in `.env` for **API URL**
+* APP_URL, MIX_APP_FRONT_URL must be defined in `.env`
+
+## Usage:
+
+* install composer and npm management tool dependencies:
+
+```console
+composer install
+```
+```console
+npm install
+```
+
+* Rename .env.example to .env
+* Config **APP_URL, MIX_APP_FRONT_URL** and database connection information in .env
+* Generate app key by running command:
+```console
+php artisan key:generate
+```
+* Make sure Apache/Nginx & PostgreSQL are running
+on your local machine
+* Migrate & seed database by running command:
+```console
+php artisan migrate:fresh --seed
+```
 
 ## Version:
 
