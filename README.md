@@ -35,6 +35,10 @@ on your local machine
 ```console
 php artisan migrate:fresh --seed
 ```
+* Compile resource ReactJS:
+```console
+npm run production
+```
 
 ## Version:
 
