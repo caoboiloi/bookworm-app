@@ -11043,10 +11043,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config */ "./resources/js/utils/config.js");
 
-
-var endpoint = _config__WEBPACK_IMPORTED_MODULE_1__.MIX_APP_FRONT_URL; // Show filter is required - only get 1 filter left: sort & filter & star & category & author
+var endpoint = "http://bookworm_app.local:8888"; // Show filter is required - only get 1 filter left: sort & filter & star & category & author
 // show & sort: limit 12, sort by sale, final_price asc
 
 function getSaleLimit() {
