@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { MIX_APP_FRONT_URL } from './config';
 
-const endpoint = MIX_APP_FRONT_URL;
+const endpoint = process.env.MIX_APP_FRONT_URL;
 
 // Show filter is required - only get 1 filter left: sort & filter & star & category & author
 
